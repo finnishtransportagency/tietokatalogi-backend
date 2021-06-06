@@ -1,0 +1,1 @@
+while true; do STATUS=$(curl -X POST -s -o /dev/null -w '%{http_code}' http://localhost:8080/tietokatalogi/external/sovellus -H 'content-type: text/csv' --data-binary @{{ sovha_dest_path }}); if [ $STATUS -eq '200' ]; then var=0; break; else var=$(($var+1)); if [ $var -eq '44' ]; then var=0; break; else sleep 60000; fi fi done

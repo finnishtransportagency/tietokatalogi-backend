@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>fi.livi</groupId>
+	<artifactId>DatabaseManagement</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+	<packaging>jar</packaging>
+
+	<name>Tietokatalogi tietokannan hallinta</name>
+	<description>Tietokatalogin paikallisen kehitysympäristön kannan hallinta</description>
+
+	<properties>
+		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+		<java.version>1.7</java.version>
+	</properties>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.dbmaintain</groupId>
+				<artifactId>dbmaintain-maven-plugin</artifactId>
+				<version>2.7.2</version>
+				<configuration>
+					<databases>
+						<database>
+							<userName>${dataSource.userName}</userName>
+							<password>${dataSource.password}</password>
+							<url>${dataSource.url}</url>
+							<schemaNames>${dataSource.schemaNames}</schemaNames>
+							<driverClassName>${dataSource.driverClassName}</driverClassName>
+						</database>
+					</databases>
+					<scriptLocations>${scriptLocations}</scriptLocations>
+					<scriptEncoding>UTF-8</scriptEncoding>
+					<autoCreateDbMaintainScriptsTable>true</autoCreateDbMaintainScriptsTable>
+				</configuration>
+				<dependencies>
+					<dependency>
+						<groupId>com.oracle</groupId>
+						<artifactId>ojdbc6</artifactId>
+						<version>11.2.0.3</version>
+						<scope>system</scope>
+    					<systemPath>${basedir}/../ojdbc6.jar</systemPath>
+					</dependency>
+				</dependencies>
+			</plugin>
+
+			<plugin>
+				<groupId>org.codehaus.mojo</groupId>
+				<artifactId>properties-maven-plugin</artifactId>
+				<version>1.0.0</version>
+				<configuration>
+					<files>
+						<file>${configFile}</file>
+					</files>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+</project>

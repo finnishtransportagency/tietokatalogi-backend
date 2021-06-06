@@ -1,0 +1,13 @@
+[{
+	"nimi": "tietojarjestelmasalkku",
+	"sisalto": {
+		"TIETOJARJESTELMATUNNUS": 164, 
+		"JARJESTELMAN_NIMI": "Digiroad 2: Väyläverkonhallintasovellus",
+		"KUVAUS_MAARITELMA": "Digiroad2 ?järjestelmän VVH-sovellus ylläpitää tie- ja katuverkkoa linkkisolmumallin mukaisessa tietomallissa. Sovelluksen avulla voidaan muokata tieverkkoa, lisätä uusia tieosuuksia, linkkejä eli risteyksiä sekä ylläpitää linkkien ja solmujen geometriaa. Järjestelmä tarjoaa ajantasaisen tieverkon tiedot muille järjestelmille. VVH-sovellus hallinnoi ja ylläpitää tieverkkoon liittyviä paikkatietoja. Jatkossa VVH-sovelluksen alle siirretään mahdollisesti myös tieosoiteverkon mukaiset tiedot (Tieosoiteviitekehys)", 
+		"ELINKAARITILA": "Kehityksessä",
+		"JARJESTELMAVASTAAVA_LIVI": "Matti Testi1",
+		"RIVIMUOKKAAJATUNNUS": "K255741",
+		"DOCUMENT_ID": "3d71ae308272a6f894db7e2f75aa33b91984d252",
+		"YHTEISK_KRIIT_JARJ": "ei",
+		"JARJESTELMAALUE":"VTJ -Tie"}
+}]

@@ -1,0 +1,33 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Install Tomcat
+      yum: name={{item}} state=present
+      with_items:
+        - tomcat
+
+    - name: Install Haproxy
+      yum: name={{item}} state=present
+      with_items:
+        - haproxy
+
+    - name: Install unzip
+      yum: name={{item}} state=present
+      with_items:
+        - unzip
+
+    - name: Update Haproxy config
+      template: src=../templates/haproxy.cfg dest=/etc/haproxy/haproxy.cfg
+
+    - name: Create user for tomcat
+      user:
+        name: tomcat
+        group: tomcat
+        state: present
+
+    - name: Restart Tomcat
+      service: name=tomcat state=restarted enabled=yes
+
+    - name: Restart Haproxy
+      service: name=haproxy state=restarted enabled=yes

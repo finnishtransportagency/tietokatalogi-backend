@@ -1,0 +1,14 @@
+@test-data/jarjestelmasalkku/tietojarjestelmasalkku_testdata_new.sql;
+@test-data/jarjestelmasalkku/tietojarjestelmasalkku_sahke_testdata.sql;
+@test-data/palvelukatalogi/palvelukatalogi_testdata.sql;
+@test-data/tietoarkkitehtuuri/looginen_tietovaranto_testdata.sql;
+@test-data/tietoarkkitehtuuri/fyysinen_tietovaranto_testdata.sql;
+@test-data/tietoarkkitehtuuri/paatietoryhma_testdata.sql;
+@test-data/tietoarkkitehtuuri/tietoryhma_testdata.sql;
+@test-data/tietoarkkitehtuuri/tieto_testdata.sql;
+@test-data/sovellussalkku/sovellus_testdata.sql;
+@test-data/tietoarkkitehtuuri/tietoryhma_paatietoryhma_testdata.sql;
+@test-data/tietoarkkitehtuuri/tietolaji_tietoryhma_testdata.sql;
+@test-data/tietoarkkitehtuuri/tietolaji_looginentietovaranto_testdata.sql;
+@test-data/tietoarkkitehtuuri/looginen_fyysinen_testdata.sql;
+@test-data/jarjestelmasalkku/jarjestelma_linkkaus_testdata.sql;

@@ -1,0 +1,1 @@
+while true; do STATUS=$(curl -s -o /dev/null -I -w '%{http_code}' http://localhost:8080/tietokatalogi/rest/FIM/fetchFIM); if [ $STATUS -eq '200' ]; then var=0; break; else var=$(($var+1)); if [ $var -eq '44' ]; then var=0; break; else sleep 1800; fi fi done

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 36 36" enable-background="new 0 0 36 36" xml:space="preserve">
+<g id="Layer_1">
+	<g>
+		<rect y="17" width="4" height="2"/>
+		<rect x="24" y="17" width="4" height="2"/>
+		<rect x="32" y="17" width="4" height="2"/>
+		<rect x="16" y="17" width="4" height="2"/>
+		<rect x="8" y="17" width="4" height="2"/>
+		<rect x="2" y="22" width="2" height="14"/>
+		<rect x="8" y="22" width="2" height="14"/>
+		<rect x="14" y="22" width="2" height="14"/>
+		<rect x="20" y="22" width="2" height="14"/>
+		<rect x="26" y="22" width="2" height="14"/>
+		<rect x="32" y="22" width="2" height="14"/>
+		<rect x="0.5" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -3.0208 8.7071)" width="17" height="2"/>
+		<rect x="6.5" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 -1.2635 12.9497)" width="17" height="2"/>
+		<rect x="12.5" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.4939 17.1924)" width="17" height="2"/>
+		<rect x="18.5" y="7" transform="matrix(0.7071 -0.7071 0.7071 0.7071 2.2513 21.435)" width="17" height="2"/>
+		<rect x="25.3" y="9" transform="matrix(0.7071 -0.7071 0.7071 0.7071 2.0086 24.8492)" width="11.3" height="2"/>
+		<rect x="32.6" y="12" transform="matrix(0.7071 -0.7071 0.7071 0.7071 0.766 27.8492)" width="2.8" height="2"/>
+	</g>
+</g>
+<g id="Layer_2" display="none">
+	
+		<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" stroke-dasharray="4" x1="0" y1="18" x2="36" y2="18"/>
+	<rect x="2" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<rect x="8" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<rect x="14" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<rect x="20" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<rect x="26" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<rect x="32" y="22" display="inline" fill="#ED1C24" width="2" height="14"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="3" y1="14" x2="15" y2="2"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="9" y1="14" x2="21" y2="2"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="15" y1="14" x2="27" y2="2"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="21" y1="14" x2="33" y2="2"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="27" y1="14" x2="35" y2="6"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="33" y1="14" x2="35" y2="12"/>
+</g>
+</svg>

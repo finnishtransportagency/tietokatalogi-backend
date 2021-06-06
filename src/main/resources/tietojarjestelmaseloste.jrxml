@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!-- Created with Jaspersoft Studio version 6.1.1.final using JasperReports Library version 6.1.1  -->
+<!-- 2015-11-13T14:02:04 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="tietojarjestelmaseloste" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="f18e3121-36ce-4ccb-986d-b39b722fccae">
+	<property name="com.jaspersoft.studio.data.sql.tables" value=""/>
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="tietokatalogi"/>
+	<property name="com.jaspersoft.studio.unit." value="pixel"/>
+	<parameter name="system" class="java.lang.Integer"/>
+	<queryString>
+		<![CDATA[select * from  "TIETOJARJESTELMASALKKU" where TIETOJARJESTELMATUNNUS = $P{system}]]>
+	</queryString>
+	<field name="JARJESTELMAN_NIMI" class="java.lang.String"/>
+	<field name="JARJ_OMISTAJA" class="java.lang.String"/>
+	<field name="JARJESTELMAVASTAAVA_LIVI" class="java.lang.String"/>
+	<field name="KUVAUS_MAARITELMA" class="java.lang.String"/>
+	<field name="TIETOVARASTOT" class="java.lang.String"/>
+	<field name="TIETOJEN_JULKISUUS" class="java.lang.String"/>
+	<field name="JULKISET_TIEDOT_RYHMITTAIN" class="java.lang.String"/>
+	<field name="SALASSA_PIDETTAVAT_TIEDOT" class="java.lang.String"/>
+	<field name="TIETOJ_INTERNET_OSOITE" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="90" splitType="Stretch">
+			<image>
+				<reportElement x="-20" y="-20" width="120" height="100" uuid="8daadab4-6925-4e42-863f-24d316322277"/>
+				<imageExpression><![CDATA["http://www.liikennevirasto.fi/livi-theme/images/general/liikennevirasto_logo_2x.png"]]></imageExpression>
+			</image>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="189" y="24" width="5" height="8" uuid="6b1c6b8b-5c4a-4163-be36-341b6f7481d3"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="24" width="389" height="30" uuid="ff8e8f51-4243-426b-ba0d-9d1131648a2f"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Julkisuuslain mukainen tietojärjestelmäseloste ]]></text>
+			</staticText>
+			<textField pattern=" dd.MM.yyyy">
+				<reportElement x="189" y="0" width="280" height="30" uuid="727ce7fd-2bf4-4675-b3ce-1c8a9fef0c60"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="80" y="0" width="109" height="30" uuid="308a10c0-c868-4406-ba5f-45965a6f7254"/>
+				<textElement>
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Liikennevirasto]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band splitType="Stretch"/>
+	</columnHeader>
+	<detail>
+		<band height="577" splitType="Stretch">
+			<staticText>
+				<reportElement positionType="Float" x="40" y="0" width="150" height="20" uuid="ae89b5f6-3d09-4cc1-bcc8-1bdf4140ad06">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[1. Tietojärjestelmän nimi]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="20" width="500" height="20" isRemoveLineWhenBlank="true" uuid="35cf9865-9a7c-4b1a-8111-f7ce213abcd1">
+					<property name="com.jaspersoft.studio.unit.x" value="pixel"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{JARJESTELMAN_NIMI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="50" width="231" height="20" uuid="a9b188b1-04db-4356-a4d7-03aa5ff37bdd"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[2. Tietojärjestelmän vastuutaho ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="70" width="500" height="20" isRemoveLineWhenBlank="true" uuid="893c2582-3b26-4f29-867d-61243f4a1ba7"/>
+				<textFieldExpression><![CDATA[$F{JARJ_OMISTAJA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="55" y="90" width="100" height="40" uuid="8af9d257-dfa9-4444-a4a7-1741fb3a33ab"/>
+				<text><![CDATA[Liikennevirasto
+Opastinsilta 12 A
+00520 Helsinki
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="130" width="370" height="20" uuid="a0d44228-6691-49cf-968a-bd6869109e4e"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[3. Tietojärjestelmän vastuuyksikkö ja -henkilö]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="150" width="500" height="20" isRemoveLineWhenBlank="true" uuid="2564d53c-b7ff-49d3-b196-5eb6c0b9abfe"/>
+				<textFieldExpression><![CDATA[$F{JARJESTELMAVASTAAVA_LIVI}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="180" width="290" height="20" uuid="ed62f137-8391-4244-9ac9-6e4769f12426"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[4. Tietojärjestelmän käyttötarkoitus]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="55" y="200" width="500" height="20" isRemoveLineWhenBlank="true" uuid="d6614208-96b0-467a-a605-1625612cb5d0"/>
+				<textFieldExpression><![CDATA[$F{KUVAUS_MAARITELMA}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="230" width="212" height="20" uuid="f258ca6a-7978-4a24-9079-0f3282254172"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[5. Tietolähteet ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" stretchType="RelativeToBandHeight" x="55" y="250" width="500" height="20" isRemoveLineWhenBlank="true" uuid="8e9ad396-845b-4965-a8af-17283c4e3264"/>
+				<textFieldExpression><![CDATA[$F{TIETOVARASTOT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="278" width="212" height="20" uuid="a00d06ff-9a7e-49b9-a573-290672f8453e"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[6. Tietojen julkisuus/salassa pidettävyys]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="298" width="500" height="20" isRemoveLineWhenBlank="true" uuid="393036a8-fd45-4855-93b2-35ebce35f5fa"/>
+				<textFieldExpression><![CDATA[$F{TIETOJEN_JULKISUUS}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="330" width="100" height="20" uuid="9e72882f-b632-4f83-9afe-42f3ab5e0b58"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[7. Julkiset tiedot]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="350" width="500" height="20" isRemoveLineWhenBlank="true" uuid="a8705dfc-3399-4f4d-b9c2-c9d0e01a8e31"/>
+				<textFieldExpression><![CDATA[$F{JULKISET_TIEDOT_RYHMITTAIN}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="380" width="180" height="20" uuid="04ac0621-479f-4cad-90e8-b18a5d32ec8d"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[8. Salassa pidettävät tiedot ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="400" width="500" height="20" isRemoveLineWhenBlank="true" uuid="d11011ba-9949-47a2-843e-93f9ba7a9613"/>
+				<textFieldExpression><![CDATA[$F{SALASSA_PIDETTAVAT_TIEDOT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement positionType="Float" x="40" y="430" width="196" height="20" uuid="d8fd2829-acd5-4a1e-a8f0-a6bf516ac744"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[9. Tietojärjestelmän julkinen osoite ]]></text>
+			</staticText>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement positionType="Float" x="55" y="450" width="500" height="20" isRemoveLineWhenBlank="true" uuid="d53b5e5e-2c98-43d4-9363-181d241bcbd5"/>
+				<textFieldExpression><![CDATA[$F{TIETOJ_INTERNET_OSOITE}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="70" splitType="Stretch">
+			<textField>
+				<reportElement x="230" y="30" width="100" height="30" uuid="933b291f-3d52-457a-8cb4-abe20f80fdc6"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

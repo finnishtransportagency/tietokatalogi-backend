@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 18 18" enable-background="new 0 0 18 18" xml:space="preserve">
+<g id="Layer_1">
+	<path d="M0,0v18h18V0H0z M16,7.8l-2,0.8V8h-4V7.2l6-2.2V7.8z M8,10.8l-6,2.2v-2.9l2-0.8V10h4V10.8z M8,8H6V6h2V8z M10,10h2v2h-2V10
+		z M16,2v0.8l-6,2.2V4H4v3.3L2,8.1V2H16z M2,16v-0.8l6-2.2V14h6v-3.3l2-0.8V16H2z"/>
+</g>
+<g id="Layer_2" display="none">
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="13" y1="10" x2="17" y2="8.5"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="1" y1="14.5" x2="9" y2="11.5"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="9" y1="6.5" x2="17" y2="3.5"/>
+	<line display="inline" fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="1" y1="9.5" x2="5" y2="8"/>
+	<g display="inline">
+		<path fill="#ED1C24" d="M8,6v2H6V6H8 M10,4H4v6h6V4L10,4z"/>
+	</g>
+	<g display="inline">
+		<path fill="#ED1C24" d="M16,2v14H2V2H16 M18,0H0v18h18V0L18,0z"/>
+	</g>
+	<g display="inline">
+		<path fill="#ED1C24" d="M12,10v2h-2v-2H12 M14,8H8v6h6V8L14,8z"/>
+	</g>
+</g>
+</svg>

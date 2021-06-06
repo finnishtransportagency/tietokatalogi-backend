@@ -1,0 +1,39 @@
+[
+	{
+		"nimi": "palvelu",
+		"sisalto": {
+			"PALVELUTUNNUS": 1,
+			"YLATASO": "PROJEKTIEN TUKI- JA OHJAUSPALVELUT",
+			"OTSIKKO": "Yhteisten palveluiden asiantuntijatuki",
+			"NIMI": "ICT-järjestelmäpäällikköpalvelu",
+			"KUVAUS": "Palvelulla tarjotaan ICT-kehittämisprojekteille ja järjestelmille muutoshallinnan koordinointi, työnjohto ja raportointi. ",
+			"VASTUUHENKILO": "Test Person",
+			"ASIAKKAAT": "Järjestelmien ja ICT-palveluiden kehittämisestä vastaavat projektipäälliköt, järjestelmä- ja palveluvastaavat sekä muut konesalipalveluja tarvitsevat",
+			"SAATAVUUS": "Virka-aika",
+			"VASTEAJAT": "-",
+			"OHJE_PT": "test.person@testhost.test",
+			"OHJEISTUS": "Asiakkaalle nimetään järjestelmäpäällikkö ja pidetään yleensä palvelun aloituspalaveri, johon osallistuu asiakas, tuotantovastaava ja nimetty järjestelmäpäällikkö",
+			"OHJESAANNOT": "-",
+			"RIVIMUOKKAAJATUNNUS": "T123456",
+			"DOCUMENT_ID": "50bc6eb4d557c4b498ffde6d99ceeef2d5c5bXXX"
+		}
+	},
+	{
+		"nimi": "palvelu",
+		"sisalto": {
+			"PALVELUTUNNUS": 2,
+			"YLATASO": "Ylätaso2",
+			"OTSIKKO": "Testiotsikko",
+			"NIMI": "testipäällikköpalvelu"
+		}
+	},
+	{
+		"nimi": "palvelu",
+		"sisalto": {
+			"PALVELUTUNNUS": 3,
+			"YLATASO": "Ylätaso3",
+			"OTSIKKO": "Yhteisten palveluiden asiantuntijatuki",
+			"NIMI": "testinimi"
+		}
+	}
+]

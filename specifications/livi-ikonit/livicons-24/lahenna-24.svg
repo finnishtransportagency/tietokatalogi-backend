@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 19.2.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g id="Layer_1">
+	<path d="M14,8v2h-4v4H8v-4H4V8h4V4h2v4H14z M22.3,23.7L14.6,16c-1.5,1.2-3.5,2-5.6,2c-5,0-9-4-9-9s4-9,9-9s9,4,9,9
+		c0,2.1-0.7,4.1-2,5.6l7.7,7.7L22.3,23.7z M16,9c0-3.9-3.1-7-7-7S2,5.1,2,9s3.1,7,7,7S16,12.9,16,9z"/>
+</g>
+<g id="Layer_2" display="none">
+	<g display="inline">
+		<line fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="9" y1="4" x2="9" y2="14"/>
+		<line fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="4" y1="9" x2="14" y2="9"/>
+		<g>
+			<circle fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" cx="9" cy="9" r="8"/>
+			<line fill="none" stroke="#ED1C24" stroke-width="2" stroke-miterlimit="10" x1="23" y1="23" x2="15" y2="15"/>
+		</g>
+	</g>
+</g>
+</svg>

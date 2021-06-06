@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Generator: Adobe Illustrator 21.0.0, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+<!DOCTYPE svg PUBLIC "-//W3C//DTD SVG 1.1//EN" "http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd">
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
+	 viewBox="0 0 24 24" enable-background="new 0 0 24 24" xml:space="preserve">
+<g id="Layer_1">
+	<path d="M2,14h2v10H2V14z M8,24h2V14H8V24z M14,24h2V14h-2V24z M20,24h2V14h-2V24z M12,6c-1.1,0-2,0.9-2,2s0.9,2,2,2
+		c1.1,0,2-0.9,2-2S13.1,6,12,6z M12,0c-2,0-4.1,0.8-5.7,2.3L0.7,8l4,4h2.8l-4-4l4.2-4.2C8.9,2.6,10.4,2,12,2s3.1,0.6,4.2,1.8L20.5,8
+		l-4,4h2.8l4-4l-5.7-5.7C16.1,0.8,14,0,12,0z"/>
+</g>
+<g id="Layer_2" display="none">
+	<rect x="2" y="14" display="inline" fill="#ED1C24" width="2" height="10"/>
+	<rect x="8" y="14" display="inline" fill="#ED1C24" width="2" height="10"/>
+	<rect x="14" y="14" display="inline" fill="#ED1C24" width="2" height="10"/>
+	<rect x="20" y="14" display="inline" fill="#ED1C24" width="2" height="10"/>
+	<path display="inline" fill="#ED1C24" d="M12,6c-1.1,0-2,0.9-2,2s0.9,2,2,2s2-0.9,2-2S13.1,6,12,6L12,6z"/>
+	<path display="inline" fill="#ED1C24" d="M7.5,12l-4-4l4.2-4.2C8.9,2.6,10.4,2,12,2s3.1,0.6,4.2,1.8L20.5,8l-4,4h2.8l4-4l-5.7-5.7
+		C16.1,0.8,14,0,12,0c-2,0-4.1,0.8-5.7,2.3L0.7,8l4,4H7.5z"/>
+</g>
+</svg>

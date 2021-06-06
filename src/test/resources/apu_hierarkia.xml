@@ -1,0 +1,11 @@
+<dataset>
+  <APU_HIERARKIA_3 LIITTYY_1="AIS" TUNNUS_1="411" VARANTO_1="tietojarjestelma" LIITTYY_2="IBNet" TUNNUS_2="540" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="AURA" TUNNUS_1="422" VARANTO_1="tietojarjestelma" LIITTYY_2="Lauttaportaali (www.lautat.fi)" TUNNUS_2="576" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="AURA" TUNNUS_1="422" VARANTO_1="tietojarjestelma" LIITTYY_2="Sampo" TUNNUS_2="629" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="AURA" TUNNUS_1="422" VARANTO_1="tietojarjestelma" LIITTYY_2="Sonja" TUNNUS_2="635" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>    
+  <APU_HIERARKIA_3 LIITTYY_1="AURA" TUNNUS_1="422" VARANTO_1="tietojarjestelma" LIITTYY_2="TM Suunnitelma" TUNNUS_2="884" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/> 
+  <APU_HIERARKIA_3 LIITTYY_1="IBNet" TUNNUS_1="540" VARANTO_1="tietojarjestelma" LIITTYY_2="baltice.org" TUNNUS_2="394" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="LDAP_Manager" TUNNUS_1="756" VARANTO_1="tietojarjestelma" LIITTYY_2="AURA" TUNNUS_2="422" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="AIS" TUNNUS_1="411" VARANTO_1="tietojarjestelma" LIITTYY_2="IBNet2" TUNNUS_2="541" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+  <APU_HIERARKIA_3 LIITTYY_1="AIS" TUNNUS_1="411" VARANTO_1="tietojarjestelma" LIITTYY_2="IBNet3" TUNNUS_2="542" VARANTO_2="tietojarjestelma" TYYPPI="jarjestelma"/>
+</dataset>

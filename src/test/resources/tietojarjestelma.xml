@@ -1,0 +1,10 @@
+<dataset>
+  <TIETORYHMA paatietoryhmatunnus="1" tietoryhmatunnus="1" nimi="TestTR6" koodi="1" document_id="0"/>
+  <PAATIETORYHMA paatietoryhmatunnus="1" nimi="TestPTR" koodi="11" document_id="3"/>
+  <TIETORYHMA paatietoryhmatunnus="2" tietoryhmatunnus="2" nimi="TestTR2" koodi="1" document_id="1"/>
+  <PAATIETORYHMA paatietoryhmatunnus="2" nimi="TestPTR2" koodi="11" document_id="3"/>
+  <TIETORYHMA paatietoryhmatunnus="3" tietoryhmatunnus="3" nimi="TestTR3" koodi="1" document_id="2"/>
+  <PAATIETORYHMA paatietoryhmatunnus="3" nimi="TestPTR3" koodi="11" document_id="3"/>
+  <TIETORYHMA paatietoryhmatunnus="4" tietoryhmatunnus="4" nimi="TestTR4" koodi="1" document_id="4"/>
+  <PAATIETORYHMA paatietoryhmatunnus="4" nimi="TestPTR4" koodi="11" document_id="3"/>
+</dataset>

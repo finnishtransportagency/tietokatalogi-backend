@@ -1,0 +1,6 @@
+---
+- hosts: all
+  become: true
+  pre_tasks:
+    - name: Update all packages
+      yum: name=* state=latest

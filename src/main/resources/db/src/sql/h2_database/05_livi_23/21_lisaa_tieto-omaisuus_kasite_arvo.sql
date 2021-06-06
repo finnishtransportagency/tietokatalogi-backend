@@ -1,0 +1,68 @@
+-- TKYP-124 Tieto-omaisuus -lomake
+CREATE TABLE TIETOOMAISUUS_KASITE_ARVO (
+"KASITE_WID" NUMBER NOT NULL,
+"KASITE" VARCHAR2(100),
+"ARVO" VARCHAR2(200),
+"PISTEYTYS" NUMBER,
+PRIMARY KEY ("KASITE_WID"));
+
+
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (1, 'PRIMAARIKAYTTOTARVE', 'Tiedon ensisijaista käyttötarvetta ei tiedetä', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (2, 'PRIMAARIKAYTTOTARVE', 'Tiedon ensisijainen käyttötarve on tunnistettu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (3, 'SEKUNDAAR_KAYTTOTARPEET', 'Tiedon sekundäärisiä käyttötarpeita ei tiedetä', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (4, 'SEKUNDAAR_KAYTTOTARPEET', 'Tiedon tärkeimmät sekundääriset käyttötarpeet tiedetään', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (5, 'SEKUNDAAR_KAYTTOTARPEET', 'Tieto vastaa tärkeimpien sekundääristen käyttötarpeiden vaatimuksiin', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (6, 'KAYTTAJAT', 'Asiakkaita ja käyttäjiä ei ole tunnistettu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (7, 'KAYTTAJAT', 'Tiedon asiakkaat ja käyttäjät on tunnistettu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (8, 'KAYTTAJAT', 'Tiedon asiakkaisiin ja käyttäjiin pystytään ottamaan yhteyttä', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (9, 'KAYTTAJAT', 'Yhteys voi tapahtua myös rajapinnan kautta', 4);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (10, 'MODULAARISUUS', 'Tiedolla ei ole modulaarista rakennetta', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (11, 'MODULAARISUUS', 'Tieto rakentuu modulaarisesti', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (12, 'MODULAARISUUS', 'Modulaarinen rakenne on yhteismitallinen (pienin yhteinen nimittäjä) muiden kytkeytyvien tietojen kanssa (esim. linkkijako, hallintoaluejako)', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (13, 'YLEISTYSTASOT', 'Tietoa ei voida yleistää', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (14, 'YLEISTYSTASOT', 'Tietoa voidaan yleistää yhteismitallisia tasoja hyödyntäen', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (15, 'YLEISTYSTASOT', 'Tietoa voidaan yleistää yhteismitallisia tasoja hyödyntäen ja yleistystasot on tunnistettu', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (16, 'MALLINNUSTAPA', 'Tietoa ei ole mallinnettu tieto- tai käsitemallien avulla', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (17, 'MALLINNUSTAPA', 'Tieto on mallinnettu tieto- ja/tai käsitemallien avulla', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (18, 'MALLINNUSTAPA', 'Mallinnustapa on standardi eli Väylän linjausta noudattava', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (19, 'KAYTTOFORMAATIT', 'Tiedon käyttöformaatit eivät ole tiedossa', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (20, 'KAYTTOFORMAATIT', 'Tiedon käyttöformaatit ovat tiedossa ja dokumentoitu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (21, 'KAYTTOFORMAATIT', 'Tietoa käytetään standardien rajapinta- tai tiedostoformaattien avulla', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (22, 'HISTORIATIEDOT', 'Tiedon historioinnin tarpeellisuutta ei ole pohdittu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (23, 'HISTORIATIEDOT', 'Tarve historioinnille on tunnistettu ja tapa historiatiedon hallintaan on kehitetty. Jos historiatietoja ei hallita, peruste on kirjattu.', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (24, 'HISTORIATIEDOT', 'Historiatiedon käyttäminen on suunniteltu käyttöliittymiin asti', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (25, 'KATTAVUUS_JA_LAATU', 'Tiedon kattavuutta ja laatua ei tunneta', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (26, 'KATTAVUUS_JA_LAATU', 'Tiedon kattavuus ja laatu on kuvattu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (27, 'KATTAVUUS_JA_LAATU', ' Laadun valvonta on automatisoitu (analytiikka)', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (28, 'METATIEDOT', 'Tiedon metatietoja ei ole kuvattu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (29, 'METATIEDOT', 'Tiedon metatiedot on kuvattu standardilla tavalla', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (30, 'METATIEDOT', 'Metatiedot kattavat koko tietoaineiston', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (31, 'METATIEDOT', 'Metatiedoille on rajapinta', 4);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (32, 'MUUTOSTIEDOT', 'Tiedon muutoksia ei pystytä tunnistamaan', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (33, 'MUUTOSTIEDOT', 'Tiedon muuttuessa muutokset pystytään tunnistamaan ja yksilöimään', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (34, 'MUUTOSTIEDOT', 'Aineiston hyödyntäminen on mahdollista muutossanomien avulla', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (35, 'SAATAVUUS', 'Tiedon saatavuuden vaatimuksia ei ole tunnistettu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (36, 'SAATAVUUS', 'Tiedon saatavuuden vaatimukset primäärien käyttötapauksen suhteen on tunnistettu (esim. kuinka pitkään järjestelmä voi olla ilman tätä tietoa)', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (37, 'SAATAVUUS', 'Vaatimukset 2. käyttötarpeiden suhteen on tunnistettu', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (38, 'HENKILOTIEDOT', 'Henkilötietojen läsnä-/poissaolo ei ole tiedossa', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (39, 'HENKILOTIEDOT', 'Henkilötietojen läsnä-/poissaolo on tiedossa', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (40, 'HENKILOTIEDOT', 'Henkilötietojen läsnä-/poissaolo on harkittu ja perusteltu', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (41, 'EHEYS', 'Datan eheyttä ei seurata', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (42, 'EHEYS', 'Datan hallitsemattomat tai tahalliset muutokset pystytään havaitsemaan tai on voitu varmistaa, ettei sellaisia voi tapahtua', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (43, 'EHEYS', 'Muutosten aiheuttaja pystytään selvittämään', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (44, 'AVOIMUUS', 'Datan avoimuutta tai ei-avoimuutta ei ole päätetty', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (45, 'AVOIMUUS', 'Data on avointa tai peruste ei-avoimuudelle on kirjattu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (46, 'IMMATERIAALIOIKEUDET', 'Tiedon käyttöoikeutta ja lisenssiä ei ole määritelty', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (47, 'IMMATERIAALIOIKEUDET', 'Tiedon käyttöoikeudet ja lisenssit on määritelty', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (48, 'IMMATERIAALIOIKEUDET', 'Tiedon käyttöoikeuksien jatkuvuus on turvattu (esim. data ei poistu saatavilta, jos organisaatiot muuttuvat)', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (49, 'YKSILOIVAT_TUNNISTEET', 'Ei yksilöiviä id:tä', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (50, 'YKSILOIVAT_TUNNISTEET', 'Yksilöivät id:t käytössä linkille tai muulle datassa olevalle peruselementille', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (51, 'YKSILOIVAT_TUNNISTEET', 'Yksilöivät id:t käytössä datan kaikille ominaisuustiedoille', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (52, 'PYSYVYYS', 'Datan pysyvyyttä ei ole tunnistettu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (53, 'PYSYVYYS', 'On määritelty, onko data staattista vai dynaamista', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (54, 'DOKUMENTAATIO', 'Tietojärjestelmää / Tietolajia ei ole dokumentoitu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (55, 'DOKUMENTAATIO', 'Ei ajantasainen dokumentaatio on olemassa', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (56, 'DOKUMENTAATIO', 'Ajantasainen dokumentaatio on olemassa', 3);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (57, 'ELINKAARI', 'Tietojärjestelmän elinkaarivaihetta ei ole tunnistettu', 1);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (58, 'ELINKAARI', 'Tietojärjestelmän elinkaarivaihe on tunnistettu', 2);
+INSERT INTO TIETOOMAISUUS_KASITE_ARVO (KASITE_WID, KASITE, ARVO, PISTEYTYS) VALUES (59, 'ELINKAARI', 'Tietojärjestelmän elinkaarivaiheen seuraava muuttuminen on ajoitettu', 3);
