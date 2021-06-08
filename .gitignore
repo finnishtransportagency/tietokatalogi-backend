@@ -1,0 +1,8 @@
+.git
+build
+target
+.DS_Store
+.classpath
+.project
+.settings/
+.vscode/settings.json
