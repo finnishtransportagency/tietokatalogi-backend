@@ -279,6 +279,11 @@
 			<name>MuleSoft Repository</name>
 			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
 		</repository>
+		<!-- external repo for jasperreport itext dependency -->
+		<repository>
+			<id>jaspersoft-third-party</id>
+			<url>http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
+		</repository>
 	</repositories>
 
 </project>
