@@ -3,7 +3,6 @@ FROM tomcat:7-jdk8-openjdk
 
 # Remove default apps
 RUN rm -rf {$CATALINA_HOME}/webapps/*
-# Copy oracle driver in place
-COPY lib/ojdbc6.jar ${CATALINA_HOME}/lib/
+
 # Copy and extract
 ADD target/TietokatalogiUI.war ${CATALINA_HOME}/webapps/tietokatalogi.war

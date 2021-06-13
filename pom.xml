@@ -137,12 +137,11 @@
 			<version>1.4.200</version>
 			<scope>test</scope>
 		</dependency>
-
 		<!-- Dependencies below are using LGPL license-->
 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
-			<version>6.4.3</version>
+			<version>6.12.0</version>
 		</dependency>
 
 		<!-- Dependencies below are using LGPL 2.1 license-->
