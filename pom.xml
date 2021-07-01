@@ -138,11 +138,23 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- Dependencies below are using LGPL license-->
-		<dependency>
+<!-- 		<dependency>
 			<groupId>net.sf.jasperreports</groupId>
 			<artifactId>jasperreports</artifactId>
 			<version>6.12.0</version>
+		</dependency> -->
+		<dependency>
+			<groupId>com.github.librepdf</groupId>
+			<artifactId>openpdf</artifactId>
+			<version>1.3.26</version>
 		</dependency>
+		<!-- https://mvnrepository.com/artifact/commons-beanutils/commons-beanutils -->
+		<dependency>
+			<groupId>commons-beanutils</groupId>
+			<artifactId>commons-beanutils</artifactId>
+			<version>1.9.4</version>
+		</dependency>
+
 
 		<!-- Dependencies below are using LGPL 2.1 license-->
 		<dependency>
@@ -280,10 +292,10 @@
 			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
 		</repository>
 		<!-- external repo for jasperreport itext dependency -->
-		<repository>
+<!-- 		<repository>
 			<id>jaspersoft-third-party</id>
 			<url>http://jaspersoft.jfrog.io/jaspersoft/third-party-ce-artifacts/</url>
-		</repository>
+		</repository> -->
 	</repositories>
 
 </project>

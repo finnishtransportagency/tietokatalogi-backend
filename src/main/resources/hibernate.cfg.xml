@@ -5,7 +5,7 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:postgresql://host.docker.internal:5432/tietokt?currentSchema=tietokt</property>
+		<property name="hibernate.connection.url">jdbc:postgresql://host.docker.internal:5432/tietokatalogi?currentSchema=tietok</property>
 		<property name="hibernate.connection.username">tietokt</property>
 		<property name="hibernate.connection.password">tietok123</property>
 		<property name="hibernate.default_schema">tietok</property>
