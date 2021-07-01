@@ -4,27 +4,34 @@ Parameters:
   NetworkStackName:
     Description: Name of the network stack
     Type: String
+    Default: tietokatalogi-dev
   ApplicationName:
     Description: Name of the application (no whitespace or special characters)
     Type: String
+    Default: tietokatalogi
   Environment:
     Description: "Environment of the application, that these resources are created for. Used when tagging the resources"
     Type: String
   Owner:
     Description: "Owner of the of application, that these resources are created for. Used when tagging the resources"
     Type: String
+    Default: vayla
   Project:
     Description: "Project of the of application, that these resources are created for. Used when tagging the resources"
     Type: String
+    Default: tietokatalogi
   ContainerTag:
     Type: String
     Default: latest
     Description: Tag of the container
   ContainerPort:
     Type: Number
-    Default: 80
+    Default: 3000
     Description: Port of the container
   RepositoryURI:
+    Type: String
+    Description: URI to repository, where the container is
+  RepositoryURIUI:
     Type: String
     Description: URI to repository, where the container is
   LoadBalancerSecurityGroup:
@@ -52,6 +59,12 @@ Resources:
     Type: AWS::Logs::LogGroup
     Properties:
       LogGroupName: !Join ['', ['/ecs/', !Ref ApplicationName, '-ECS-logs']]
+      RetentionInDays: 14
+
+  ECSLogGroupUI:
+    Type: AWS::Logs::LogGroup
+    Properties:
+      LogGroupName: !Join ['', ['/ecs/', !Ref ApplicationName, '-UI-ECS-logs']]
       RetentionInDays: 14
 
   # This is a role which is used by the ECS tasks themselves.
@@ -96,11 +109,12 @@ Resources:
       RequiresCompatibilities:
         - FARGATE
       ContainerDefinitions:
-        # First container. You can add several containers to one task. You would probably only add sidecar containers though
+        # First container, Backend. You can add several containers to one task. You would probably only add sidecar containers though
         - Name: !Ref ApplicationName
           Image: !Join [':', [!Ref RepositoryURI, !Ref ContainerTag]]
-          PortMappings:
-            - ContainerPort: !Ref ContainerPort
+          # Only expose UI port
+          #PortMappings:
+          #  - ContainerPort: !Ref ContainerPort
           # If you want to pass environment variables to the container, uncomment and modify these:
           # Environment:
           #   - Name: REGION
@@ -110,6 +124,25 @@ Resources:
             LogDriver: awslogs
             Options:
               awslogs-group: !Ref ECSLogGroup
+              awslogs-region: !Ref "AWS::Region"
+              awslogs-stream-prefix: ecs
+          # Adjust this according to the need of your container
+          Memory: 512
+          # Second container, UI
+
+        - Name: !Join ['-', [!Ref ApplicationName, 'UI']]
+          Image: !Join [':', [!Ref RepositoryURIUI, !Ref ContainerTag]]
+          PortMappings:
+            - ContainerPort: !Ref ContainerPort
+          # If you want to pass environment variables to the container, uncomment and modify these:
+          # Environment:
+          #   - Name: REGION
+          #     Value: !Ref AWS::Region
+          Essential: true # Both are essential until changed to service discovery achitecture
+          LogConfiguration:
+            LogDriver: awslogs
+            Options:
+              awslogs-group: !Ref ECSLogGroupUI
               awslogs-region: !Ref "AWS::Region"
               awslogs-stream-prefix: ecs
           # Adjust this according to the need of your container
@@ -161,15 +194,6 @@ Resources:
       LoadBalancerArn: !Ref PrivateLoadBalancer
       Port: 80
       Protocol: HTTP
-      Tags:
-        - Key: Name
-          Value: !Join ['-', [!Ref ApplicationName, 'LoadBalancer-Listener']]
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref Owner
-        - Key: Project
-          Value: !Ref Project
 
   TargetGroup:
     Type: AWS::ElasticLoadBalancingV2::TargetGroup
@@ -210,15 +234,6 @@ Resources:
           Values: ['*']
       ListenerArn: !Ref PrivateLoadBalancerListener
       Priority: 1
-      Tags:
-        - Key: Name
-          Value: !Join ['-', [!Ref ApplicationName, 'LoadBalancer-Rule']]
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref Owner
-        - Key: Project
-          Value: !Ref Project
 
   EcsService:
     Type: AWS::ECS::Service
@@ -243,22 +258,14 @@ Resources:
                 !Join ['-', [!Ref NetworkStackName, 'Subnet2-Id']]
       LaunchType: FARGATE
       TaskDefinition: !Ref ECSTask
+      # Loadbalance traffic to UI containers
       LoadBalancers:
-        - ContainerName: !Ref ApplicationName
+        - ContainerName: !Join ['-', [!Ref ApplicationName, 'UI']]
           ContainerPort: !Ref ContainerPort
           TargetGroupArn: !Ref TargetGroup
       Tags:
         - Key: Name
           Value: !Join ['-', [!Ref ApplicationName, 'ECS-Service']]
-        - Key: Environment
-          Value: !Ref Environment
-        - Key: Owner
-          Value: !Ref Owner
-        - Key: Project
-          Value: !Ref Project
-      Tags:
-        - Key: Name
-          Value: !Join ['-', [!Ref ApplicationName, 'LoadBalancer']]
         - Key: Environment
           Value: !Ref Environment
         - Key: Owner
