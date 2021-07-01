@@ -1,5 +1,6 @@
 #Tomcat 7 poimittu projektin pom:sta ja openjdk8 confluencesta tuotannon ajoympariston kuvauksesta
-FROM tomcat:7-jdk8-openjdk
+#AWS ecr osoite vain pilvikayttoon, devissa voi poistaa (tai tehda toisen Dockerfilen)
+FROM 894932018761.dkr.ecr.eu-west-1.amazonaws.com/tomcat:7-jdk8-openjdk
 
 # Remove default apps
 RUN rm -rf {$CATALINA_HOME}/webapps/*
