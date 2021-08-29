@@ -1,5 +1,13 @@
 version: 0.2
 phases:
+  env:
+  secrets-manager:
+    LOCAL_JDBC_HOST: "dev/hassu/db:host"
+    LOCAL_JDBC_PORT: "dev/hassu/db:port"
+    LOCAL_JDBC_DBNAME: "dev/hassu/db:dbname"
+    LOCAL_JDBC_USERNAME: "dev/hassu/db:username"
+    LOCAL_JDBC_PASSWORD: "dev/hassu/db:password"
+    LOCAL_JDBC_SCHEMA: "dev/hassu/db:schema"
   pre_build:
     commands:
       - echo Logging to ECR...
@@ -9,6 +17,12 @@ phases:
     commands:
       - echo Build started on `date`
       - mvn clean install -Dmaven.test.skip=true
+      - sed -i 's/!dbhost!/'${LOCAL_JDBC_HOST}'/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbport!/'${LOCAL_JDBC_PORT}'/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbname!/'${LOCAL_JDBC_DBNAME}'/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbschema!/'${LOCAL_JDBC_SCHEMA}'/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbuser!/'${LOCAL_JDBC_USERNAME}/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbpassword!/'${LOCAL_JDBC_PASSWORD}'/' ./src/main/resources/hibernate.cfg.xml
       - docker build -f Dockerfile.aws -t $ECR_REPOSITORY_NAME:latest .
   post_build:
     commands:

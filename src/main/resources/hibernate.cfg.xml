@@ -5,13 +5,10 @@
 <hibernate-configuration>
 	<session-factory>
 		<property name="hibernate.connection.driver_class">org.postgresql.Driver</property>
-		<property name="hibernate.connection.url">jdbc:postgresql://host.docker.internal:5432/tietokatalogi?currentSchema=tietok</property>
-		<property name="hibernate.connection.username">tietokt</property>
-		<property name="hibernate.connection.password">tietok123</property>
-		<property name="hibernate.default_schema">tietok</property>
-		<!-- <property name="hibernate.connection.url">${JDBC_URL}</property>
-		<property name="hibernate.connection.username">${JDBC_USER}</property>
-		<property name="hibernate.connection.password">${JDBC_PASSWORD}</property> -->
+		<property name="hibernate.connection.url">jdbc:postgresql://!dbhost!:!dbport!/!dbname!?currentSchema=!dbschema!</property>
+		<property name="hibernate.connection.username">!dbusername!</property>
+		<property name="hibernate.connection.password">!dbpassword!</property>
+		<property name="hibernate.default_schema">!dbschema!</property>
 		<property name="hibernate.dialect">org.hibernate.dialect.PostgreSQLDialect</property>
 		<property name="show_sql">true</property>
 		<property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
