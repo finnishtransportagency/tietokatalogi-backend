@@ -169,6 +169,10 @@ Resources:
                   - 'cloudformation:*'
                   - 'ecs:*'
                 Resource: '*'
+              - Effect: Allow
+                Action:
+                  - 'secretsmanager:GetSecretValue'
+                Resource: '*'
 
   CodeBuild:
     Type: AWS::CodeBuild::Project
@@ -242,6 +246,10 @@ Resources:
                   - "s3:GetObject"
                   - "s3:GetObjectVersion"
                   - "s3:PutObject"
+              - Effect: Allow
+                Action:
+                  - 'secretsmanager:GetSecretValue'
+                Resource: '*'
 
   ECRRepo:
     Type: AWS::ECR::Repository

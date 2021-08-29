@@ -21,7 +21,7 @@ phases:
       - sed -i 's/!dbport!/'${LOCAL_JDBC_PORT}'/' ./src/main/resources/hibernate.cfg.xml
       - sed -i 's/!dbname!/'${LOCAL_JDBC_DBNAME}'/' ./src/main/resources/hibernate.cfg.xml
       - sed -i 's/!dbschema!/'${LOCAL_JDBC_SCHEMA}'/' ./src/main/resources/hibernate.cfg.xml
-      - sed -i 's/!dbuser!/'${LOCAL_JDBC_USERNAME}/' ./src/main/resources/hibernate.cfg.xml
+      - sed -i 's/!dbuser!/'${LOCAL_JDBC_USERNAME}'/' ./src/main/resources/hibernate.cfg.xml
       - sed -i 's/!dbpassword!/'${LOCAL_JDBC_PASSWORD}'/' ./src/main/resources/hibernate.cfg.xml
       - docker build -f Dockerfile.aws -t $ECR_REPOSITORY_NAME:latest .
   post_build:
