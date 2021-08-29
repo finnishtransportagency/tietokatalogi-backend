@@ -1,6 +1,5 @@
 version: 0.2
-phases:
-  env:
+env:
   secrets-manager:
     LOCAL_JDBC_HOST: "dev/hassu/db:host"
     LOCAL_JDBC_PORT: "dev/hassu/db:port"
@@ -8,6 +7,7 @@ phases:
     LOCAL_JDBC_USERNAME: "dev/hassu/db:username"
     LOCAL_JDBC_PASSWORD: "dev/hassu/db:password"
     LOCAL_JDBC_SCHEMA: "dev/hassu/db:schema"
+phases:
   pre_build:
     commands:
       - echo Logging to ECR...
