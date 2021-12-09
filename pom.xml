@@ -260,6 +260,7 @@
 					<include>hibernate.cfg.xml</include>
 					<include>tietojarjestelmaseloste.jrxml</include>
 					<include>config.properties</include>
+					<include>log4j.properties</include>
 					<!--  <include>testhibernate.cfg.xml</include> -->
 				</includes>
 				<excludes>
@@ -287,7 +288,7 @@
 		</repository>
 		<!-- adding mulesoft for pdfbox -->
 		<repository>
-			<id>mulesoft-releases</id>
+			<id>Mulesoft</id>
 			<name>MuleSoft Repository</name>
 			<url>https://repository.mulesoft.org/nexus/content/repositories/public/</url>
 		</repository>
