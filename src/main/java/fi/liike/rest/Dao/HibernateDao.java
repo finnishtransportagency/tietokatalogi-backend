@@ -10,12 +10,12 @@ import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.ConstraintViolationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -156,8 +156,13 @@ public class HibernateDao extends HibernateSession {
 
 		while (!freeIdFound) {
 			SQLQuery increaseSeqQuery = session.createSQLQuery("select nextval('" + sequence + "')");
-			BigDecimal newValue = (BigDecimal) increaseSeqQuery.uniqueResult();
-			id = newValue.intValue();
+			Object newValue = increaseSeqQuery.uniqueResult();
+			// h2 database returns seq vals in different data type than pg
+			if (newValue.getClass().equals(BigDecimal.class)) {
+				id = ((BigDecimal) newValue).intValue();
+			} else {
+				id = ((BigInteger) newValue).intValue();
+			}
 
 			Criteria criteria = session.createCriteria(content.getClass());
 			criteria.add(Restrictions.eq("tunnus", id));

@@ -24,9 +24,9 @@ public class HenkiloDao extends HibernateDao {
 
     private final static String henkiloQuery = "SELECT h.tunnus, h.object_id, h.nayttonimi, h.tunnustyyppi,\n" +
             "h.poistunut, h.kayttajatunnus, h.yritys, h.yritystunnus, h.etunimi, h.sukunimi, h.sahkoposti, h.matkapuhelin\n" +
-            "FROM tietok.HENKILO h\n";
+            "FROM HENKILO h\n";
 
-    private final static String rooliQuery = "SELECT r.tunnus, r.nimi FROM tietok.ROOLI r\n";
+    private final static String rooliQuery = "SELECT r.tunnus, r.nimi FROM ROOLI r\n";
     private final Logger LOG = LoggerFactory.getLogger(HenkiloDao.class);
 
     public List<Henkilo> saveHenkiloList(List<Henkilo> henkiloList) {
@@ -193,7 +193,7 @@ public class HenkiloDao extends HibernateDao {
             String joinIdColumn) {
         String table = joinClass.getAnnotation(Table.class).name();
 
-        String sql = format("%s INNER JOIN tietok.%s jhr ON jhr.HENKILO_ID = h.TUNNUS\n" +
+        String sql = format("%s INNER JOIN %s jhr ON jhr.HENKILO_ID = h.TUNNUS\n" +
                 "WHERE jhr.ROOLI_ID = %d AND jhr.%s = %d\n", henkiloQuery, table, rooliId, joinIdColumn, systeemiId);
         if (filterDisabled) {
             sql += "AND h.poistunut = 0";
@@ -289,7 +289,7 @@ public class HenkiloDao extends HibernateDao {
     private Set<Rooli> getRooliListBySystemId(Integer systemId, Class<? extends JoinHenkiloRooliTable> joinClass,
                                               String jointableIdColumn, Session session) {
         String table = joinClass.getAnnotation(Table.class).name();
-        String sql = format("%s INNER JOIN tietok.%s jhr ON jhr.ROOLI_ID = r.tunnus\n" +
+        String sql = format("%s INNER JOIN %s jhr ON jhr.ROOLI_ID = r.tunnus\n" +
                 "WHERE jhr.%s = %d", rooliQuery, table, jointableIdColumn, systemId);
 
         SQLQuery query = session.createSQLQuery(sql);
@@ -425,7 +425,7 @@ public class HenkiloDao extends HibernateDao {
         String objectId = (String) henkiloObj[1];
         String nayttonimi = (String) henkiloObj[2];
         String tunnustyyppi = (String) henkiloObj[3];
-        Integer poistunut = ((Short) henkiloObj[4]).intValue();
+        Integer poistunut = ((BigDecimal) henkiloObj[4]).intValue();
         String kayttajatunnus = (String) henkiloObj[5];
         String yritys = (String) henkiloObj[6];
         String yritystunnus = (String) henkiloObj[7];

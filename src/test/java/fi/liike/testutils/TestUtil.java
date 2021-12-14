@@ -9,7 +9,7 @@ import java.util.*;
 import com.google.common.collect.ImmutableMap;
 import fi.liike.rest.Controller.*;
 import fi.liike.rest.api.dto.*;
-import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.codehaus.jettison.json.JSONArray;
 import org.codehaus.jettison.json.JSONException;
 import org.codehaus.jettison.json.JSONObject;
