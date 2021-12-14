@@ -425,7 +425,7 @@ public class HenkiloDao extends HibernateDao {
         String objectId = (String) henkiloObj[1];
         String nayttonimi = (String) henkiloObj[2];
         String tunnustyyppi = (String) henkiloObj[3];
-        Integer poistunut = ((BigDecimal) henkiloObj[4]).intValue();
+        Integer poistunut = ((Short) henkiloObj[4]).intValue();
         String kayttajatunnus = (String) henkiloObj[5];
         String yritys = (String) henkiloObj[6];
         String yritystunnus = (String) henkiloObj[7];
