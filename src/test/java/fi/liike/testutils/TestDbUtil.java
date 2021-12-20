@@ -1,6 +1,6 @@
 package fi.liike.testutils;
 
-import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.*;
 
 import com.google.common.collect.ImmutableSet;
@@ -409,7 +409,7 @@ public class TestDbUtil {
 		try {
 			session = getSession();
 			Transaction tx = session.beginTransaction();
-
+			session.flush();
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONObject json;
 				json = jsonArr.getJSONObject(i);
@@ -417,7 +417,7 @@ public class TestDbUtil {
 				SQLQuery query = session.createSQLQuery(sql);
 				query.executeUpdate();
 			}
-
+			session.flush();
 			tx.commit();
 		} catch (Exception e) {
 			LOG.error("There was an error: " + e.getMessage());
@@ -437,15 +437,17 @@ public class TestDbUtil {
 		return list;
 	}
 
-	public static BigDecimal getNextSequenceVal(String sequenceName) {
+	public static BigInteger getNextSequenceVal(String sequenceName) {
 		Session session = sessionFactory.openSession();
-		String sql = "select " + sequenceName + ".nextval from dual";
+		String sql = "select nextval('" + sequenceName + "')";
 
 		try {
 			Query query = session.createSQLQuery(sql);
-			return (BigDecimal) query.uniqueResult();
+			return (BigInteger) query.uniqueResult();
 		} catch(Exception e) {
-			return new BigDecimal(42);
+			LOG.error("getNextSequenceVal failed with the following error: " + e.getMessage());
+			LOG.info("fallback to 42");
+			return BigInteger.valueOf(42);
 		}
 
 	}

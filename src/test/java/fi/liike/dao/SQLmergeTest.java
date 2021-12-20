@@ -25,10 +25,10 @@ public class SQLmergeTest extends HibernateSession {
     private static String testTableName = "TEST_TABLE";
     private static String testTempTableName = "TEST_TABLE_TEMP";
     private static List<String> testTableRows = Arrays.asList(
-            "ID NUMBER NOT NULL UNIQUE",
+            "ID NUMERIC NOT NULL UNIQUE",
             "OBJECT_ID VARCHAR2(255 CHAR) NOT NULL",
             "NAME VARCHAR2(255 CHAR) NOT NULL",
-            "POISTUNUT NUMBER DEFAULT 0"
+            "POISTUNUT NUMERIC DEFAULT 0"
     );
 
     @Before
