@@ -424,7 +424,7 @@ CREATE TABLE sovellus (
     tuotantoon_hyvaksymispaiva timestamp without time zone,
     kriittisyys character varying(4000),
     elinkaaritieto character varying(4000),
-    poistunut numeric(38,10) NOT NULL,
+    poistunut numeric(38,10) DEFAULT 0 NOT NULL,
     tuotekoodi character varying(255),
     nimi character varying(255) NOT NULL
 );
