@@ -7,6 +7,7 @@ import fi.liike.rest.api.HistoryType;
 import fi.liike.rest.api.KasiteArvoContent;
 import fi.liike.rest.api.dto.ExternalSovellusCSVDto;
 import org.apache.commons.beanutils.PropertyUtilsBean;
+import org.apache.commons.lang3.StringUtils;
 import org.hibernate.*;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.Restrictions;
@@ -434,6 +435,47 @@ public class HibernateDao extends HibernateSession {
 	}
 
 	public String getMergeTablesSql(String targetTable, String targetTableIdSequence, String idColumn,
+									String sourceTable, List<String> matchingColumns,
+									List<String> updateColumns, List<String> insertColumns) {
+
+		StringBuilder targetColumnsString = new StringBuilder("(");
+		for (String insertColumn : insertColumns) {
+			targetColumnsString.append(format("\"%s\",", insertColumn).toLowerCase());
+		}
+		targetColumnsString.replace(targetColumnsString.length() - 1, targetColumnsString.length(), ")");
+		StringBuilder sourceColumnsString = new StringBuilder();
+		final String sourceTableAlias = "src.";
+		for (String insertColumn : insertColumns) {
+			if (insertColumn.equals(idColumn)) {
+				sourceColumnsString.append(format("nextval('%s'),", targetTableIdSequence));
+			} else {
+				sourceColumnsString.append(format("%s\"%s\",",sourceTableAlias , insertColumn).toLowerCase());
+			}
+
+		}
+		sourceColumnsString.replace(sourceColumnsString.length() - 1, sourceColumnsString.length(), "");
+		String matchingSql = StringUtils.join(matchingColumns, ",");
+		String lineEnding = ",\n";
+		StringBuilder updateSql = new StringBuilder();
+		for (String updateColumn : updateColumns) {
+			updateSql.append(format("%s = excluded.%s%s", updateColumn, updateColumn, lineEnding));
+		}
+		updateSql.replace(updateSql.length() - lineEnding.length(), updateSql.length() - 1, "");
+
+		return format(
+				"INSERT INTO %s %s\n" +
+						"SELECT %s " +
+						"FROM %s src\n" +
+						"ON CONFLICT (%s)\n" +
+						"DO UPDATE\n" +
+						"SET %s",
+				targetTable, targetColumnsString, sourceColumnsString, sourceTable, matchingSql, updateSql
+		);
+	}
+
+	// TODO remove or redirect h2 tests to use this
+	// Works with h2 but not with postgres
+	public String getMergeTablesSqlOLD(String targetTable, String targetTableIdSequence, String idColumn,
 									String sourceTable, List<String> matchingColumns,
 									List<String> updateColumns, List<String> insertColumns) {
 		String lineEnding = ",\n";
