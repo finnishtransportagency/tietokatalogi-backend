@@ -21,3 +21,12 @@ CREATE VIEW tietok.TIETOOMAISUUS_JARJESTELMA_NIMI
 AS select tietoomaisuus.*, tietojarjestelmasalkku.jarjestelman_nimi
 from tietok.tietoomaisuus
 join tietok.tietojarjestelmasalkku on (tietoomaisuus.tietojarjestelma_id = tietojarjestelmasalkku.tietojarjestelmatunnus);
+
+
+-- ANALPK-1520 Integraatiot
+-- Migrate merge statements to pgsql upsert. In pgsql, the ON CONFLICT columns require a unique constraint.
+alter table tietok.sovellus
+add constraint sov_merge_unq unique(nimi,versio,tuotekoodi);
+
+alter table tietok.henkilo
+add constraint object_id_unq unique (object_id);

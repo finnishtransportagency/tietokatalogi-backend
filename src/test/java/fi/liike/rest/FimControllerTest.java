@@ -7,6 +7,7 @@ import fi.liike.rest.Service.HenkiloService;
 import fi.liike.rest.util.http.HttpClient;
 import fi.liike.rest.util.http.LiikeHttpResponse;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.IOException;
@@ -46,6 +47,8 @@ public class FimControllerTest {
     }
 
     @Test
+    @Ignore
+    // requires pgsql
     public void fetchAllPersonsFromFIMTest() throws IOException {
         String firstName = "Test";
         String lastName = "Name";

@@ -10,6 +10,7 @@ import fi.liike.rest.api.dto.SovellusDto;
 import fi.liike.testutils.TestRequest;
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.ws.rs.core.Response;
@@ -40,6 +41,8 @@ public class SovellusControllerTest {
     }
 
     @Test
+    @Ignore
+    // requires pgsql
     public void deactiveSovellusTest() throws IllegalAccessException, NoSuchFieldException, IOException, SQLException {
         Integer tunnus = createAndDisableTestSovellus();
 
@@ -74,6 +77,8 @@ public class SovellusControllerTest {
     }
 
     @Test
+    @Ignore
+    // requires pgsql
     public void getInactiveSovellusErrorTest() throws IllegalAccessException, NoSuchFieldException, IOException, SQLException {
         Integer tunnus = createAndDisableTestSovellus();
 
@@ -100,6 +105,8 @@ public class SovellusControllerTest {
     }
 
     @Test
+    @Ignore
+    // requires pgsql
     public void testImportMetadataWithSuccessfulImport() throws IOException, SQLException {
         // Get initial import metadata
 
@@ -130,6 +137,8 @@ public class SovellusControllerTest {
     }
 
     @Test
+    @Ignore
+    // requires pgsql
     public void testImportMetadataWithFailedImport() throws IOException, SQLException {
         // Get initial import metadata
         ImportMetadata initialImportMetadata = this.getImportMetadata();
