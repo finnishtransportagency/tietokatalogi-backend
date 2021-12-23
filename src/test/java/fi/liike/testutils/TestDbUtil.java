@@ -180,14 +180,22 @@ public class TestDbUtil {
 			return;
 		}
 		Session session = getSession();
+		Transaction tx = session.beginTransaction();
 		for (String sequence : sequences) {
-			session.createSQLQuery("drop sequence " + sequence + "_id_seq").executeUpdate();
+			session.createSQLQuery("drop sequence if exists " + sequence + "_id_seq").executeUpdate();
+			if (!TestDbUtil.idOnlySequences.contains(sequence)) {
+				session.createSQLQuery("drop sequence if exists " + sequence + "_seq").executeUpdate();
+			}
+		}
+		tx.commit();
+		Transaction tx2 = session.beginTransaction();
+		for (String sequence : sequences) {
 			session.createSQLQuery("create sequence " + sequence + "_id_seq start with 1").executeUpdate();
 			if (!TestDbUtil.idOnlySequences.contains(sequence)) {
-				session.createSQLQuery("drop sequence " + sequence + "_seq").executeUpdate();
 				session.createSQLQuery("create sequence " + sequence + "_seq start with 1").executeUpdate();
 			}
 		}
+		tx2.commit();
 	}
 
 	public static void setupJoinTableDB(JoinCategory category) {
