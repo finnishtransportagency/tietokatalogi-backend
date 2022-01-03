@@ -1,0 +1,1 @@
+docker run --name tk-pgsql -it --rm -e POSTGRES_PASSWORD=tietok123 -e POSTGRES_USER=tietokt -p 5432:5432 postgres
