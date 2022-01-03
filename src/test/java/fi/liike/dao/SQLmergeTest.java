@@ -45,7 +45,6 @@ public class SQLmergeTest extends HibernateSession {
         dropTable(testTempTableName);
     }
 
-    // TODO: compare to new pg compatible query
     @Test
     public void getMergeTablesSqlTest() {
         String targetTable = "TARGET_TABLE";
@@ -57,18 +56,12 @@ public class SQLmergeTest extends HibernateSession {
         String sql = hibernateDao.getMergeTablesSql(targetTable, "seq_" + targetTable, "ID",
                 sourceTable, matchingColumns, updateColumns, insertColumns);
 
-        String expectedSql = "MERGE INTO TARGET_TABLE T\n" +
-                "USING SOURCE_TABLE S\n" +
-                "ON (S.OBJECT_ID = T.OBJECT_ID)\n" +
-                "WHEN MATCHED THEN UPDATE\n" +
-                "SET T.NAME = S.NAME,\n" +
-                "T.INACTIVE = S.INACTIVE\n" +
-                "WHEN NOT MATCHED\n" +
-                "THEN INSERT (ID,OBJECT_ID,NAME,INACTIVE)\n" +
-                "VALUES (seq_TARGET_TABLE.nextval, S.OBJECT_ID, S.NAME, S.INACTIVE)";
-        // Oracle syntax differs from h2 syntax that is used in testing.
-        // In non-testing use, the second-to-last row should be:
-        // "THEN INSERT (T.ID,T.OBJECT_ID,T.NAME,T.INACTIVE)\n"
+        String expectedSql = "INSERT INTO TARGET_TABLE (id,object_id,name,inactive)\n" +
+                "SELECT nextval('seq_TARGET_TABLE'),src.object_id,src.name,src.inactive FROM SOURCE_TABLE src\n" +
+                "ON CONFLICT (object_id)\n" +
+                "DO UPDATE\n" +
+                "SET name = excluded.name,\n" +
+                "inactive = excluded.inactive\n";
         assertThat(expectedSql, is(sql));
     }
 

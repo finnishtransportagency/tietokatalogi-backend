@@ -440,7 +440,7 @@ public class HibernateDao extends HibernateSession {
 
 		StringBuilder targetColumnsString = new StringBuilder("(");
 		for (String insertColumn : insertColumns) {
-			targetColumnsString.append(format("\"%s\",", insertColumn).toLowerCase());
+			targetColumnsString.append(format("%s,", insertColumn).toLowerCase());
 		}
 		targetColumnsString.replace(targetColumnsString.length() - 1, targetColumnsString.length(), ")");
 		StringBuilder sourceColumnsString = new StringBuilder();
@@ -449,16 +449,21 @@ public class HibernateDao extends HibernateSession {
 			if (insertColumn.equals(idColumn)) {
 				sourceColumnsString.append(format("nextval('%s'),", targetTableIdSequence));
 			} else {
-				sourceColumnsString.append(format("%s\"%s\",",sourceTableAlias , insertColumn).toLowerCase());
+				sourceColumnsString.append(format("%s%s,",sourceTableAlias , insertColumn).toLowerCase());
 			}
-
 		}
 		sourceColumnsString.replace(sourceColumnsString.length() - 1, sourceColumnsString.length(), "");
-		String matchingSql = StringUtils.join(matchingColumns, ",");
+
+		// TODO: convert to java stream
+		ArrayList<String> lowerCaseMatchingColumns = new ArrayList<>();
+		for (String columnName : matchingColumns) {
+			lowerCaseMatchingColumns.add(columnName.toLowerCase());
+		}
+		String matchingSql = StringUtils.join(lowerCaseMatchingColumns, ",");
 		String lineEnding = ",\n";
 		StringBuilder updateSql = new StringBuilder();
 		for (String updateColumn : updateColumns) {
-			updateSql.append(format("%s = excluded.%s%s", updateColumn, updateColumn, lineEnding));
+			updateSql.append(format("%s = excluded.%s%s", updateColumn.toLowerCase(), updateColumn.toLowerCase(), lineEnding));
 		}
 		updateSql.replace(updateSql.length() - lineEnding.length(), updateSql.length() - 1, "");
 
@@ -471,49 +476,6 @@ public class HibernateDao extends HibernateSession {
 						"SET %s",
 				targetTable, targetColumnsString, sourceColumnsString, sourceTable, matchingSql, updateSql
 		);
-	}
-
-	// TODO remove or redirect h2 tests to use this
-	// Works with h2 but not with postgres
-	public String getMergeTablesSqlOLD(String targetTable, String targetTableIdSequence, String idColumn,
-									String sourceTable, List<String> matchingColumns,
-									List<String> updateColumns, List<String> insertColumns) {
-		String lineEnding = ",\n";
-		StringBuilder updateSql = new StringBuilder();
-		for (String updateColumn : updateColumns) {
-			updateSql.append(format("T.%s = S.%s%s", updateColumn, updateColumn, lineEnding));
-		}
-		updateSql.replace(updateSql.length() - lineEnding.length(), updateSql.length() - 1, "");
-
-		StringBuilder insertSql = new StringBuilder("(");
-		// h2 database used for testing uses a slightly different syntax where the target table
-		// alias is not used in the insert statement.
-		final String targetTableAlias = isTestingSession() ? "": "T.";
-		for (String insertColumn : insertColumns) {
-			insertSql.append(format("%s%s,",targetTableAlias , insertColumn));
-		}
-		insertSql.replace(insertSql.length() - 1, insertSql.length(), ")\n");
-		insertSql.append("VALUES (");
-		for (String insertColumn : insertColumns) {
-			if (insertColumn.equals(idColumn)) {
-				insertSql.append(format("%s.nextval, ", targetTableIdSequence));
-			} else {
-				insertSql.append(format("S.%s, ", insertColumn));
-			}
-
-		}
-		insertSql.replace(insertSql.length() - 2, insertSql.length(), ")");
-		String matchingSql = matchingColumnsToStr(matchingColumns, " AND ");
-
-		return format(
-				"MERGE INTO %s T\n" +
-						"USING %s S\n" +
-						"ON (%s)\n" +
-						"WHEN MATCHED THEN UPDATE\n" +
-						"SET %s" +
-						"WHEN NOT MATCHED\n" +
-						"THEN INSERT %s",
-				targetTable, sourceTable, matchingSql, updateSql.toString(), insertSql.toString());
 	}
 
 	/**

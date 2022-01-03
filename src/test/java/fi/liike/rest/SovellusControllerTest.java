@@ -53,7 +53,7 @@ public class SovellusControllerTest {
         assertEquals((Integer) 1, deleted.getPoistunut());
     }
 
-    private Integer createAndDisableTestSovellus() throws IllegalAccessException, NoSuchFieldException, IOException, SQLException {
+    private Integer createAndDisableTestSovellus() throws IOException, SQLException {
         String csv = "\"ADGroup\",\"Tier1\",\"Tier2\",\"Tier3\",\"Model\",\"ConfigVersion\",\"ConfigurationBasicNumber\"," +
                 "\"Criticality\",\"Manufacturer\",\"Version\",\"Person Role\",\"Signature0\",\"Misc\",\"Language\",\"ForOS\"," +
                 "\"ForArchitecture\",\"Platfor\",\"Dependecies\",\"Relations\",\"StandardizedDate\",\"AcceptanceDate\",\"Company\"," +
@@ -79,7 +79,7 @@ public class SovellusControllerTest {
     @Test
     @Ignore
     // requires pgsql
-    public void getInactiveSovellusErrorTest() throws IllegalAccessException, NoSuchFieldException, IOException, SQLException {
+    public void getInactiveSovellusErrorTest() throws IOException, SQLException {
         Integer tunnus = createAndDisableTestSovellus();
 
         Response response = controller.get(tunnus.toString(), true);
