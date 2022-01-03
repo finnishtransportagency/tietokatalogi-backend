@@ -424,7 +424,7 @@ CREATE TABLE sovellus (
     tuotantoon_hyvaksymispaiva timestamp without time zone,
     kriittisyys character varying(4000),
     elinkaaritieto character varying(4000),
-    poistunut numeric(38,10) NOT NULL,
+    poistunut numeric(38,10) DEFAULT 0 NOT NULL,
     tuotekoodi character varying(255),
     nimi character varying(255) NOT NULL
 );
@@ -6147,6 +6147,8 @@ alter table  yleissuunnitelmahistoria
 -- PostgreSQL database dump complete
 --
 
+
+
 --
 -- PostgreSQL database dump
 --
@@ -6607,18 +6609,18 @@ INSERT INTO tietovaranto_kasite_arvo VALUES (139, 'TIEDONOHJAUSSUUNNITELMAT', '0
 --
 -- Helper view that shows tietolaji and tietoryhma values related to jarjestelma entities.
 
-  CREATE OR REPLACE FORCE VIEW "JARJESTELMA_TIETOARKKITEHTUURI" ("JARJESTELMAN_NIMI", "TIETOJARJESTELMATUNNUS", "TIETONIMI", "TIETOTUNNUS", "TIETORYHMANIMI", "TIETORYHMATUNNUS") AS
-  SELECT
-    tietojarjestelmasalkku.jarjestelman_nimi, tietojarjestelmasalkku.tietojarjestelmatunnus, tieto.nimi AS tietonimi, tieto.tietotunnus, tietoryhma.nimi AS tietoryhmanimi, tietoryhma.tietoryhmatunnus
-FROM
-    tietojarjestelmasalkku
-JOIN looginentietovaranto ON
-    tietojarjestelmasalkku.tietojarjestelmatunnus = looginentietovaranto.koodi
-JOIN tieto ON
-    looginentietovaranto.looginentietovarantotunnus = tieto.looginentietovarantotunnus
-LEFT JOIN tietoryhma ON
-    tieto.tietoryhmatunnus = tietoryhma.tietoryhmatunnus
-;
+--  CREATE OR REPLACE VIEW "JARJESTELMA_TIETOARKKITEHTUURI" ("JARJESTELMAN_NIMI", "TIETOJARJESTELMATUNNUS", "TIETONIMI", "TIETOTUNNUS", "TIETORYHMANIMI", "TIETORYHMATUNNUS") AS
+--  SELECT
+--    tietojarjestelmasalkku.jarjestelman_nimi, tietojarjestelmasalkku.tietojarjestelmatunnus, tieto.nimi AS tietonimi, tieto.tietotunnus, tietoryhma.nimi AS tietoryhmanimi, tietoryhma.tietoryhmatunnus
+--FROM
+--    tietojarjestelmasalkku
+--JOIN looginentietovaranto ON
+--    tietojarjestelmasalkku.tietojarjestelmatunnus = looginentietovaranto.koodi
+--JOIN tieto ON
+--    looginentietovaranto.looginentietovarantotunnus = tieto.looginentietovarantotunnus
+--LEFT JOIN tietoryhma ON
+--    tieto.tietoryhmatunnus = tietoryhma.tietoryhmatunnus
+--;
 
 
 -- TKYP-124 Tieto-omaisuus -lomake

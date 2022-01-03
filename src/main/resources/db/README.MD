@@ -1,9 +1,11 @@
 # Database management
 
-Database is updated using [dbmaintain-maven-plugin ](http://www.dbmaintain.org/maven-goals.html). All files placed in src/sql/database/ (TODO) are executed in sql-server.
+Database is updated using [dbmaintain-maven-plugin ](http://www.dbmaintain.org/maven-goals.html). All files placed in src/sql/database/postgres_scripts are executed in sql-server.
 All updates are incremental - only new files are executed. Therefore you can insert files to folder with biggest ordernumber.
 
 Create new folder for new development iteration (for example folder/version).  Sql-filename must begin with ordernumber, you can skip numbers but you cannot later add files with lower number (for example 03-add-user.sql after 05-add-group.sql is not allowed - next file must be 06 or bigger).
+
+TODO: reorganize/remove old (non-postgres) scripts after migration is complete!
 
 ## Initialize database
 Start the docker container by running `start-local-db.sh`

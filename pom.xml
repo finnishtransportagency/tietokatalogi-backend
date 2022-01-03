@@ -187,7 +187,7 @@
 		<dependency>
 			<groupId>org.mockito</groupId>
 			<artifactId>mockito-core</artifactId>
-			<version>2.12.0</version>
+			<version>2.23.0</version>
 			<scope>test</scope>
 		</dependency>
 		<dependency>
@@ -261,7 +261,7 @@
 					<include>tietojarjestelmaseloste.jrxml</include>
 					<include>config.properties</include>
 					<include>log4j.properties</include>
-					<!--  <include>testhibernate.cfg.xml</include> -->
+					<include>testhibernate.cfg.xml</include>
 				</includes>
 				<excludes>
 					<!--  <exclude>hibernate.cfg.xml</exclude> -->
