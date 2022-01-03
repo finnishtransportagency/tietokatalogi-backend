@@ -260,7 +260,7 @@
 					<include>hibernate.cfg.xml</include>
 					<include>tietojarjestelmaseloste.jrxml</include>
 					<include>config.properties</include>
-					<include>log4j.properties</include>
+					<include>log4j.xml</include>
 					<include>testhibernate.cfg.xml</include>
 				</includes>
 				<excludes>
