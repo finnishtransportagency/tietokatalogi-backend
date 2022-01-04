@@ -90,12 +90,6 @@
 			<version>8.5.2</version>
 		</dependency>
 
-<!--		TODO -->
-<!--		<dependency>-->
-<!--			<groupId>log4j</groupId>-->
-<!--			<artifactId>log4j</artifactId>-->
-<!--			<version>1.2.17</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-api</artifactId>
@@ -106,11 +100,6 @@
 			<artifactId>log4j-core</artifactId>
 			<version>2.12.4</version>
 		</dependency>
-<!--		<dependency>-->
-<!--			<groupId>org.slf4j</groupId>-->
-<!--			<artifactId>slf4j-log4j12</artifactId>-->
-<!--			<version>1.7.25</version>-->
-<!--		</dependency>-->
 		<dependency>
 			<groupId>org.apache.logging.log4j</groupId>
 			<artifactId>log4j-slf4j-impl</artifactId>
@@ -121,7 +110,6 @@
 			<artifactId>slf4j-api</artifactId>
 			<version>1.7.25</version>
 		</dependency>
-<!--		log stuff ends here-->
 
 		<dependency>
 			<groupId>io.swagger</groupId>
@@ -274,7 +262,7 @@
 					<include>hibernate.cfg.xml</include>
 					<include>tietojarjestelmaseloste.jrxml</include>
 					<include>config.properties</include>
-					<include>log4j.xml</include>
+					<include>log4j2.xml</include>
 					<include>testhibernate.cfg.xml</include>
 				</includes>
 				<excludes>

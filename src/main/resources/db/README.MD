@@ -9,7 +9,9 @@ TODO: reorganize/remove old (non-postgres) scripts after migration is complete!
 
 ## Initialize database
 Start the docker container by running `start-local-db.sh`
-Connect to db with `sudo docker exec -it tk-pgsql bash`
+Connect to db with
+  1. `sudo docker exec -it tk-pgsql bash`
+  2. `psql -U tietokt`
 Copy-paste and run contents of src/main/resources/db/src/sql/init_users/01_globals.sql.
 Run `./updateDatabase.sh`
 

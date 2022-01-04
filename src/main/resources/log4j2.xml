@@ -1,0 +1,37 @@
+<Configuration>
+<!--    These old appenders from log4j 1.x could be converted to RollingFileAppender if needed.
+        Leave out for now.
+        Alvar, 2022-01-04
+-->
+<!--    <appender name="TIETOKATALOGI" class="org.apache.log4j.DailyRollingFileAppender">-->
+<!--        <param name="Append" value="true"/>-->
+<!--        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"/>-->
+<!--        <param name="Encoding" value="UTF-8"/>-->
+<!--        <param name="File" value="${catalina.base}/logs/info_tietokatalogi"/>-->
+<!--        <layout class="org.apache.log4j.PatternLayout">-->
+<!--            <param name="ConversionPattern" value="%d [%t] %-5p %c- %m%n"/>-->
+<!--        </layout>-->
+<!--    </appender>-->
+<!--    <appender name="TIETOKATALOGIERROR" class="org.apache.log4j.DailyRollingFileAppender">-->
+<!--        <param name="Append" value="true"/>-->
+<!--        <param name="DatePattern" value="'.'yyyy-MM-dd'.log'"/>-->
+<!--        <param name="Encoding" value="UTF-8"/>-->
+<!--        <param name="File" value="${catalina.base}/logs/error_tietokatalogi"/>-->
+<!--        <param name="Threshold" value="ERROR"/>-->
+<!--        <layout class="org.apache.log4j.PatternLayout">-->
+<!--            <param name="ConversionPattern" value="%d [%t] %-5p %c- %m%n"/>-->
+<!--        </layout>-->
+<!--    </appender>-->
+
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d [%t] %-5p %c- %m%n" />
+        </Console>
+    </Appenders>
+    <Loggers>
+        <Root level="debug">
+            <AppenderRef ref="CONSOLE" />
+        </Root>
+    </Loggers>
+</Configuration>
+
