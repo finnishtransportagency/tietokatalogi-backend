@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration>
+    <Appenders>
+        <Console name="CONSOLE" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d [%t] %-5p %c- %m%n" />
+        </Console>
+        <Console name="stdout" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss,SSS} %-5p [%c] - %m%n" />
+        </Console>
+    </Appenders>
+
+    <Loggers>
+        <Logger name="fi.liike" level="info">
+            <AppenderRef ref="CONSOLE" />
+        </Logger>
+        <Logger name="org.hibernate" level="info" />
+        <Logger name="org.hibernate.SQL" level="debug" />
+        <Logger name="org.hibernate.type" level="trace" />
+        <Root level="info">
+            <AppenderRef ref="stdout" />
+        </Root>
+    </Loggers>
+</Configuration>
