@@ -35,10 +35,10 @@ public class FyysinenTietovaranto extends Haettava implements Serializable {
 	private String palvelutaso;
 	
 	@Column(name="koko")
-	private String koko;
+	private Integer koko;
 	
 	@Column(name="tietuemaara")
-	private String tietuemaara;
+	private Integer tietuemaara;
 	
 	@Column(name="linkki")
 	private String linkki;
@@ -147,19 +147,19 @@ public class FyysinenTietovaranto extends Haettava implements Serializable {
 		this.palvelutaso = palvelutaso;
 	}
 
-	public String getKoko() {
+	public Integer getKoko() {
 		return koko;
 	}
 
-	public void setKoko(String koko) {
+	public void setKoko(Integer koko) {
 		this.koko = koko;
 	}
 
-	public String getTietuemaara() {
+	public Integer getTietuemaara() {
 		return tietuemaara;
 	}
 
-	public void setTietuemaara(String tietuemaara) {
+	public void setTietuemaara(Integer tietuemaara) {
 		this.tietuemaara = tietuemaara;
 	}
 

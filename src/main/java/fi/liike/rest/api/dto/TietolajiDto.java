@@ -24,9 +24,9 @@ public class TietolajiDto extends ContentDtoWithRights {
 
 	private String tietosuojataso;
 
-	private String ylempitaso;
+	private Integer ylempitaso;
 
-	private String rivitunnus;
+	private Integer rivitunnus;
 
 	private String rivitila;
 
@@ -124,19 +124,19 @@ public class TietolajiDto extends ContentDtoWithRights {
 		this.tietosuojataso = tietosuojataso;
 	}
 
-	public String getYlempitaso() {
+	public Integer getYlempitaso() {
 		return ylempitaso;
 	}
 
-	public void setYlempitaso(String ylempitaso) {
+	public void setYlempitaso(Integer ylempitaso) {
 		this.ylempitaso = ylempitaso;
 	}
 
-	public String getRivitunnus() {
+	public Integer getRivitunnus() {
 		return rivitunnus;
 	}
 
-	public void setRivitunnus(String rivitunnus) {
+	public void setRivitunnus(Integer rivitunnus) {
 		this.rivitunnus = rivitunnus;
 	}
 

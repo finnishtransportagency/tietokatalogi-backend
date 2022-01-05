@@ -45,12 +45,12 @@ public class Tietolaji extends Haettava implements Serializable {
 	
 	@Column(name="TIETOSUOJATASO")
 	private String tietosuojataso;
-	
+
 	@Column(name="YLEMPITASO")
-	private String ylempitaso;
-	
+	private Integer ylempitaso;
+
 	@Column(name="RIVITUNNUS")
-	private String rivitunnus;
+	private Integer rivitunnus;
 	
 	@Column(name="RIVITILA")
 	private String rivitila;
@@ -161,19 +161,19 @@ public class Tietolaji extends Haettava implements Serializable {
 		this.tietosuojataso = tietosuojataso;
 	}
 
-	public String getYlempitaso() {
+	public Integer getYlempitaso() {
 		return ylempitaso;
 	}
 
-	public void setYlempitaso(String ylempitaso) {
+	public void setYlempitaso(Integer ylempitaso) {
 		this.ylempitaso = ylempitaso;
 	}
 
-	public String getRivitunnus() {
+	public Integer getRivitunnus() {
 		return rivitunnus;
 	}
 
-	public void setRivitunnus(String rivitunnus) {
+	public void setRivitunnus(Integer rivitunnus) {
 		this.rivitunnus = rivitunnus;
 	}
 

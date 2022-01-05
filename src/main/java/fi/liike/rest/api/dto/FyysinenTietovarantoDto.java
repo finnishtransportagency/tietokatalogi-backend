@@ -1,10 +1,5 @@
 package fi.liike.rest.api.dto;
 
-import fi.liike.rest.api.ContentDto;
-import fi.liike.rest.auth.Right;
-
-import java.util.List;
-
 public class FyysinenTietovarantoDto extends ContentDtoWithRights {
 
 	private Integer tunnus;
@@ -21,9 +16,9 @@ public class FyysinenTietovarantoDto extends ContentDtoWithRights {
 
 	private String palvelutaso;
 
-	private String koko;
+	private Integer koko;
 
-	private String tietuemaara;
+	private Integer tietuemaara;
 
 	private String linkki;
 
@@ -102,19 +97,19 @@ public class FyysinenTietovarantoDto extends ContentDtoWithRights {
 		this.palvelutaso = palvelutaso;
 	}
 
-	public String getKoko() {
+	public Integer getKoko() {
 		return koko;
 	}
 
-	public void setKoko(String koko) {
+	public void setKoko(Integer koko) {
 		this.koko = koko;
 	}
 
-	public String getTietuemaara() {
+	public Integer getTietuemaara() {
 		return tietuemaara;
 	}
 
-	public void setTietuemaara(String tietuemaara) {
+	public void setTietuemaara(Integer tietuemaara) {
 		this.tietuemaara = tietuemaara;
 	}
 
