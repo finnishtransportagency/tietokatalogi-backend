@@ -217,6 +217,7 @@ public class HibernateDao extends HibernateSession {
 	}
 
 	public Haettava update(Session passedSession, DaoContent saveContent, HaettavaHistory history) {
+		LOG.info("Updating content {} with name: {}", saveContent.getContent().getClass(), saveContent.getContent().getNimi());
 		Haettava content = saveContent.getContent();
 		Session session = passedSession;
 		if (session == null) {
@@ -228,12 +229,14 @@ public class HibernateDao extends HibernateSession {
 		List<Haettava> list = list(crit);
 		Haettava existing = getLatest(list);
 		if (existing == null) {
+			LOG.info("Unable to update entity: existing entity not found.");
 			return null;
 		}
 
 		copyEditedContentToExistingEntry(content, existing);
 		setModificationInformation(existing, history);
 		if (!createHistoryEntry(existing, history, HistoryType.MOD)) {
+			LOG.info("Unable to update entity: creating history entry failed.");
 			return null;
 		}
 
@@ -286,6 +289,7 @@ public class HibernateDao extends HibernateSession {
 
 	public void delete(Class<? extends Haettava> className, Class<? extends HaettavaHistory> historyClassName, int id,
 			HaettavaHistory history, DaoContent deleteContent, String remoteUser) throws SQLException {
+		LOG.info("Deleting content {} with id: {}", className, id);
 		Session session = getSession();
 		Criteria criteria = session.createCriteria(className);
 		criteria.add(Restrictions.eq("tunnus", id));

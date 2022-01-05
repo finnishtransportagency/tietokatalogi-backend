@@ -25,10 +25,11 @@
 
     <Appenders>
         <Console name="CONSOLE" target="SYSTEM_OUT">
-            <PatternLayout pattern="%d [%t] %-5p %c- %m%n" />
+            <PatternLayout pattern="%d [%t] %X{user_name} %-5p %c- %m%n" />
         </Console>
     </Appenders>
     <Loggers>
+<!--        Enable these to log sql queries for debugging -->
 <!--        <Logger name="org.hibernate" level="info" />-->
 <!--        <Logger name="org.hibernate.SQL" level="debug" />-->
 <!--        <Logger name="org.hibernate.type" level="trace" />-->
