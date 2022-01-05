@@ -29,6 +29,9 @@
         </Console>
     </Appenders>
     <Loggers>
+<!--        <Logger name="org.hibernate" level="info" />-->
+<!--        <Logger name="org.hibernate.SQL" level="debug" />-->
+<!--        <Logger name="org.hibernate.type" level="trace" />-->
         <Root level="debug">
             <AppenderRef ref="CONSOLE" />
         </Root>

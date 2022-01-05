@@ -69,7 +69,7 @@ public class TietojarjestelmapalveluDaoImpl extends SearchDaoImpl implements Mai
         // This seems more simple than setting another manyToOne relation and using hibernate to fetch
         // Tietojarjestelmapalvelu -> Tietolaji -> Tietoryhma  in the same query.
         Query hql = session.createQuery(
-                "SELECT tunnus AS tunnus, nimi AS nimi FROM tietok.Tietoryhma WHERE tunnus IN :tietoryhmaIDSet")
+                "SELECT tunnus AS tunnus, nimi AS nimi FROM Tietoryhma WHERE tunnus IN :tietoryhmaIDSet")
                 .setParameterList("tietoryhmaIDSet", tietoryhmaIDs)
                 .setResultTransformer(Transformers.aliasToBean(TietoryhmaMinimalDto.class));
         List<TietoryhmaMinimalDto> dtos = hql.list();

@@ -158,19 +158,12 @@ public class HibernateDao extends HibernateSession {
 		while (!freeIdFound) {
 			SQLQuery increaseSeqQuery = session.createSQLQuery("select nextval('" + sequence + "')");
 			Object newValue = increaseSeqQuery.uniqueResult();
-			// h2 database returns seq vals in different data type than pg
-			if (newValue.getClass().equals(BigDecimal.class)) {
-				id = ((BigDecimal) newValue).intValue();
-			} else {
-				id = ((BigInteger) newValue).intValue();
-			}
-
+			id = ((BigInteger) newValue).intValue();
 			Criteria criteria = session.createCriteria(content.getClass());
 			criteria.add(Restrictions.eq("tunnus", id));
 			List<Haettava> list = list(criteria);
 			if (list.isEmpty())
 				freeIdFound = true;
-
 		}
 		return id;
 	}
