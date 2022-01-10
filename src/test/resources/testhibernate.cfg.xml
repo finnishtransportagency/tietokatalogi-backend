@@ -57,7 +57,6 @@
    <mapping class="fi.liike.rest.Model.SovellusTemp$TestObj"></mapping>
    <mapping class="fi.liike.rest.Model.SovellusTemp$TestObjTemp"></mapping>
    <mapping class="fi.liike.rest.Model.SovellusImport"></mapping>
-   <mapping class="fi.liike.rest.Model.TietojarjestelmapalveluFetch"></mapping>
    <mapping class="fi.liike.rest.Model.TietojarjestelmapalveluKasite"></mapping>
    <mapping class="fi.liike.rest.Model.TietojarjestelmapalveluHistory"></mapping>
    <mapping class="fi.liike.rest.Model.JoinTietojarjestelmapalveluTietolaji"></mapping>
@@ -107,5 +106,9 @@
    <mapping class="fi.liike.rest.Model.TermilomakeJoinAssosiatiivinenKasiteHistory"></mapping>
    <mapping class="fi.liike.rest.Model.TermilomakeJoinHierarkkinenKasite"></mapping>
    <mapping class="fi.liike.rest.Model.TermilomakeJoinHierarkkinenKasiteHistory"></mapping>
+   <mapping class="fi.liike.rest.Model.TermilomakeJoinHuomautus"></mapping>
+   <mapping class="fi.liike.rest.Model.TermilomakeJoinHuomautusHistory"></mapping>
+   <mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelma"></mapping>
+   <mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelmaHistory"></mapping>
  </session-factory>
 </hibernate-configuration>
