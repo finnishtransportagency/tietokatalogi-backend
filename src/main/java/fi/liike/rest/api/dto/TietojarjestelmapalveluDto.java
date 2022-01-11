@@ -1,9 +1,5 @@
 package fi.liike.rest.api.dto;
 
-import fi.liike.rest.api.ContentDto;
-import fi.liike.rest.auth.Right;
-
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
@@ -20,13 +16,15 @@ public class TietojarjestelmapalveluDto extends ContentDtoWithRights {
 
     private String elinkaaritila;
 
-    private Set<TietolajiMinimalDto> tietolajit;
+    private Set<AnnotatedTietolajiDto> tietolajit;
 
     private Set<TietoryhmaMinimalDto> tietoryhmat;
 
     private String rivimuokkaajatunnus;
 
     private List<FetchHenkiloRooliDto> fetchRooliHenkiloList;
+
+    private List<Integer> relatedJarjestelmaIds;
 
 
     public String getKayttajaroolit() {
@@ -83,11 +81,11 @@ public class TietojarjestelmapalveluDto extends ContentDtoWithRights {
         return rivimuokkaajatunnus;
     }
 
-    public Set<TietolajiMinimalDto> getTietolajit() {
+    public Set<AnnotatedTietolajiDto> getTietolajit() {
         return tietolajit;
     }
 
-    public void setTietolajit(Set<TietolajiMinimalDto> tietolajit) {
+    public void setTietolajit(Set<AnnotatedTietolajiDto> tietolajit) {
         this.tietolajit = tietolajit;
     }
 
@@ -111,4 +109,11 @@ public class TietojarjestelmapalveluDto extends ContentDtoWithRights {
         this.fetchRooliHenkiloList = henkiloRooliList;
     }
 
+    public List<Integer> getRelatedJarjestelmaIds() {
+        return relatedJarjestelmaIds;
+    }
+
+    public void setRelatedJarjestelmaIds(List<Integer> relatedJarjestelmaIds) {
+        this.relatedJarjestelmaIds = relatedJarjestelmaIds;
+    }
 }

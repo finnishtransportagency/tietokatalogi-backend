@@ -4,10 +4,12 @@ import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.*;
 import fi.liike.rest.api.dto.TietoryhmaMinimalDto;
+import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.Session;
+import org.hibernate.Transaction;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
-import org.hibernate.type.StandardBasicTypes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,17 +22,17 @@ public class TietojarjestelmapalveluDaoImpl extends SearchDaoImpl implements Mai
 
     @Override
     public ModelResults getFiltered(SearchContent searchContent) {
-        return super.getFiltered(TietojarjestelmapalveluFetch.class, searchContent);
+        return super.getFiltered(Tietojarjestelmapalvelu.class, searchContent);
     }
 
     @Override
     public Haettava get(int id) {
-        return get(TietojarjestelmapalveluFetch.class, id);
+        return get(Tietojarjestelmapalvelu.class, id);
     }
 
     @Override
     public List<Haettava> getAll() {
-        return super.getAll(TietojarjestelmapalveluFetch.class);
+        return super.getAll(Tietojarjestelmapalvelu.class);
     }
 
     @Override
@@ -78,20 +80,50 @@ public class TietojarjestelmapalveluDaoImpl extends SearchDaoImpl implements Mai
         return new HashSet<>(dtos);
     }
 
-    public Set<Integer> getAllowedTietolajiIDs(Integer jarjestelmaID) {
-        if (jarjestelmaID == null) return new HashSet<>();
-
+    public Tietolaji getTietolaji(Integer tietolajiId) {
+        if (tietolajiId == null) return null;
+        Tietolaji result = null;
         Session session = getSession();
-
-        Query sql = session.createSQLQuery("SELECT TIETOTUNNUS as tietolajiID FROM tietok.JARJESTELMA_TIETOARKKITEHTUURI " +
-                        "WHERE TIETOJARJESTELMATUNNUS = :jarjestelmaID")
-                // ensures that hibernate casts the result to Integer
-                .addScalar("tietolajiID", StandardBasicTypes.INTEGER)
-                .setParameter("jarjestelmaID", jarjestelmaID);
-        List<Integer> tietolajiIDs = sql.list();
-
-        session.close();
-        return new HashSet<>(tietolajiIDs);
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Criteria criteria = getSession().createCriteria(Tietolaji.class);
+            criteria.add(Restrictions.eq("tunnus", tietolajiId));
+            result = (Tietolaji) criteria.uniqueResult();
+            tx.commit();
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            LOG.error(e.getLocalizedMessage());
+        }
+        finally {
+            session.close();
+        }
+        return result;
     }
 
+    /**
+     * Updates jarjestelma links to reflect a deleted tietojarjestelmapalvelu.
+     * The related links' tietojarjestelmapalveluTunnus and kuvaus (tietovirta/tietolaji) are set to null.
+     */
+    public void nullifyJarjestelmaLinkReferences(int tjpId) {
+        Session session = getSession();
+        Transaction tx = null;
+        try {
+            tx = session.beginTransaction();
+            Query hql = session.createQuery("UPDATE JoinJarjestelmaLinkkaus SET tietojarjestelmapalveluTunnus = null, " +
+                    "kuvaus = null " +
+                    "WHERE tietojarjestelmapalveluTunnus = :tjpId");
+            hql.setInteger("tjpId", tjpId);
+            int rowsAffected = hql.executeUpdate();
+            tx.commit();
+            LOG.info("Nullified jarjestelma link references to tietojarjestelmapalvelu " + tjpId +
+                    ", " + rowsAffected + " rows affected");
+        } catch (Exception e) {
+            if (tx != null) tx.rollback();
+            LOG.error(e.getLocalizedMessage());
+        }
+        finally {
+            session.close();
+        }
+    }
 }

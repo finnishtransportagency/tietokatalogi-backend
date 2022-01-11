@@ -13,7 +13,7 @@ import java.util.List;
 
 public class TermilomakeJoinHierarkkinenKasiteDao extends JoinMainDao implements JoinDao {
     private List<TermilomakeJoinHierarkkinenKasite> joinList;
-    String remoteUser;
+    private String remoteUser;
 
     private final Logger LOG = LoggerFactory.getLogger(TermilomakeJoinHierarkkinenKasiteDao.class);
 
@@ -37,7 +37,10 @@ public class TermilomakeJoinHierarkkinenKasiteDao extends JoinMainDao implements
     @Override
     public void save(Session session, int childNode) {
         for(TermilomakeJoinHierarkkinenKasite hierarkkinenKasite : this.joinList){
-            hierarkkinenKasite.setChildNode(childNode);
+            if (hierarkkinenKasite.getChildNode() == null)
+                hierarkkinenKasite.setChildNode(childNode);
+            if (hierarkkinenKasite.getParentNode() == null)
+                hierarkkinenKasite.setParentNode(childNode);
         }
         this.save(session, this.joinList);
     }
@@ -59,8 +62,8 @@ public class TermilomakeJoinHierarkkinenKasiteDao extends JoinMainDao implements
         Criteria criteria = session.createCriteria(TermilomakeJoinHierarkkinenKasite.class);
         //Fetch both links
         criteria.add(Restrictions.disjunction()
-                             .add(Restrictions.eq("childNode", childNode))
-                             .add(Restrictions.eq("parentNode", childNode)));
+             .add(Restrictions.eq("childNode", childNode))
+             .add(Restrictions.eq("parentNode", childNode)));
 
 //        criteria.add(Restrictions.eq("childNode", childNode));
         @SuppressWarnings("unchecked")

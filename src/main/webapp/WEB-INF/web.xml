@@ -54,6 +54,7 @@
 		<servlet-name>externalApi</servlet-name>
 		<url-pattern>/external/*</url-pattern>
 	</servlet-mapping>
+
 	<filter>
 		<filter-name>requestLogFilter</filter-name>
 		<filter-class>fi.liike.rest.util.RequestLogFilter</filter-class>
@@ -62,4 +63,5 @@
 		<filter-name>requestLogFilter</filter-name>
 		<url-pattern>*</url-pattern>
 	</filter-mapping>
+
 </web-app>

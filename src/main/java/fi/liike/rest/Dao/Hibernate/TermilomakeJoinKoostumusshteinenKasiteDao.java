@@ -42,7 +42,10 @@ public class TermilomakeJoinKoostumusshteinenKasiteDao extends JoinMainDao imple
         // Since this is called on tietovaranto POST, the tietovaranto id (child node) couldn't have been set
         // before (in the service layer) since it didn't exist then.
         for (TermilomakeJoinKoostumussuhteinenKasite termilomakeJoinKoostumussuhteinenKasite : this.joinList) {
-            termilomakeJoinKoostumussuhteinenKasite.setChildNode(childNode);
+            if (termilomakeJoinKoostumussuhteinenKasite.getChildNode() == null)
+                termilomakeJoinKoostumussuhteinenKasite.setChildNode(childNode);
+            if (termilomakeJoinKoostumussuhteinenKasite.getParentNode() == null)
+                termilomakeJoinKoostumussuhteinenKasite.setParentNode(childNode);
         }
         this.save(session, this.joinList);
     }

@@ -31,9 +31,6 @@ public class TietojarjestelmapalveluController extends MainController {
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
     public Response create(@Context HttpServletRequest httpRequest, TietojarjestelmapalveluDto content) throws IOException {
-        if (!service.tietolajiSetIsValid(content)) {
-            return Response.serverError().build();
-        }
         return super.create(service, content, httpRequest);
     }
 
@@ -80,7 +77,7 @@ public class TietojarjestelmapalveluController extends MainController {
                            @DefaultValue("0") @QueryParam("offset") String offset,
                            @DefaultValue("") @QueryParam("filter") String filter,
                            @DefaultValue("") @QueryParam("sort") String sort) {
-        LOG.info("Järjestelmä hakee tietojärjestelmäpalveluja");
+        LOG.info("Haetaan tietojärjestelmäpalvelut");
         SearchContent searchContent = new SearchContent(filter, sort);
         return super.getAll(service, searchContent, size, offset);
     }

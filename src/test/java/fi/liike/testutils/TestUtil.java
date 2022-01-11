@@ -117,6 +117,8 @@ public class TestUtil {
 			return createEntries(1, count, "TOIMINTAPROSESSI", "TOIMINTAPROSESSITUNNUS", "NIMI");
 		case TERMILOMAKE:
 			return createEntries(1, count, "TERMILOMAKE", "TERMILOMAKETUNNUS", "NIMI");
+		case TIETOJARJESTELMAPALVELU:
+			return createEntries(1, count, "TIETOJARJESTELMAPALVELU", "TUNNUS", "NIMI");
 		default:
 			return null;
 		}
@@ -322,6 +324,8 @@ public class TestUtil {
 			return createEntries(startId, count, "TOIMINTAPROSESSI", "TOIMINTAPROSESSITUNNUS", "NIMI");
 		case TERMILOMAKE:
 			return createEntries(startId, count, "TERMILOMAKE", "TERMILOMAKETUNNUS", "NIMI");
+		case TIETOJARJESTELMAPALVELU:
+			return createEntries(startId, count, "TIETOJARJESTELMAPALVELU", "TUNNUS", "NIMI");
 		default:
 			return null;
 		}

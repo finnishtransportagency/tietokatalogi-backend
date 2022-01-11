@@ -40,7 +40,10 @@ public class TermilomakeJoinAssosiatiivinenKasiteDao extends JoinMainDao impleme
         // Since this is called on tietovaranto POST, the tietovaranto id (child node) couldn't have been set
         // before (in the service layer) since it didn't exist then.
         for (TermilomakeJoinAssosiatiivinenKasite kasite : this.joinList) {
-            kasite.setChildNode(childNode);
+            if (kasite.getChildNode() == null)
+                kasite.setChildNode(childNode);
+            if (kasite.getParentNode() == null)
+                kasite.setParentNode(childNode);
         }
         this.save(session, this.joinList);
     }

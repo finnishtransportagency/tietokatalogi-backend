@@ -21,6 +21,7 @@ public class TermilomakeService extends MainService implements Service {
     private TermilomakeHierarkkinenKasiteService hierarkkinenKasiteService;
     private TermilomakeKoostumusKasiteService koostumusKasiteService;
     private TermilomakeAssosiatiivinenKasiteService assosiatiivinenKasiteService;
+    private TermilomakeJoinHuomautusService joinHuomautusService;
     private final Logger LOG = LoggerFactory.getLogger(TermilomakeService.class);
 
 
@@ -31,6 +32,7 @@ public class TermilomakeService extends MainService implements Service {
         this.hierarkkinenKasiteService = new TermilomakeHierarkkinenKasiteService();
         this.koostumusKasiteService = new TermilomakeKoostumusKasiteService();
         this.assosiatiivinenKasiteService = new TermilomakeAssosiatiivinenKasiteService();
+        this.joinHuomautusService = new TermilomakeJoinHuomautusService();
 
     }
 
@@ -41,9 +43,12 @@ public class TermilomakeService extends MainService implements Service {
 
     @Override
     public ContentDto save(Session session, ContentDto content) throws SQLException {
+
         DaoContent dataToSave = prepareDaoContent(content);
+
         Haettava savedTermilomake = dao.save(session, dataToSave);
         if (savedTermilomake != null ) {
+
             return get(savedTermilomake.getTunnus());
         }
         return null;
@@ -53,6 +58,19 @@ public class TermilomakeService extends MainService implements Service {
         Integer termilomakeTunnus = ((TermilomakeDto) content).getTunnus();
         DaoContent saveContent = new DaoContent();
         saveContent.setHaettava(converter.dtoToDomain(content));
+
+
+        List<TermilomakeJoinHuomautus> joinTermilomakeHuomautusList = new ArrayList<>();
+        List<String> huomautusList = ((TermilomakeDto) content).gethuomautusList();
+
+        if (huomautusList != null) {
+            for (String huomautus : huomautusList) {
+                joinTermilomakeHuomautusList.add(new TermilomakeJoinHuomautus(content.getTunnus(), huomautus));
+            }
+            JoinPublicDao joinTermilomakeHuomautusDao = joinHuomautusService.getDao(
+                    joinTermilomakeHuomautusList, content.getRivimuokkaajatunnus());
+            saveContent.addJoinDao(joinTermilomakeHuomautusDao);
+        }
 
         // Create joinDao for Koostumussuhteinen kasite joins, 2-sided
         List<TermilomakeJoinKoostumussuhteinenKasite> termilomakeJoinKoostumussuhteinenKasiteList =
@@ -148,6 +166,7 @@ public class TermilomakeService extends MainService implements Service {
 
     @Override
     public ContentDto update(Session session, ContentDto content) throws SQLException {
+
         DaoContent dataToSave = prepareDaoContent(content);
         Haettava savedTermilomake = dao.update(session, dataToSave);
         if (savedTermilomake != null) {
@@ -162,6 +181,7 @@ public class TermilomakeService extends MainService implements Service {
             // Fetch existing Termilomake content including joins
             ContentDto existingContent = this.get(id);
             if (existingContent != null) {
+
                 DaoContent deleteContent = prepareDaoContent(existingContent);
                 dao.delete(id, deleteContent, remoteUser);
                 return id;
@@ -203,7 +223,11 @@ public class TermilomakeService extends MainService implements Service {
 
     private ContentDto addLinksAndConvert(Haettava haettava) {
         if (haettava != null) {
+
             Integer termilomakeId = haettava.getTunnus();
+
+            List<String> huomautusList = joinHuomautusService.getHuomautusList(termilomakeId,
+                    TermilomakeJoinHuomautus.class);
 
             List<Integer> hierarkkIds = hierarkkinenKasiteService.getHierarkkinenYlaKasiteIds(termilomakeId
                     , TermilomakeJoinHierarkkinenKasite.class);
@@ -217,7 +241,7 @@ public class TermilomakeService extends MainService implements Service {
                     , TermilomakeJoinKoostumussuhteinenKasite.class);
 
 
-            return converter.modelToDto(haettava, hierarkkIds, assosIds, koostIds);
+            return converter.modelToDto(haettava, hierarkkIds, assosIds, koostIds, huomautusList);
 
         }
 

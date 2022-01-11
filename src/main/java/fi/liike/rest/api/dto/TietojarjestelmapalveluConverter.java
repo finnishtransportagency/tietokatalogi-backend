@@ -3,8 +3,7 @@ package fi.liike.rest.api.dto;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.ContentDto;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.List;
 
 public class TietojarjestelmapalveluConverter implements MinimalConverter {
     @Override
@@ -27,7 +26,7 @@ public class TietojarjestelmapalveluConverter implements MinimalConverter {
     public ContentDto modelToDto(Haettava modelObject, Integer... parentId) {
         if (modelObject == null)
             return null;
-        TietojarjestelmapalveluFetch data = (TietojarjestelmapalveluFetch) modelObject;
+        Tietojarjestelmapalvelu data = (Tietojarjestelmapalvelu) modelObject;
         TietojarjestelmapalveluDto result = new TietojarjestelmapalveluDto();
         result.setTunnus(data.getTunnus());
         result.setNimi(data.getNimi());
@@ -36,24 +35,26 @@ public class TietojarjestelmapalveluConverter implements MinimalConverter {
         result.setKayttajaroolit(data.getKayttajaroolit());
         result.setJarjestelma(data.getTietojarjestelmatunnus());
         result.setRivimuokkaajatunnus(data.getRivimuokkaajatunnus());
-        Set<Tietolaji> tietolajit = data.getTietolajit();
-        Set<TietolajiMinimalDto> dtoTietolajit = new HashSet<>();
-        for (Tietolaji t : tietolajit) {
-            dtoTietolajit.add(tietolajiModelToMinimalDto(t));
-        }
-        result.setTietolajit(dtoTietolajit);
         return result;
     }
 
-    public TietolajiMinimalDto tietolajiModelToMinimalDto(Tietolaji tietolaji) {
-        TietolajiMinimalDto result = new TietolajiMinimalDto();
+    public ContentDto modelToDto(Haettava modelObject, List<Integer> relatedJarjestelmaIds) {
+        if (modelObject == null)
+            return null;
+        TietojarjestelmapalveluDto dtoContent = (TietojarjestelmapalveluDto) modelToDto(modelObject);
+        dtoContent.setRelatedJarjestelmaIds(relatedJarjestelmaIds);
+        return dtoContent;
+    }
+
+    public AnnotatedTietolajiDto tietolajiModelToAnnotatedDto(Tietolaji tietolaji) {
+        AnnotatedTietolajiDto result = new AnnotatedTietolajiDto();
         result.setNimi(tietolaji.getNimi());
         result.setTunnus(tietolaji.getTunnus());
         return result;
     }
 
     public ContentDto modelToMinimalDto(Haettava modelObject) {
-        TietojarjestelmapalveluFetch data = (TietojarjestelmapalveluFetch) modelObject;
+        Tietojarjestelmapalvelu data = (Tietojarjestelmapalvelu) modelObject;
         TietojarjestelmapalveluFetchMinimalDto result = new TietojarjestelmapalveluFetchMinimalDto();
         result.setTunnus(data.getTunnus());
         result.setNimi(data.getNimi());
@@ -61,11 +62,12 @@ public class TietojarjestelmapalveluConverter implements MinimalConverter {
         return result;
     }
 
-    public JoinTietojarjestelmapalveluTietolaji linkDtoToDomain(TietolajiMinimalDto data) {
+    public JoinTietojarjestelmapalveluTietolaji linkDtoToDomain(AnnotatedTietolajiDto data) {
         JoinTietojarjestelmapalveluTietolaji result = new JoinTietojarjestelmapalveluTietolaji();
         result.setParentNode(data.getTunnus());
         // TODO: legacy feature, consider removing
         result.setRivitila("A");
+        result.setLiittyvaJarjestelma(data.getLiittyvaJarjestelmaTunnus());
         return result;
     }
 

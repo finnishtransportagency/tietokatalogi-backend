@@ -2,6 +2,7 @@ package fi.liike.rest.Service;
 
 import fi.liike.rest.Dao.Hibernate.JoinTietojarjestelmapalveluTietolajiDao;
 import fi.liike.rest.Dao.Hibernate.TietojarjestelmapalveluDaoImpl;
+import fi.liike.rest.Dao.JoinPublicDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.*;
 import fi.liike.rest.api.dto.*;
@@ -19,6 +20,7 @@ public class TietojarjestelmapalveluService extends MinimalFetchService implemen
     private TietojarjestelmapalveluConverter converter;
     private final Logger LOG = LoggerFactory.getLogger(TietojarjestelmapalveluService.class);
     private JoinTietojarjestelmapalveluTietolajiService joinTietojarjestelmapalveluTietolajiService;
+    private JoinTJPRelatedJarjestelmaService joinTJPRelatedJarjestelmaService;
     private HenkiloService henkiloService;
 
     public TietojarjestelmapalveluService() {
@@ -26,12 +28,34 @@ public class TietojarjestelmapalveluService extends MinimalFetchService implemen
         this.dao = (TietojarjestelmapalveluDaoImpl) getDao();
         this.converter = (TietojarjestelmapalveluConverter) getConverter();
         this.joinTietojarjestelmapalveluTietolajiService = new JoinTietojarjestelmapalveluTietolajiService();
+        this.joinTJPRelatedJarjestelmaService = new JoinTJPRelatedJarjestelmaService();
         this.henkiloService = new HenkiloService();
     }
 
     @Override
     public DtoResults getFiltered(SearchContent searchContent) {
-        return super.getFiltered(converter, dao, searchContent);
+        DtoResults results = super.getFiltered(converter, dao, searchContent);
+        for (ContentDto contentDto : results.getHaettavat()) {
+            TietojarjestelmapalveluDto dto = (TietojarjestelmapalveluDto) contentDto;
+            List<Integer> relatedJarjestelmaIds = joinTJPRelatedJarjestelmaService.getRelatedJarjestelmaIdsOfTJP(
+                    dto.getTunnus());
+            dto.setRelatedJarjestelmaIds(relatedJarjestelmaIds);
+
+            List<JoinTietojarjestelmapalveluTietolaji> joins = joinTietojarjestelmapalveluTietolajiService.getJoinEntries(dto.getTunnus());
+            List<Tietolaji> tietolajiList = new ArrayList<>();
+            Set<AnnotatedTietolajiDto> tietolajiDtos = new HashSet<>();
+            for (JoinTietojarjestelmapalveluTietolaji join : joins) {
+                Tietolaji tietolaji = dao.getTietolaji(join.getParentNode());
+                tietolajiList.add(tietolaji);
+                AnnotatedTietolajiDto tietolajiDto = converter.tietolajiModelToAnnotatedDto(tietolaji);
+                tietolajiDto.setLiittyvaJarjestelmaTunnus(join.getLiittyvaJarjestelma());
+                tietolajiDto.setLiittyvaJarjestelmaNimi(dao.getJarjestelmaName(join.getLiittyvaJarjestelma()));
+                tietolajiDtos.add(tietolajiDto);
+            }
+            dto.setTietolajit(new HashSet<>(tietolajiDtos));
+            dto.setTietoryhmat(dao.getMatchingTietoryhmat(new HashSet<>(tietolajiList)));
+        }
+        return results;
     }
 
     @Override
@@ -44,64 +68,49 @@ public class TietojarjestelmapalveluService extends MinimalFetchService implemen
         return save(null, content);
     }
 
-    @Override
-    public ContentDto save(Session session, ContentDto content) throws SQLException {
-        LOG.info("Converting tietojarjestelmapalvelu with id " + content.getTunnus());
-        DaoContent saveContent = new DaoContent();
-        saveContent.setHaettava(this.converter.dtoToDomain(content));
+    private DaoContent prepareDaoContent(ContentDto content) {
+        DaoContent saveUpdateContent = new DaoContent();
+        saveUpdateContent.setHaettava(this.converter.dtoToDomain(content));
+        LOG.info("Save or update tietojarjestelmapalvelu " + content.getTunnus());
 
-        // Tietolaji data is saved through a separate joinDao
-        Set<TietolajiMinimalDto> tietolajiSet = ((TietojarjestelmapalveluDto) content).getTietolajit();
+        Set<AnnotatedTietolajiDto> tietolajiSet = ((TietojarjestelmapalveluDto) content).getTietolajit();
+        LOG.info("Save or update tietolaji set: " + tietolajiSet);
+
         List<JoinTietojarjestelmapalveluTietolaji> joinTietolajiList = new ArrayList<>();
-        if (tietolajiSet != null && !(tietolajiSet.isEmpty())) {
-            for (TietolajiMinimalDto dto : tietolajiSet) {
+        if (tietolajiSet != null) {
+            for (AnnotatedTietolajiDto dto : tietolajiSet) {
                 joinTietolajiList.add(this.converter.linkDtoToDomain(dto));
             }
-            saveContent.addJoinDao(joinTietojarjestelmapalveluTietolajiService.getDao(joinTietolajiList, content.getRivimuokkaajatunnus()));
         }
+        LOG.info("Koottu joinTietolajiList: " + joinTietolajiList);
+        saveUpdateContent.addJoinDao(joinTietojarjestelmapalveluTietolajiService.getDao(joinTietolajiList, content.getRivimuokkaajatunnus()));
 
+        // Create joinDao for tjp - related jarjestelma joins
+        List<JoinTJPRelatedJarjestelma> joinTJPRelatedJarjestelmaList = new ArrayList<>();
+        List<Integer> jarjestelmaIds = ((TietojarjestelmapalveluDto) content).getRelatedJarjestelmaIds();
+        if (jarjestelmaIds != null) {
+            for (Integer jarjestelmaId : jarjestelmaIds) {
+                joinTJPRelatedJarjestelmaList.add(new JoinTJPRelatedJarjestelma(jarjestelmaId, content.getTunnus()));
+            }
+        }
+        LOG.info("Koottu liittyvien järjestelmien lista: " + joinTJPRelatedJarjestelmaList);
+        JoinPublicDao joinTJPRelatedJarjestelmaDao = joinTJPRelatedJarjestelmaService.getDao(
+                joinTJPRelatedJarjestelmaList, content.getRivimuokkaajatunnus());
+        saveUpdateContent.addJoinDao(joinTJPRelatedJarjestelmaDao);
+        return saveUpdateContent;
+    }
+
+    @Override
+    public ContentDto save(Session session, ContentDto content) throws SQLException {
+        DaoContent saveContent = prepareDaoContent(content);
         Haettava createdHaettava = dao.save(session, saveContent);
         return get(createdHaettava.getTunnus());
     }
 
-    /**
-     * Validates the tietolaji set associated with a tietojarjestelmapalvelu.
-     * Checks that the set is a subset of the set of all tietolaji values associated
-     * with the given jarjestelma.
-     */
-    public boolean tietolajiSetIsValid(ContentDto content) {
-        TietojarjestelmapalveluDto dto = (TietojarjestelmapalveluDto) content;
-        Set<TietolajiMinimalDto> tietolajit = dto.getTietolajit();
-        if (tietolajit == null) return true;
-        Set<Integer> tietolajiIDs = new LinkedHashSet<>();
-        for (TietolajiMinimalDto tl : tietolajit) {
-            tietolajiIDs.add(tl.getTunnus());
-        }
-        Set<Integer> allowedTietolajiIDs = this.dao.getAllowedTietolajiIDs(dto.getJarjestelma());
-        return allowedTietolajiIDs.containsAll(tietolajiIDs);
-    }
 
     @Override
     public ContentDto update(ContentDto content) throws IOException, SQLException, InvalidTietokatalogiDataException {
-        if (!this.tietolajiSetIsValid(content)) {
-            throw new InvalidTietokatalogiDataException("Virheellinen tietolajien joukko");
-        }
-
-        DaoContent updateContent = new DaoContent();
-        updateContent.setHaettava(this.converter.dtoToDomain(content));
-        LOG.info("Update tietojarjestelmapalvelu " + content.getTunnus());
-
-        Set<TietolajiMinimalDto> tietolajiSet = ((TietojarjestelmapalveluDto) content).getTietolajit();
-        LOG.info("Update tietolaji set: " + tietolajiSet);
-
-        List<JoinTietojarjestelmapalveluTietolaji> joinTietolajiList = new ArrayList<>();
-        if (tietolajiSet != null) {
-            for (TietolajiMinimalDto dto : tietolajiSet) {
-                joinTietolajiList.add(this.converter.linkDtoToDomain(dto));
-            }
-            LOG.info("Koottu joinTietolajiList: " + joinTietolajiList);
-        }
-        updateContent.addJoinDao(joinTietojarjestelmapalveluTietolajiService.getDao(joinTietolajiList, content.getRivimuokkaajatunnus()));
+        DaoContent updateContent = prepareDaoContent(content);
         this.dao.update(null, updateContent);
         if (content.getTunnus() == null) return null;
         return get(content.getTunnus());
@@ -118,6 +127,15 @@ public class TietojarjestelmapalveluService extends MinimalFetchService implemen
             DaoContent deleteContent = new DaoContent();
             // The join dao handles deleting join data
             deleteContent.addJoinDao(new JoinTietojarjestelmapalveluTietolajiDao());
+            List<JoinTJPRelatedJarjestelma> joinTJPRelatedJarjestelmaList = new ArrayList<>();
+            List<Integer> jarjestelmaIds = joinTJPRelatedJarjestelmaService.getRelatedJarjestelmaIdsOfTJP(id);
+            if (jarjestelmaIds != null) {
+                for (Integer jarjestelmaId : jarjestelmaIds) {
+                    joinTJPRelatedJarjestelmaList.add(new JoinTJPRelatedJarjestelma(jarjestelmaId, id));
+                }
+                deleteContent.addJoinDao(joinTJPRelatedJarjestelmaService.getDao(joinTJPRelatedJarjestelmaList, remoteUser));
+            }
+            dao.nullifyJarjestelmaLinkReferences(id);
             dao.delete(id, deleteContent, remoteUser);
             return id;
         } catch (SQLException e) {
@@ -128,10 +146,24 @@ public class TietojarjestelmapalveluService extends MinimalFetchService implemen
 
     @Override
     public ContentDto get(int id) {
-        TietojarjestelmapalveluFetch domainObject = (TietojarjestelmapalveluFetch) dao.get(id);
+        Tietojarjestelmapalvelu domainObject = (Tietojarjestelmapalvelu) dao.get(id);
         if (domainObject == null) return null;
-        TietojarjestelmapalveluDto dto = (TietojarjestelmapalveluDto) converter.modelToDto(domainObject);
-        dto.setTietoryhmat(dao.getMatchingTietoryhmat(domainObject.getTietolajit()));
+        List<Integer> relatedJarjestelmaIds = joinTJPRelatedJarjestelmaService.getRelatedJarjestelmaIdsOfTJP(id);
+        TietojarjestelmapalveluDto dto = (TietojarjestelmapalveluDto) converter.modelToDto(domainObject, relatedJarjestelmaIds);
+
+        List<JoinTietojarjestelmapalveluTietolaji> joins = joinTietojarjestelmapalveluTietolajiService.getJoinEntries(id);
+        List<Tietolaji> tietolajiList = new ArrayList<>();
+        Set<AnnotatedTietolajiDto> tietolajiDtos = new HashSet<>();
+        for (JoinTietojarjestelmapalveluTietolaji join : joins) {
+            Tietolaji tietolaji = dao.getTietolaji(join.getParentNode());
+            tietolajiList.add(tietolaji);
+            AnnotatedTietolajiDto tietolajiDto = converter.tietolajiModelToAnnotatedDto(tietolaji);
+            tietolajiDto.setLiittyvaJarjestelmaTunnus(join.getLiittyvaJarjestelma());
+            tietolajiDto.setLiittyvaJarjestelmaNimi(dao.getJarjestelmaName(join.getLiittyvaJarjestelma()));
+            tietolajiDtos.add(tietolajiDto);
+        }
+        dto.setTietolajit(new HashSet<>(tietolajiDtos));
+        dto.setTietoryhmat(dao.getMatchingTietoryhmat(new HashSet<>(tietolajiList)));
         Set<FetchHenkiloRooliDto> fetchHenkiloRooliDtoList = henkiloService.getFetchHenkiloRooliListBySystemId(
                 domainObject.getTietojarjestelmatunnus(), false, JarjestelmaHenkiloRooli.class,
                 "JARJESTELMA_ID");

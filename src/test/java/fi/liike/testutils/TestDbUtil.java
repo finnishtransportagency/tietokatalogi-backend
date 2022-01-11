@@ -38,7 +38,8 @@ public class TestDbUtil {
 			"tietovarantohist", "toimintaprosessi", "toimintaprosessihist", "toimintaprostietovarant",
 			"toimintaprostietovahist", "tietoryhmatietovaranto", "tietoryhmatietovarahist",
 			"termilomake", "termilomakehist","TERMILOMAKEHIERKASITE", "TERMILOMAKEHIERKHIST",
-		   "TERMILOMAKEKOOSTKASITE","TERMILOMAKEKOOSTKASHIST","TERMILOMAKEASSOSKASITE","TERMILOMAKEASKAHISTORIA");
+		   "TERMILOMAKEKOOSTKASITE","TERMILOMAKEKOOSTKASHIST","TERMILOMAKEASSOSKASITE","TERMILOMAKEASKAHISTORIA",
+			"tietojarjestelmapalvelu", "tietojarjpalveluhist", "tietojarjpalvelutieto", "tietojarjpalvtietohist");
 
 
 	public static void init() {
@@ -176,6 +177,14 @@ public class TestDbUtil {
 			sequences.add("TERMILOMAKEASSOSKASITE"); // assosiatiivinen käsite
 			sequences.add("TERMILOMAKEASKAHISTORIA"); // assosiatiivinen käsite historia
 			break;
+		case TIETOJARJESTELMAPALVELU:
+			setupDB(Catalogue.JARJESTELMA);
+			setupDB(Catalogue.TIETOLAJI);
+			sequences.add("tietojarjestelmapalvelu");
+			sequences.add("tietojarjpalveluhist");
+			sequences.add("tietojarjpalvelutieto");
+			sequences.add("tietojarjpalvtietohist");
+			break;
 		default:
 			return;
 		}
@@ -309,16 +318,32 @@ public class TestDbUtil {
 			dbNames.add("termilomake");
 			dbNames.add("termilomakehistoria");
 			break;
+		case TIETOJARJESTELMAPALVELU:
+			clearDB(Catalogue.JARJESTELMA);
+			clearDB(Catalogue.TIETOLAJI);
+			dbNames.add("tietojarjestelmapalvelu");
+			dbNames.add("tietojarjpalveluhistoria");
+			break;
 		default:
 			return;
 		}
+		Transaction tx = getSession().beginTransaction();
 		for (String dbName : dbNames) {
 			SQLQuery query = getSession().createSQLQuery("delete from " + dbName);
 			query.executeUpdate();
 		}
-		Transaction tx = getSession().beginTransaction();
 		tx.commit();
 		closeSession();
+	}
+
+	public static void disableConstraintsH2() {
+		SQLQuery setIntegrityFalse = getSession().createSQLQuery("SET REFERENTIAL_INTEGRITY FALSE;");
+		setIntegrityFalse.executeUpdate();
+	}
+
+	public static void enableConstraintsH2() {
+		SQLQuery setIntegrityTrue = getSession().createSQLQuery("SET REFERENTIAL_INTEGRITY TRUE;");
+		setIntegrityTrue.executeUpdate();
 	}
 
 	public static void clearJoinTableDB(JoinCategory category) {
@@ -417,7 +442,7 @@ public class TestDbUtil {
 		try {
 			session = getSession();
 			Transaction tx = session.beginTransaction();
-			session.flush();
+
 			for (int i = 0; i < jsonArr.length(); i++) {
 				JSONObject json;
 				json = jsonArr.getJSONObject(i);
@@ -425,7 +450,7 @@ public class TestDbUtil {
 				SQLQuery query = session.createSQLQuery(sql);
 				query.executeUpdate();
 			}
-			session.flush();
+
 			tx.commit();
 		} catch (Exception e) {
 			LOG.error("There was an error: " + e.getMessage());

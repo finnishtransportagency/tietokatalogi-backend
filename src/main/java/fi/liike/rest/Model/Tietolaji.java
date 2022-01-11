@@ -2,7 +2,6 @@ package fi.liike.rest.Model;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.util.Set;
 
 import javax.persistence.*;
 
@@ -67,8 +66,6 @@ public class Tietolaji extends Haettava implements Serializable {
 	@Column(name="DOCUMENT_ID")
 	private String documentId;
 
-	@ManyToMany(mappedBy = "tietolajit")
-	private Set<TietojarjestelmapalveluFetch> tietojarjestelmapalvelut;
 
 	@Override
 	public Integer getTunnus() {
@@ -219,15 +216,6 @@ public class Tietolaji extends Haettava implements Serializable {
 
 	public void setDocument_id(String documentId) {
 		this.documentId = documentId;
-	}
-
-
-	public Set<TietojarjestelmapalveluFetch> getTietojarjestelmapalvelut() {
-		return tietojarjestelmapalvelut;
-	}
-
-	public void setTietojarjestelmapalvelut(Set<TietojarjestelmapalveluFetch> tietojarjestelmapalvelut) {
-		this.tietojarjestelmapalvelut = tietojarjestelmapalvelut;
 	}
 
 
