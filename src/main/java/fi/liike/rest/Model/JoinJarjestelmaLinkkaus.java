@@ -2,6 +2,7 @@ package fi.liike.rest.Model;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 import static java.lang.String.format;
 
@@ -37,6 +38,9 @@ public class JoinJarjestelmaLinkkaus extends JoinTable implements Serializable {
 
     @Column(name = "KUVAUS")
     private String kuvaus;
+
+    @Column(name = "ELINKAARITILA")
+    private String elinkaaritila;
 
     public JoinJarjestelmaLinkkaus() {
     }
@@ -115,10 +119,19 @@ public class JoinJarjestelmaLinkkaus extends JoinTable implements Serializable {
         this.rivitunnus = rivitunnus;
     }
 
+    public String getElinkaaritila() {
+        return elinkaaritila;
+    }
+
+    public void setElinkaaritila(String elinkaaritila) {
+        this.elinkaaritila = elinkaaritila == null ? "Tuotannossa" : elinkaaritila;
+    }
+
     @Override
     public String toString() {
-        return format("JarjestelmaLinkkausDto [tietojarjestelmaTunnus=%s, linkattavaTunnus=%s, suunta=%s, tietojarjestelmapalveluTunnus=%s, tyyppi=%s, rivitunnus=%s, kuvaus=%s",
-                parentNode, childNode, suunta, tietojarjestelmapalveluTunnus, tyyppi, rivitunnus, kuvaus);
+        return format("JarjestelmaLinkkausDto [tietojarjestelmaTunnus=%s, linkattavaTunnus=%s, suunta=%s, " +
+                        "tietojarjestelmapalveluTunnus=%s, tyyppi=%s, rivitunnus=%s, kuvaus=%s, elinkaaritila=%s",
+                parentNode, childNode, suunta, tietojarjestelmapalveluTunnus, tyyppi, rivitunnus, kuvaus, elinkaaritila);
     }
 
     @Override
@@ -133,9 +146,10 @@ public class JoinJarjestelmaLinkkaus extends JoinTable implements Serializable {
         if (!parentNode.equals(that.parentNode)) return false;
         if (!rivitila.equals(that.rivitila)) return false;
         if (!suunta.equals(that.suunta)) return false;
-        if (tietojarjestelmapalveluTunnus != null ? !tietojarjestelmapalveluTunnus.equals(that.tietojarjestelmapalveluTunnus) : that.tietojarjestelmapalveluTunnus != null) return false;
+        if (!Objects.equals(tietojarjestelmapalveluTunnus, that.tietojarjestelmapalveluTunnus)) return false;
         if (!tyyppi.equals(that.tyyppi)) return false;
-        return kuvaus != null ? kuvaus.equals(that.kuvaus) : that.kuvaus == null;
+        if (!Objects.equals(kuvaus, that.kuvaus)) return false;
+        return Objects.equals(elinkaaritila, that.elinkaaritila);
     }
 
     @Override
@@ -148,6 +162,7 @@ public class JoinJarjestelmaLinkkaus extends JoinTable implements Serializable {
         result = 31 * result + tietojarjestelmapalveluTunnus.hashCode();
         result = 31 * result + tyyppi.hashCode();
         result = 31 * result + (kuvaus != null ? kuvaus.hashCode() : 0);
+        result = 31 * result + (elinkaaritila != null ? elinkaaritila.hashCode() : 0);
         return result;
     }
 }

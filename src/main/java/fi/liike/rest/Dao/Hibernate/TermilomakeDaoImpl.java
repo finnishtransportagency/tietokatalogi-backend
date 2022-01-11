@@ -55,7 +55,9 @@ public class TermilomakeDaoImpl extends SearchDaoImpl implements MainDao {
         for (Termilomake termilomake : resources) {
             contents.add(new SelitysKasiteArvoContent(
                     termilomake.getTunnus(),
-                    termilomake.getNimi(), termilomake.getNimi(), termilomake.getNimi() ));
+                    termilomake.getNimi(),
+                    termilomake.getNimi(),
+                    termilomake.getNimi() ));
         }
         return contents;
     }

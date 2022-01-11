@@ -84,6 +84,38 @@ public class JarjestelmasalkkuTest {
         mainTester.testCreateNew(Catalogue.JARJESTELMA, jarjestelmaWithLinks, false);
     }
 
+
+    @Test
+    public void testJarjestelmaUpdateNewWithDuplicateLinks() throws IOException {
+        ContentDto jarjestelmaWithLinks = new JarjestelmaDto();
+        jarjestelmaWithLinks.setNimi("testiJärjestelmä1");
+        JarjestelmaDto createdJarjestelma = createJarjestelma(jarjestelmaWithLinks);
+
+        //luodaan järjestelmälle kaksi duplikaattilinkkiä
+        JarjestelmaLinkkausDto link = new JarjestelmaLinkkausDto();
+        link.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
+        link.setLinkattavaTunnus(999);
+        link.setSuunta("Kirjoitus");
+        link.setTietovirta("1");
+        link.setTyyppi("Järjestelmä");
+
+        JarjestelmaLinkkausDto link2 = new JarjestelmaLinkkausDto();
+        link2.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
+        link2.setLinkattavaTunnus(999);
+        link2.setSuunta("Kirjoitus");
+        link2.setTietovirta("1");
+        link2.setTyyppi("Järjestelmä");
+
+        List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = new ArrayList<JarjestelmaLinkkausDto>();
+        jarjestelmaLinkkausList.add(link);
+        jarjestelmaLinkkausList.add(link2);
+        createdJarjestelma.setJarjestelmaLinkkausList(jarjestelmaLinkkausList);
+        JarjestelmaDto updatedJarjestelma = updateJarjestelma(createdJarjestelma);
+        List<JarjestelmaLinkkausDto> updatedLinks = updatedJarjestelma.getJarjestelmaLinkkausList();
+        assertEquals(1, updatedLinks.size());
+        assertEquals(link, updatedLinks.get(0));
+    }
+
     @Test
     public void testJarjestelmaUpdateNewWithInvalidLinks1() throws IOException, JSONException {
         ContentDto jarjestelmaWithLinks = new JarjestelmaDto();
@@ -105,36 +137,7 @@ public class JarjestelmasalkkuTest {
     }
 
     @Test
-    public void testJarjestelmaUpdateNewWithInvalidLinks2() throws IOException, JSONException {
-        ContentDto jarjestelmaWithLinks = new JarjestelmaDto();
-        jarjestelmaWithLinks.setNimi("testiJärjestelmä1");
-        JarjestelmaDto createdJarjestelma = createJarjestelma(jarjestelmaWithLinks);
-
-        //luodaan järjestelmälle kaksi duplikaatti linkkiä
-        JarjestelmaLinkkausDto link = new JarjestelmaLinkkausDto();
-        link.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
-        link.setLinkattavaTunnus(999);
-        link.setSuunta("Kirjoitus");
-        link.setTietovirta("Tietovirta");
-        link.setTyyppi("Järjestelmä");
-
-        JarjestelmaLinkkausDto link2 = new JarjestelmaLinkkausDto();
-        link2.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
-        link2.setLinkattavaTunnus(999);
-        link2.setSuunta("Kirjoitus");
-        link2.setTietovirta("Tietovirta");
-        link2.setTyyppi("Järjestelmä");
-
-        List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = new ArrayList<JarjestelmaLinkkausDto>();
-        jarjestelmaLinkkausList.add(link);
-        jarjestelmaLinkkausList.add(link2);
-        createdJarjestelma.setJarjestelmaLinkkausList(jarjestelmaLinkkausList);
-        ExtractedResponse response = getUpdateResponse(createdJarjestelma);
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void testJarjestelmaUpdateNewWithInvalidLinks3() throws IOException, JSONException {
+    public void testJarjestelmaUpdateNewWithInvalidLinks2() throws IOException {
         ContentDto jarjestelmaWithLinks = new JarjestelmaDto();
         jarjestelmaWithLinks.setNimi("testiJärjestelmä1");
         JarjestelmaDto createdJarjestelma = createJarjestelma(jarjestelmaWithLinks);
@@ -148,37 +151,6 @@ public class JarjestelmasalkkuTest {
         link.setTyyppi("Järjestelmä");
 
         List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = Collections.singletonList(link);
-        createdJarjestelma.setJarjestelmaLinkkausList(jarjestelmaLinkkausList);
-        ExtractedResponse response = getUpdateResponse(createdJarjestelma);
-        assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
-    }
-
-    @Test
-    public void testJarjestelmaUpdateNewWithInvalidLinks4() throws IOException, JSONException {
-        ContentDto jarjestelmaWithLinks = new JarjestelmaDto();
-        jarjestelmaWithLinks.setNimi("testiJärjestelmä1");
-        JarjestelmaDto createdJarjestelma = createJarjestelma(jarjestelmaWithLinks);
-
-        //luodaan järjestelmälle kaksi duplikaattilinkkiä eri id:illä
-        JarjestelmaLinkkausDto link = new JarjestelmaLinkkausDto();
-        link.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
-        link.setLinkattavaTunnus(999);
-        link.setSuunta("Kirjoitus");
-        link.setTietovirta("Tietovirta");
-        link.setTyyppi("Järjestelmä");
-        link.setId(1);
-
-        JarjestelmaLinkkausDto link2 = new JarjestelmaLinkkausDto();
-        link2.setTietojarjestelmaTunnus(createdJarjestelma.getTunnus());
-        link2.setLinkattavaTunnus(999);
-        link2.setSuunta("Kirjoitus");
-        link2.setTietovirta("Tietovirta");
-        link2.setTyyppi("Järjestelmä");
-        link2.setId(2);
-
-        List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = new ArrayList<JarjestelmaLinkkausDto>();
-        jarjestelmaLinkkausList.add(link);
-        jarjestelmaLinkkausList.add(link2);
         createdJarjestelma.setJarjestelmaLinkkausList(jarjestelmaLinkkausList);
         ExtractedResponse response = getUpdateResponse(createdJarjestelma);
         assertEquals(Response.Status.INTERNAL_SERVER_ERROR.getStatusCode(), response.getStatus());
@@ -405,6 +377,13 @@ public class JarjestelmasalkkuTest {
         return gson.fromJson(resp.getEntity().toString(), new TypeToken<JarjestelmaDto>() {}.getType());
     }
 
+    private JarjestelmaDto getJarjestelma(Integer id) {
+        ExtractedResponse response = new ExtractedResponse(rest.get(new TestRequest(), id.toString()));
+        Response resp = response.getResponse();
+        return gson.fromJson(resp.getEntity().toString(), new TypeToken<JarjestelmaDto>() {
+        }.getType());
+    }
+
     @Test
     public void testJarjestelmaGetEntry() throws JSONException {
         mainTester.testGetEntry(Catalogue.JARJESTELMA);
@@ -423,6 +402,33 @@ public class JarjestelmasalkkuTest {
     @Test
     public void testJarjestelmaDelete() throws JSONException {
         mainTester.testDelete(Catalogue.JARJESTELMA);
+    }
+
+    @Test
+    public void testJarjestelmaDeleteWithLinks() throws IOException {
+        // create 2 jarjestelmas
+        JarjestelmaDto jarjestelmaA = new JarjestelmaDto();
+        jarjestelmaA.setNimi("a");
+        JarjestelmaDto jarjestelmaB = new JarjestelmaDto();
+        jarjestelmaB.setNimi("b");
+        jarjestelmaA = createJarjestelma(jarjestelmaA);
+        jarjestelmaB = createJarjestelma(jarjestelmaB);
+        // link them to each other
+        JarjestelmaLinkkausDto link = new JarjestelmaLinkkausDto();
+        link.setTietojarjestelmaTunnus(jarjestelmaA.getTunnus());
+        link.setLinkattavaTunnus(jarjestelmaB.getTunnus());
+        link.setTyyppi("Järjestelmä");
+        link.setSuunta("Kirjoitus");
+        jarjestelmaA.setJarjestelmaLinkkausList(Collections.singletonList(link));
+        jarjestelmaA = updateJarjestelma(jarjestelmaA);
+        // check that links were created to jarjestelma _B_
+        jarjestelmaB = getJarjestelma(jarjestelmaB.getTunnus());
+        assertEquals(1, jarjestelmaB.getJarjestelmaLinkkausList().size());
+        // delete first jarjestelma
+        rest.delete(new TestRequest(), jarjestelmaA.getTunnus().toString());
+        // assert that links are gone from the other one
+        JarjestelmaDto b2 = getJarjestelma(jarjestelmaB.getTunnus());
+        assertEquals(0, b2.getJarjestelmaLinkkausList().size());
     }
 
     @Test

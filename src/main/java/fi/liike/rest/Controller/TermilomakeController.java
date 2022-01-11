@@ -14,6 +14,9 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.Set;
 
 @Api(value = "Sanasto")
 @Path("/sanasto/")
@@ -62,12 +65,25 @@ public class TermilomakeController extends MainController {
     }
 
     @GET
+    @Path("vid/{vid}")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getvid(@Context HttpServletRequest httpServletRequest, @PathParam("vid") String vid){
+        String id = vid.substring(1);
+        return get(httpServletRequest, id);
+    }
+
+
+
+    @GET
     @Path("")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getAll(@DefaultValue("100") @QueryParam("size") String size,
                            @DefaultValue("0") @QueryParam("offset") String offset,
-                           @DefaultValue("") @QueryParam("filter") String filter, @DefaultValue("") @QueryParam("sort") String sort) {
-        SearchContent searchContent = new SearchContent(filter, sort);
+                           @DefaultValue("") @QueryParam("filter") String filter,
+                           @DefaultValue("") @QueryParam("sort") String sort) {
+//        Custom search fields for filter termilomake
+        Set<String> searchFields = new HashSet<>(Arrays.asList("nimi", "ensisij_termi"));
+        SearchContent searchContent = new SearchContent(filter, sort, searchFields);
 
         return super.getAll(service, searchContent, size, offset);
     }

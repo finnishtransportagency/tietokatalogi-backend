@@ -2,11 +2,13 @@ package fi.liike.rest.Service;
 
 import com.google.common.collect.ImmutableSet;
 import fi.liike.rest.Dao.Hibernate.JarjestelmaDaoImpl;
+import fi.liike.rest.Dao.Hibernate.JoinJarjestelmaLinkkausDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.Model.Dto.MolekyyliLinkkiDto;
 import fi.liike.rest.api.*;
 import fi.liike.rest.api.dto.*;
 import fi.liike.rest.util.DocumentCreator;
+import org.apache.commons.beanutils.BeanUtils;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -14,6 +16,7 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletContext;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.lang.reflect.InvocationTargetException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -49,11 +52,13 @@ public class JarjestelmaService extends MinimalFetchService implements Service {
         saveContent.setHaettava(converter.dtoToDomain(content));
 
         List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = ((JarjestelmaDto) content).getJarjestelmaLinkkausList();
-        List<JoinJarjestelmaLinkkaus> joinJarjestelmaLinkkausList = new ArrayList<>();
-        this.checkLinkListValidity(jarjestelmaLinkkausList);
+        List<JarjestelmaLinkkausDto> uniqueJarjestelmaLinkkausList = removeDuplicates(jarjestelmaLinkkausList);
 
-        if (jarjestelmaLinkkausList != null && jarjestelmaLinkkausList.size() > 0) {
-            for (JarjestelmaLinkkausDto jarjestelmaLinkkausDto : jarjestelmaLinkkausList) {
+        List<JoinJarjestelmaLinkkaus> joinJarjestelmaLinkkausList = new ArrayList<>();
+        this.checkLinkListValidity(uniqueJarjestelmaLinkkausList);
+
+        if (uniqueJarjestelmaLinkkausList != null && uniqueJarjestelmaLinkkausList.size() > 0) {
+            for (JarjestelmaLinkkausDto jarjestelmaLinkkausDto : uniqueJarjestelmaLinkkausList) {
                 joinJarjestelmaLinkkausList.add(converter.jarjestelmaLinkkausDtoToDomain(jarjestelmaLinkkausDto));
             }
             saveContent.addJoinDao(joinJarjestelmaLinkkausService.getDao(joinJarjestelmaLinkkausList, content.getRivimuokkaajatunnus()));
@@ -94,12 +99,13 @@ public class JarjestelmaService extends MinimalFetchService implements Service {
         saveContent.setHaettava(converter.dtoToDomain(content));
         LOG.info("Update jarjestelma " + tunnus);
         List<JarjestelmaLinkkausDto> jarjestelmaLinkkausList = ((JarjestelmaDto) content).getJarjestelmaLinkkausList();
-        checkLinkListValidity(jarjestelmaLinkkausList);
+        List<JarjestelmaLinkkausDto> uniqueJarjestelmaLinkkausList = removeDuplicates(jarjestelmaLinkkausList);
+        checkLinkListValidity(uniqueJarjestelmaLinkkausList);
 
-        LOG.info("Update jarjestelmaLinkkausList: " + jarjestelmaLinkkausList);
+        LOG.info("Update jarjestelmaLinkkausList: " + uniqueJarjestelmaLinkkausList);
         List<JoinJarjestelmaLinkkaus> joinJarjestelmaLinkkausList = new ArrayList<JoinJarjestelmaLinkkaus>();
-        if (jarjestelmaLinkkausList != null) {
-            for (JarjestelmaLinkkausDto jarjestelmaLinkkausDto : jarjestelmaLinkkausList) {
+        if (uniqueJarjestelmaLinkkausList != null) {
+            for (JarjestelmaLinkkausDto jarjestelmaLinkkausDto : uniqueJarjestelmaLinkkausList) {
                 joinJarjestelmaLinkkausList.add(converter.jarjestelmaLinkkausDtoToDomain(jarjestelmaLinkkausDto));
 
             }
@@ -121,6 +127,41 @@ public class JarjestelmaService extends MinimalFetchService implements Service {
         return get(tunnus);
     }
 
+    /**
+     * Create copy where tietojarjestelmaTunnus < linkattavaTunnus (swap them and change suunta if not)
+     */
+    public JarjestelmaLinkkausDto createSingleDirectionalLink(JarjestelmaLinkkausDto dto) throws InvocationTargetException, IllegalAccessException {
+        JarjestelmaLinkkausDto out = new JarjestelmaLinkkausDto();
+        BeanUtils.copyProperties(out, dto);
+        if ((dto.getTietojarjestelmaTunnus() != null && dto.getLinkattavaTunnus() != null)
+                && dto.getTietojarjestelmaTunnus() > dto.getLinkattavaTunnus()) {
+            out.setTietojarjestelmaTunnus(dto.getLinkattavaTunnus());
+            out.setLinkattavaTunnus(dto.getTietojarjestelmaTunnus());
+            out.setSuunta(dto.getSuunta().equals("Kirjoitus") ? "Luku" : "Kirjoitus");
+        }
+        return out;
+    }
+
+    public List<JarjestelmaLinkkausDto> removeDuplicates(List<JarjestelmaLinkkausDto> linkList) {
+        List<JarjestelmaLinkkausDto> uniqueList = new ArrayList<>();
+        if (linkList == null) return uniqueList;
+        Set<JarjestelmaLinkkausDto> linkSet = new HashSet<>();
+        for (JarjestelmaLinkkausDto link : linkList) {
+            try {
+                JarjestelmaLinkkausDto directionalLink = createSingleDirectionalLink(link);
+                if (!linkSet.contains(directionalLink)) {
+                    linkSet.add(directionalLink);
+                    uniqueList.add(link);
+                } else {
+                    linkSet.add(directionalLink);
+                }
+            } catch (InvocationTargetException | IllegalAccessException e) {
+                LOG.error("Failed to make link " + link + " single directional");
+            }
+        }
+        return uniqueList;
+    }
+
     public void checkLinkListValidity(List<JarjestelmaLinkkausDto> jarjLinkkausList) throws IOException {
         if (jarjLinkkausList == null || jarjLinkkausList.size() == 0) return;
 
@@ -134,7 +175,9 @@ public class JarjestelmaService extends MinimalFetchService implements Service {
             }
 
             if (!isInvalid && jarjLink1.getTietojarjestelmaTunnus() != null &&
-                    jarjLink1.getTietojarjestelmaTunnus().equals(jarjLink1.getLinkattavaTunnus())) {
+                    jarjLink1.getTietojarjestelmaTunnus().equals(jarjLink1.getLinkattavaTunnus()) &&
+                    jarjLink1.getTyyppi().equals("Järjestelmä")
+            ) {
                 isInvalid = true;
                 message = "linkkaus osoittaa itseensä";
             }
@@ -176,7 +219,11 @@ public class JarjestelmaService extends MinimalFetchService implements Service {
     @Override
     public Integer delete(int id, String remoteUser) {
         try {
-            dao.delete(id, null, remoteUser);
+            List<JoinJarjestelmaLinkkaus> joinList = dao.getJoinJarjestelmaLinkkausList(id);
+            DaoContent daoContent = new DaoContent();
+            JoinJarjestelmaLinkkausDao joinDao = new JoinJarjestelmaLinkkausDao();
+            daoContent.addJoinDao(joinDao.getDao(joinList, remoteUser));
+            dao.delete(id, daoContent, remoteUser);
             return id;
         } catch (SQLException e) {
             LOG.error("Unable to do a delete transaction. Error message: " + e.getMessage());

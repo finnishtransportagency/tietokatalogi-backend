@@ -11,8 +11,6 @@ public class TermilomakeDto extends ContentDtoWithRights {
     private String ei_suosit_termi;
     private String kayttoaluerajaus;
     private String maaritelma;
-    private String huomautus_1;
-    private String huomautus_2;
     private String kommentit;
     private String valmis;
     private String lahde;
@@ -25,6 +23,17 @@ public class TermilomakeDto extends ContentDtoWithRights {
     private List<Integer> hierarkk_ylakasite;
     private List<Integer> koostumussuht_ylakasite;
     private List<Integer> assosiatiiv_kasite;
+
+
+    private List<String> huomautusList;
+
+    public List<String> gethuomautusList() {
+        return huomautusList;
+    }
+
+    public void sethuomautusList(List<String> huomautusList) {
+        this.huomautusList = huomautusList;
+    }
 
     public String getEnsisij_termi() {
         return ensisij_termi;
@@ -64,22 +73,6 @@ public class TermilomakeDto extends ContentDtoWithRights {
 
     public void setMaaritelma(String maaritelma) {
         this.maaritelma = maaritelma;
-    }
-
-    public String getHuomautus_1() {
-        return huomautus_1;
-    }
-
-    public void setHuomautus_1(String huomautus_1) {
-        this.huomautus_1 = huomautus_1;
-    }
-
-    public String getHuomautus_2() {
-        return huomautus_2;
-    }
-
-    public void setHuomautus_2(String huomautus_2) {
-        this.huomautus_2 = huomautus_2;
     }
 
     public String getKommentit() {

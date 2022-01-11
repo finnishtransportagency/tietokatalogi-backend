@@ -22,6 +22,7 @@ public class JarjestelmaConverter implements MinimalConverter {
 		joinJarjestelmaLinkkaus.setTietojarjestelmapalveluTunnus(jarjestelmaLinkkaus.getTietojarjestelmapalveluTunnus());
 		joinJarjestelmaLinkkaus.setTyyppi(jarjestelmaLinkkaus.getTyyppi());
 		joinJarjestelmaLinkkaus.setKuvaus(jarjestelmaLinkkaus.getTietovirta());
+		joinJarjestelmaLinkkaus.setElinkaaritila(jarjestelmaLinkkaus.getElinkaaritila());
 		return joinJarjestelmaLinkkaus;
 	}
 
@@ -301,6 +302,7 @@ public class JarjestelmaConverter implements MinimalConverter {
 		linkkausDto.setTietojarjestelmapalveluTunnus(jarjestelmaLinkkaus.getTietojarjestelmapalveluTunnus());
 		linkkausDto.setTyyppi(jarjestelmaLinkkaus.getTyyppi());
 		linkkausDto.setTietovirta(jarjestelmaLinkkaus.getKuvaus());
+		linkkausDto.setElinkaaritila(jarjestelmaLinkkaus.getElinkaaritila());
 		return linkkausDto;
 	}
 }

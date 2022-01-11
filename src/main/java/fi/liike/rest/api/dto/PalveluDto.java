@@ -1,9 +1,5 @@
 package fi.liike.rest.api.dto;
 
-import fi.liike.rest.auth.Right;
-
-import java.util.List;
-
 public class PalveluDto extends ContentDtoWithRights {
 
 	private Integer tunnus;

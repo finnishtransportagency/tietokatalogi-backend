@@ -48,15 +48,16 @@ public class JoinJarjestelmaLinkkausDao extends JoinMainDao implements JoinDao {
                     joinJarjestelmaLinkkaus.getSuunta(),
                     joinJarjestelmaLinkkaus.getTietojarjestelmapalveluTunnus(),
                     joinJarjestelmaLinkkaus.getTyyppi(),
-                    joinJarjestelmaLinkkaus.getKuvaus()));
+                    joinJarjestelmaLinkkaus.getKuvaus(),
+                    joinJarjestelmaLinkkaus.getElinkaaritila()));
         }
     }
 
     @Override
     public void update(Session session, int childNode) {
-        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausSaveList = new ArrayList<JoinJarjestelmaLinkkaus>();
-        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausRemoveList = new ArrayList<JoinJarjestelmaLinkkaus>();
-        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausUpdateList = new ArrayList<JoinJarjestelmaLinkkaus>();
+        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausSaveList = new ArrayList<>();
+        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausRemoveList = new ArrayList<>();
+        List<JoinJarjestelmaLinkkaus> jarjestelmaLinkkausUpdateList = new ArrayList<>();
 
         Integer tietojarjestelmaTunnus = childNode;
 
@@ -68,7 +69,7 @@ public class JoinJarjestelmaLinkkausDao extends JoinMainDao implements JoinDao {
                 jarjestelmaLinkkausRemoveList.add(joinJarjestelmaLinkkaus);
             }
         }
-        LOG.info("Poisto lista jarjestelmaLinkkausRemoveList" + jarjestelmaLinkkausRemoveList.toString());
+        LOG.info("Poisto lista jarjestelmaLinkkausRemoveList" + jarjestelmaLinkkausRemoveList);
         for (JoinJarjestelmaLinkkaus joinJarjestelmaLinkkaus : jarjestelmaLinkkausList) {
             if (joinJarjestelmaLinkkaus.getRivitunnus() == null) {
                 //Save jarjestelmaLinkkaus
@@ -85,14 +86,15 @@ public class JoinJarjestelmaLinkkausDao extends JoinMainDao implements JoinDao {
                 }
             }
         }
-
-        LOG.info("Päivitys lista jarjestelmaLinkkausUpdateList" + jarjestelmaLinkkausUpdateList.toString());
+        LOG.info("Tallennuslista jarjestelmaLinkkausSaveList" + jarjestelmaLinkkausSaveList);
+        LOG.info("Päivitys lista jarjestelmaLinkkausUpdateList" + jarjestelmaLinkkausUpdateList);
         for (JoinJarjestelmaLinkkaus joinJarjestelmaLinkkaus : jarjestelmaLinkkausUpdateList) {
             super.update(session, joinJarjestelmaLinkkaus, new JoinJarjestelmaLinkkausHistory(
                     joinJarjestelmaLinkkaus.getSuunta(),
                     joinJarjestelmaLinkkaus.getTietojarjestelmapalveluTunnus(),
                     joinJarjestelmaLinkkaus.getTyyppi(),
-                    joinJarjestelmaLinkkaus.getKuvaus()));
+                    joinJarjestelmaLinkkaus.getKuvaus(),
+                    joinJarjestelmaLinkkaus.getElinkaaritila()));
         }
 
         LOG.info("Jäljellä delete ja save.");
@@ -121,7 +123,10 @@ public class JoinJarjestelmaLinkkausDao extends JoinMainDao implements JoinDao {
     public List<JoinJarjestelmaLinkkaus> getJoinJarjestelmaLinkkausList(Session session, Integer tietojarjestelmaTunnus) {
         Criteria criteria = session.createCriteria(JoinJarjestelmaLinkkaus.class);
         Criterion parentEq = Restrictions.eq("parentNode", tietojarjestelmaTunnus);
-        Criterion childEq = Restrictions.eq("childNode", tietojarjestelmaTunnus);
+        Criterion childEq = Restrictions.and(
+                Restrictions.eq("childNode", tietojarjestelmaTunnus),
+                Restrictions.eq("tyyppi", "Järjestelmä")
+        );
         criteria.add(Restrictions.or(parentEq, childEq));
         return criteria.list();
     }
@@ -132,12 +137,14 @@ public class JoinJarjestelmaLinkkausDao extends JoinMainDao implements JoinDao {
                     joinJarjestelmaLinkkaus.getSuunta(),
                     joinJarjestelmaLinkkaus.getTietojarjestelmapalveluTunnus(),
                     joinJarjestelmaLinkkaus.getTyyppi(),
-                    joinJarjestelmaLinkkaus.getKuvaus()
+                    joinJarjestelmaLinkkaus.getKuvaus(),
+                    joinJarjestelmaLinkkaus.getElinkaaritila()
             ));
         }
     }
 
     @Override
     public void delete(Session session, int childNode) {
+        delete(session, this.jarjestelmaLinkkausList);
     }
 }

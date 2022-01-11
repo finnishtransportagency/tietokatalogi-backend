@@ -35,13 +35,15 @@ public class TermilomakeConverter implements Converter {
     public ContentDto modelToDto(Haettava modelObject,
                                  List<Integer> hierarkIds,
                                  List<Integer> assosIds,
-                                 List<Integer> koostIds) {
+                                 List<Integer> koostIds,
+                                 List<String> huomautusList) {
         if (modelObject == null) return null;
 
         TermilomakeDto dtoContent = (TermilomakeDto) modelToDto(modelObject);
         dtoContent.setHierarkk_ylakasite(hierarkIds);
         dtoContent.setKoostumussuht_ylakasite(koostIds);
         dtoContent.setAssosiatiiv_kasite(assosIds);
+        dtoContent.sethuomautusList(huomautusList);
         return dtoContent;
     }
 

@@ -245,7 +245,7 @@ public class JarjestelmaSalkkuServiceTest {
     public void linkListValidationSelfReferentialLinkTest() throws IOException {
         JarjestelmaLinkkausDto l = new JarjestelmaLinkkausDto();
         l.setId(1); l.setTietojarjestelmaTunnus(0); l.setLinkattavaTunnus(0); l.setSuunta("Luku");
-        l.setTietovirta("1");
+        l.setTietovirta("1"); l.setTyyppi("Järjestelmä");
         List<JarjestelmaLinkkausDto> list = Lists.newArrayList(l);
         jarjestelmaService.checkLinkListValidity(list);
     }

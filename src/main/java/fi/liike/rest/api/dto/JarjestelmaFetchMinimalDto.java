@@ -1,9 +1,6 @@
 package fi.liike.rest.api.dto;
 
 import fi.liike.rest.api.ContentDto;
-import fi.liike.rest.auth.Right;
-
-import java.util.List;
 
 //Use this dto only for fetching Jarjestelma data with minimal info
 public class JarjestelmaFetchMinimalDto extends ContentDto {

@@ -93,12 +93,17 @@ public class MainRestTester {
 			TestDbUtil.setupDB(Catalogue.TERMILOMAKE);
 			TestDbUtil.clearDB(Catalogue.TERMILOMAKE);
 			break;
+		case TIETOJARJESTELMAPALVELU:
+			TestDbUtil.setupDB(Catalogue.TIETOJARJESTELMAPALVELU);
+			TestDbUtil.clearDB(Catalogue.TIETOJARJESTELMAPALVELU);
+			break;
 		default:
 			break;
 		}
 	}
 
 	public void clear() {
+		TestDbUtil.disableConstraintsH2();
 		TestDbUtil.clearDB(Catalogue.SOVELLUS);
 		TestDbUtil.clearDB(Catalogue.HENKILO);
 		TestDbUtil.clearDB(Catalogue.JARJESTELMA);
@@ -115,6 +120,7 @@ public class MainRestTester {
 		TestDbUtil.clearDB(Catalogue.TIETOVARANTO);
 		TestDbUtil.clearDB(Catalogue.TOIMINTAPROSESSI);
 		TestDbUtil.clearDB(Catalogue.TERMILOMAKE);
+		TestDbUtil.enableConstraintsH2();
 		TestDbUtil.close();
 	}
 
@@ -389,6 +395,8 @@ public class MainRestTester {
 		JarjestelmaLinkkausDto link = new JarjestelmaLinkkausDto();
 		link.setLinkattavaTunnus(1);
 		link.setTietojarjestelmaTunnus(nextJarjestelmaTunnus);
+		link.setSuunta("Kirjoitus");
+		link.setTyyppi("Järjestelmä");
 		jarjestelmaLinkkausDtoList.add(link);
 
 		jarjestelma.setJarjestelmaLinkkausList(jarjestelmaLinkkausDtoList);
@@ -501,6 +509,8 @@ public class MainRestTester {
 			return new ToimintaprosessiController().getAll(size, offset, filter, order);
 		case TERMILOMAKE:
 			return new TermilomakeController().getAll(size, offset, filter, order);
+		case TIETOJARJESTELMAPALVELU:
+			return new TietojarjestelmapalveluController().getAll(size, offset, filter, order);
 		default:
 			return null;
 		}
@@ -564,6 +574,8 @@ public class MainRestTester {
 			return Toimintaprosessi.class;
 		case TERMILOMAKE:
 			return Termilomake.class;
+		case TIETOJARJESTELMAPALVELU:
+			return Tietojarjestelmapalvelu.class;
 		default:
 			return null;
 		}
@@ -591,6 +603,8 @@ public class MainRestTester {
 			return ToimintaprosessiHistory.class;
 		case TERMILOMAKE:
 			return TermilomakeHistory.class;
+		case TIETOJARJESTELMAPALVELU:
+			return TietojarjestelmapalveluHistory.class;
 		default:
 			return null;
 		}

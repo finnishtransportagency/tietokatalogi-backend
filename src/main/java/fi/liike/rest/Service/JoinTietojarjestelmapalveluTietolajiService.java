@@ -22,6 +22,10 @@ public class JoinTietojarjestelmapalveluTietolajiService implements JoinService 
         return dao.getDao(joinList, remoteUser);
     }
 
+    public List<JoinTietojarjestelmapalveluTietolaji> getJoinEntries(Integer tietojarjestelmapalveluId) {
+        return dao.getJoinEntries(tietojarjestelmapalveluId);
+    }
+
     @Override
     public Integer getParentNodeId(int childNode) {
         return dao.getParentNodeId(childNode);

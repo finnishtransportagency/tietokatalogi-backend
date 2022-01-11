@@ -93,7 +93,10 @@ public class JarjestelmaDaoImpl extends SearchDaoImpl implements MainDao {
 		Criteria criteria = getSession().createCriteria(JoinJarjestelmaLinkkaus.class);
 		criteria.add(Restrictions.or(
 				Restrictions.eq("parentNode", tietojarjestelmaTunnus),
-				Restrictions.eq("childNode", tietojarjestelmaTunnus)
+				Restrictions.and(
+						Restrictions.eq("childNode", tietojarjestelmaTunnus),
+						Restrictions.eq("tyyppi", "Järjestelmä")
+				)
 		));
 		List<JoinJarjestelmaLinkkaus> result = criteria.list();
 		closeSession();

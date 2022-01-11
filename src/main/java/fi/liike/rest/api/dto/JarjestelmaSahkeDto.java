@@ -1,7 +1,6 @@
 package fi.liike.rest.api.dto;
 
 import fi.liike.rest.api.ContentDto;
-import fi.liike.rest.auth.Right;
 
 import java.util.List;
 

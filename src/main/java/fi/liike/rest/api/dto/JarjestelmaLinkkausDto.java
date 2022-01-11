@@ -12,6 +12,7 @@ public class JarjestelmaLinkkausDto {
     private String tietovirta;
     private String tietovirtaNimi;
     private String tyyppi;
+    private String elinkaaritila;
 
     public void setTietojarjestelmaTunnus(Integer tietojarjestelmaTunnus) {
         this.tietojarjestelmaTunnus = tietojarjestelmaTunnus;
@@ -83,9 +84,19 @@ public class JarjestelmaLinkkausDto {
         this.tietovirtaNimi = tietovirtaNimi;
     }
 
+    public String getElinkaaritila() {
+        return elinkaaritila;
+    }
+
+    public void setElinkaaritila(String elinkaaritila) {
+        this.elinkaaritila = elinkaaritila;
+    }
+
     public String toString() {
-        return format("JarjestelmaLinkkausDto [tietojarjestelmaTunnus=%s, linkattavaTunnus=%s, suunta=%s, tietojarjestelmapalveluTunnus=%s, kuvaus=%s, tyyppi=%s",
-                tietojarjestelmaTunnus, linkattavaTunnus, suunta, tietojarjestelmapalveluTunnus, tietovirta, tyyppi);
+        return format("JarjestelmaLinkkausDto [tietojarjestelmaTunnus=%s, linkattavaTunnus=%s, suunta=%s," +
+                        "tietojarjestelmapalveluTunnus=%s, kuvaus=%s, tyyppi=%s, elinkaaritila=%s]",
+                tietojarjestelmaTunnus, linkattavaTunnus, suunta, tietojarjestelmapalveluTunnus, tietovirta, tyyppi,
+                elinkaaritila);
     }
 
     @Override
@@ -98,10 +109,6 @@ public class JarjestelmaLinkkausDto {
         if (o == null || getClass() != o.getClass()) return false;
 
         JarjestelmaLinkkausDto that = (JarjestelmaLinkkausDto) o;
-        // The id comparison is not currently used anywhere.
-//        if (compareId) {
-//            if (id != null ? !id.equals(that.id) : that.id != null) return false;
-//        }
         if (!isReversed) {
             if (tietojarjestelmaTunnus != null ? !tietojarjestelmaTunnus.equals(that.tietojarjestelmaTunnus) : that.tietojarjestelmaTunnus != null)
                 return false;
@@ -127,13 +134,13 @@ public class JarjestelmaLinkkausDto {
 
     @Override
     public int hashCode() {
-        int result = id != null ? id.hashCode() : 0;
-        result = 31 * result + (tietojarjestelmaTunnus != null ? tietojarjestelmaTunnus.hashCode() : 0);
+        int result = tietojarjestelmaTunnus != null ? tietojarjestelmaTunnus.hashCode() : 0;
         result = 31 * result + (linkattavaTunnus != null ? linkattavaTunnus.hashCode() : 0);
         result = 31 * result + (suunta != null ? suunta.hashCode() : 0);
         result = 31 * result + (tietojarjestelmapalveluTunnus != null ? tietojarjestelmapalveluTunnus.hashCode() : 0);
         result = 31 * result + (tietovirta != null ? tietovirta.hashCode() : 0);
         result = 31 * result + (tyyppi != null ? tyyppi.hashCode() : 0);
+        result = 31 * result + (elinkaaritila != null ? elinkaaritila.hashCode() : 0);
         return result;
     }
 }

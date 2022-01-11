@@ -44,12 +44,6 @@ public class TermilomakeHistory implements java.io.Serializable, HaettavaHistory
     @Column(name = "maaritelma")
     private String maaritelma;
 
-    @Column(name = "huomautus_1")
-    private String huomautus_1;
-
-    @Column(name = "huomautus_2")
-    private String huomautus_2;
-
     @Column(name = "kommentit")
     private String kommentit;
 
@@ -141,22 +135,6 @@ public class TermilomakeHistory implements java.io.Serializable, HaettavaHistory
 
     public void setMaaritelma(String maaritelma) {
         this.maaritelma = maaritelma;
-    }
-
-    public String getHuomautus_1() {
-        return huomautus_1;
-    }
-
-    public void setHuomautus_1(String huomautus_1) {
-        this.huomautus_1 = huomautus_1;
-    }
-
-    public String getHuomautus_2() {
-        return huomautus_2;
-    }
-
-    public void setHuomautus_2(String huomautus_2) {
-        this.huomautus_2 = huomautus_2;
     }
 
     public String getKommentit() {

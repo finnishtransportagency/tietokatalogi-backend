@@ -51,21 +51,27 @@ public class JoinJarjestelmaLinkkausHistory extends JoinTable implements Seriali
     @Column(name = "KUVAUS")
     private String kuvaus;
 
+    @Column(name = "ELINKAARITILA")
+    private String elinkaaritila;
+
     public JoinJarjestelmaLinkkausHistory() {
     }
 
-    public JoinJarjestelmaLinkkausHistory(String suunta, Integer tietojarjestelmapalveluTunnus, String tyyppi, String kuvaus) {
+    public JoinJarjestelmaLinkkausHistory(String suunta, Integer tietojarjestelmapalveluTunnus, String tyyppi,
+                                          String kuvaus, String elinkaaritila) {
         this.suunta = suunta;
         this.tietojarjestelmapalveluTunnus = tietojarjestelmapalveluTunnus;
         this.tyyppi = tyyppi;
         this.kuvaus = kuvaus;
+        this.elinkaaritila = elinkaaritila;
     }
 
     @Override
     public String toString() {
         return format("JoinJarjestelmaLinkkausHistory[rivitunnus=%s, parentNode=%s, childNode=%s, historiatyyppi=%s, " +
-                "rivimuokkaajatunnus=%s, suunta=%s, tietojarjestelmapalveluTunnus=%s, tyyppi=%s, kuvaus=%s", rivitunnus, parentNode, childNode, historiatyyppi,
-                rivimuokkaajatunnus, suunta, tietojarjestelmapalveluTunnus, tyyppi, kuvaus);
+                "rivimuokkaajatunnus=%s, suunta=%s, tietojarjestelmapalveluTunnus=%s, tyyppi=%s, kuvaus=%s, elinkaaritila=%s",
+                rivitunnus, parentNode, childNode, historiatyyppi,
+                rivimuokkaajatunnus, suunta, tietojarjestelmapalveluTunnus, tyyppi, kuvaus, elinkaaritila);
     }
 
     @Override
@@ -147,6 +153,14 @@ public class JoinJarjestelmaLinkkausHistory extends JoinTable implements Seriali
 
     public String getKuvaus() {
         return kuvaus;
+    }
+
+    public String getElinkaaritila() {
+        return elinkaaritila;
+    }
+
+    public void setElinkaaritila(String elinkaaritila) {
+        this.elinkaaritila = elinkaaritila;
     }
 
 }

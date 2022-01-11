@@ -1,6 +1,7 @@
 package fi.liike.rest.Model;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 @Table(name = "TIETOJARJPALVELU_TIETOLAJI")
@@ -8,7 +9,7 @@ public class JoinTietojarjestelmapalveluTietolaji extends JoinTable implements j
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen")
     @SequenceGenerator(name = "seq_gen", sequenceName = "tietojarjpalvelutieto_id_seq")
     @Column(name = "RIVITUNNUS", unique = true, nullable = false)
     private int rivi_id;
@@ -21,6 +22,9 @@ public class JoinTietojarjestelmapalveluTietolaji extends JoinTable implements j
 
     @Column(name = "RIVITILA")
     private String rivitila = "A";
+
+    @Column(name = "LIITTYVA_JARJESTELMA")
+    private Integer liittyvaJarjestelma;
 
     public JoinTietojarjestelmapalveluTietolaji(Integer childNode) {
         this.childNode = childNode;
@@ -67,6 +71,14 @@ public class JoinTietojarjestelmapalveluTietolaji extends JoinTable implements j
         this.rivitila = rivitila;
     }
 
+    public Integer getLiittyvaJarjestelma() {
+        return liittyvaJarjestelma;
+    }
+
+    public void setLiittyvaJarjestelma(Integer liittyvaJarjestelma) {
+        this.liittyvaJarjestelma = liittyvaJarjestelma;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -75,12 +87,14 @@ public class JoinTietojarjestelmapalveluTietolaji extends JoinTable implements j
         JoinTietojarjestelmapalveluTietolaji that = (JoinTietojarjestelmapalveluTietolaji) o;
 
         if (!childNode.equals(that.childNode)) return false;
-        return parentNode.equals(that.parentNode);
+        if (!parentNode.equals(that.parentNode)) return false;
+        return Objects.equals(liittyvaJarjestelma, that.liittyvaJarjestelma);
     }
 
     public int hashCode() {
         int result = parentNode != null ? parentNode.hashCode() : 0;
         result = 31 * result + (childNode != null ? childNode.hashCode() : 0);
+        result = 31 * result + (liittyvaJarjestelma != null ? liittyvaJarjestelma.hashCode() : 0);
         return result;
     }
 }

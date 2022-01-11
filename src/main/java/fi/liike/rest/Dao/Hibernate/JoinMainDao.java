@@ -2,10 +2,7 @@ package fi.liike.rest.Dao.Hibernate;
 
 import com.google.common.collect.Sets;
 import fi.liike.rest.Dao.HibernateSession;
-import fi.liike.rest.Model.JoinHistory;
-import fi.liike.rest.Model.JoinJarjestelmaLinkkaus;
-import fi.liike.rest.Model.JoinTable;
-import fi.liike.rest.Model.JoinTietovarantoAttribute;
+import fi.liike.rest.Model.*;
 import fi.liike.rest.api.HistoryType;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -33,9 +30,15 @@ public class JoinMainDao extends HibernateSession {
 		if (content.getClass().equals(JoinJarjestelmaLinkkaus.class)) {
 			JoinJarjestelmaLinkkaus linkContent = (JoinJarjestelmaLinkkaus) content;
 			joinTableList = getJoinCriteria(session, JoinJarjestelmaLinkkaus.class, "rivitunnus", linkContent.getRivitunnus()).list();
+		} else if (content instanceof TermilomakeJoinHuomautus) {
+			TermilomakeJoinHuomautus linkContent = (TermilomakeJoinHuomautus) content;
+			joinTableList = getJoinCriteria(session, TermilomakeJoinHuomautus.class, "rivitunnus", linkContent.getRivitunnus()).list();
 		} else if (content instanceof JoinTietovarantoAttribute) {
 			JoinTietovarantoAttribute linkContent = (JoinTietovarantoAttribute) content;
 			joinTableList = getJoinTietovarantoAttributeCriteria(session, content.getClass(), linkContent).list();
+		} else if (content instanceof JoinTietojarjestelmapalveluTietolaji) {
+			JoinTietojarjestelmapalveluTietolaji linkContent = (JoinTietojarjestelmapalveluTietolaji) content;
+			joinTableList = getJoinTietojarjestelmapalveluTietolajiCriteria(session, content.getClass(), linkContent).list();
 		} else {
 			joinTableList = getJoin(session, content);
 		}
@@ -72,6 +75,9 @@ public class JoinMainDao extends HibernateSession {
 		if (content.getClass().equals(JoinJarjestelmaLinkkaus.class)) {
 			JoinJarjestelmaLinkkaus linkContent = (JoinJarjestelmaLinkkaus) content;
 			criteria = getJoinCriteria(session, JoinJarjestelmaLinkkaus.class, "rivitunnus", linkContent.getRivitunnus());
+		} else if (content.getClass().equals(TermilomakeJoinHuomautus.class)) {
+			TermilomakeJoinHuomautus linkContent = (TermilomakeJoinHuomautus) content;
+			criteria = getJoinCriteria(session, TermilomakeJoinHuomautus.class, "rivitunnus", linkContent.getRivitunnus());
 		} else if (content instanceof JoinTietovarantoAttribute) {
 			JoinTietovarantoAttribute linkContent = (JoinTietovarantoAttribute) content;
 			criteria = getJoinTietovarantoAttributeCriteria(session, content.getClass(), linkContent);
@@ -96,6 +102,7 @@ public class JoinMainDao extends HibernateSession {
 			((JoinJarjestelmaLinkkaus) joinEntry).setTietojarjestelmapalveluTunnus(linkContent.getTietojarjestelmapalveluTunnus());
 			((JoinJarjestelmaLinkkaus) joinEntry).setTyyppi(linkContent.getTyyppi());
 			((JoinJarjestelmaLinkkaus) joinEntry).setKuvaus(linkContent.getKuvaus());
+			((JoinJarjestelmaLinkkaus) joinEntry).setElinkaaritila(linkContent.getElinkaaritila());
 		} else if (content instanceof JoinTietovarantoAttribute) {
 			JoinTietovarantoAttribute linkContent = (JoinTietovarantoAttribute) content;
 			joinEntry.setParentNode(linkContent.getParentNode());
@@ -112,9 +119,19 @@ public class JoinMainDao extends HibernateSession {
 		if (content.getClass().equals(JoinJarjestelmaLinkkaus.class)) {
 			JoinJarjestelmaLinkkaus linkContent = (JoinJarjestelmaLinkkaus) content;
 			joinList = getJoinCriteria(session, JoinJarjestelmaLinkkaus.class, "rivitunnus", linkContent.getRivitunnus()).list();
+		} else if (content instanceof TermilomakeJoinHuomautus) {
+			TermilomakeJoinHuomautus linkContent = (TermilomakeJoinHuomautus) content;
+			if (linkContent.getRivitunnus() != 0) { // hack to figure out which criteria to use
+				joinList = getJoinCriteria(session, TermilomakeJoinHuomautus.class, "rivitunnus", linkContent.getRivitunnus()).list(); // rivitunnus is needed for removing existing values
+			} else {
+				joinList = getJoinCriteria(session, TermilomakeJoinHuomautus.class, "parentNode", linkContent.getParentNode()).list(); // on termilomake delete this one is needed, since rivitunnus is 0 for some reason
+			}
 		} else if (content instanceof JoinTietovarantoAttribute) {
 			JoinTietovarantoAttribute linkContent = (JoinTietovarantoAttribute) content;
 			joinList = getJoinTietovarantoAttributeCriteria(session, content.getClass(), linkContent).list();
+		} else if (content instanceof JoinTietojarjestelmapalveluTietolaji) {
+			JoinTietojarjestelmapalveluTietolaji linkContent = (JoinTietojarjestelmapalveluTietolaji) content;
+			joinList = getJoinTietojarjestelmapalveluTietolajiCriteria(session, content.getClass(), linkContent).list();
 		} else {
 			joinList = getJoin(session, content);
 		}
@@ -161,6 +178,19 @@ public class JoinMainDao extends HibernateSession {
 		return criteria;
 	}
 
+	private Criteria getJoinTietojarjestelmapalveluTietolajiCriteria(Session session, Class<? extends JoinTable> joinTableClass,
+																	 JoinTietojarjestelmapalveluTietolaji linkContent) {
+		Criteria criteria = session.createCriteria(joinTableClass);
+		criteria.add(Restrictions.eq("parentNode", linkContent.getParentNode()));
+		criteria.add(Restrictions.eq("childNode", linkContent.getChildNode()));
+		if (linkContent.getLiittyvaJarjestelma() == null)
+			criteria.add(Restrictions.isNull("liittyvaJarjestelma"));
+		else {
+			criteria.add(Restrictions.eq("liittyvaJarjestelma", linkContent.getLiittyvaJarjestelma()));
+		}
+		return criteria;
+	}
+
  	class UpdateChangeListContainer {
 	 	private List<? extends JoinTable> deleteList;
 	 	private List<? extends JoinTable> createList;
@@ -170,11 +200,9 @@ public class JoinMainDao extends HibernateSession {
 			this.createList = createList;
 		}
 
-
 		public List<? extends JoinTable> getDeleteList() {
 			return deleteList;
 		}
-
 		public List<? extends JoinTable> getCreateList() {
 			return createList;
 		}

@@ -46,6 +46,7 @@ public class MolekyyliLinkkiService {
     private final ToimintaprosessiDaoImpl toimintaprosessiDao;
     private final TietovarantoDaoImpl tietovarantoDao;
     private final TermilomakeDaoImpl termilomakeDao;
+    private final JoinTietojarjestelmapalveluTietolajiDao joinTietojarjestelmapalveluTietolajiDao;
 
     public MolekyyliLinkkiService(){
         this.hierarkiaDao = new HibernateHierarkiaDao();
@@ -60,6 +61,7 @@ public class MolekyyliLinkkiService {
         this.toimintaprosessiDao = new ToimintaprosessiDaoImpl();
         this.tietovarantoDao = new TietovarantoDaoImpl();
         this.termilomakeDao = new TermilomakeDaoImpl();
+        this.joinTietojarjestelmapalveluTietolajiDao = new JoinTietojarjestelmapalveluTietolajiDao();
     }
 
 //    @Deprecated
@@ -336,7 +338,7 @@ public class MolekyyliLinkkiService {
     @GET
     @Path("/tunnus/tietojarjestelmapalvelu/{tunnus}")
     public Response haeTietojarjestelmapalveluLinkitTunnuksella(@PathParam("tunnus") String tunnus) {
-        TietojarjestelmapalveluFetch tjp = (TietojarjestelmapalveluFetch) this.tietojarjestelmapalveluDao.get(Integer.parseInt(tunnus));
+        Tietojarjestelmapalvelu tjp = (Tietojarjestelmapalvelu) this.tietojarjestelmapalveluDao.get(Integer.parseInt(tunnus));
         Integer jarjestelmaId = tjp.getTietojarjestelmatunnus();
         List<LinkitysHierarkia> linkitysHierarkiaList = getTietojarjestelmapalveluLinks(jarjestelmaId.toString(), tunnus);
         return linkitysHierarkiaListToResponse(linkitysHierarkiaList);
@@ -582,16 +584,119 @@ public class MolekyyliLinkkiService {
     }
 
     public MolekyyliLinkkiDto haeMolekyyliLinkkiDtoJarjestelmaTunnuksella(String tunnus) {
-        List<LinkitysHierarkia> linkitysHierarkiaList = new ArrayList<LinkitysHierarkia>();
-        List<LinkitysHierarkia> sovellusLinks = getSovellusLinks(tunnus);
-        List<LinkitysHierarkia> jarjestelmaLinksAsParent = getJarjestelmaLinks(tunnus, true);
-        List<LinkitysHierarkia> jarjestelmaLinksAsChild = getJarjestelmaLinks(tunnus, false);
-        linkitysHierarkiaList.addAll(sovellusLinks);
-        linkitysHierarkiaList.addAll(jarjestelmaLinksAsParent);
-        linkitysHierarkiaList.addAll(jarjestelmaLinksAsChild);
-
+        List<LinkitysHierarkia> linkitysHierarkiaList = new ArrayList<>();
+        List<JoinJarjestelmaLinkkaus> linkList = jarjestelmaDao.getJoinJarjestelmaLinkkausList(Integer.parseInt(tunnus));
+        for (JoinJarjestelmaLinkkaus link : linkList) {
+            linkitysHierarkiaList.addAll(getLinkitysHierarkiaListForLink(link));
+        }
         return linksToMolekyyliLinkki(linkitysHierarkiaList);
+    }
 
+    public static class IdNamePair {
+        private final Integer tunnus;
+        private final String nimi;
+
+        public IdNamePair(Integer tunnus, String nimi) {
+            this.tunnus = tunnus;
+            this.nimi = nimi;
+        }
+
+        public Integer getTunnus() {
+            return tunnus;
+        }
+
+        public String getNimi() {
+            return nimi;
+        }
+    }
+
+    /**
+     * Converts a JoinJarjestelmaLinkkaus link into related LinkitysHierarkia link.
+     * Note that if the JoinJarjestelmaLinkkaus link contains a _related jarjestelma_ (liittyvä järjestelmä),
+     * this is represented as _two_ LinkitysHierarkia links such that the related jarjestelma comes in between
+     * the other endpoints.
+     * Thus, the resulting LinkitysHierarkia link(s) are returned as a list.
+     */
+    private List<LinkitysHierarkia> getLinkitysHierarkiaListForLink(JoinJarjestelmaLinkkaus link) {
+        Jarjestelma jarjestelmaA = (Jarjestelma) jarjestelmaDao.get(link.getParentNode());
+        if (jarjestelmaA == null)
+            LOG.warn("Building link " + link + ", but no matching entity exists for Jarjestelma " + link.getParentNode());
+        IdNamePair nodeA = new IdNamePair(link.getParentNode(), jarjestelmaA != null ? jarjestelmaA.getNimi() : "");
+
+        Haettava entityB = link.getTyyppi().equals("Järjestelmä") ? jarjestelmaDao.get(link.getChildNode()) :
+                sovellusDao.get(link.getChildNode());
+        if (entityB == null)
+            LOG.warn("Building link " + link + ", but no matching entity exists for " + link.getTyyppi() + " " + link.getChildNode());
+        IdNamePair nodeB = new IdNamePair(link.getChildNode(), entityB != null ? entityB.getNimi() : "");
+
+        if (link.getTietojarjestelmapalveluTunnus() != null && link.getKuvaus() != null) {
+            JoinTietojarjestelmapalveluTietolaji joinEntry = joinTietojarjestelmapalveluTietolajiDao
+                    .getJoinEntry(link.getTietojarjestelmapalveluTunnus(), Integer.parseInt(link.getKuvaus()));
+            // Ignore links that include tietolaji that has been removed from tietojarjestelmapalvelu
+            if (joinEntry == null) return Collections.emptyList();
+            Integer relatedJarjestelmaId = joinEntry.getLiittyvaJarjestelma();
+            if (relatedJarjestelmaId != null) {
+                Jarjestelma relatedJarjestelmaEntity = (Jarjestelma) jarjestelmaDao.get(relatedJarjestelmaId);
+                IdNamePair relatedJarjestelmaNode = new IdNamePair(relatedJarjestelmaId, relatedJarjestelmaEntity != null ?
+                        relatedJarjestelmaEntity.getNimi() : "");
+                if (relatedJarjestelmaEntity == null)
+                    LOG.warn("Building link " + link + ", but no matching entity exists for related jarjestelma " + relatedJarjestelmaId);
+                return getJarjestelmaLinkThroughRelatedJarjestelma(link, nodeA, nodeB, relatedJarjestelmaNode);
+            }
+        }
+        return Collections.singletonList(getJarjestelmaLinkWithNoRelatedJarjestelma(link, nodeA, nodeB));
+    }
+
+    private final String jarjestelmaType = "jarjestelma";
+    private final String relatedJarjestelmaType = "related_jarjestelma";
+    private final String sovellusType = "sovellus";
+
+    private LinkitysHierarkia getJarjestelmaLinkWithNoRelatedJarjestelma(JoinJarjestelmaLinkkaus link, IdNamePair nodeA, IdNamePair nodeB) {
+        boolean isKirjoitus = link.getSuunta().equals("Kirjoitus");
+        boolean isJarjestelma = link.getTyyppi().equals("Järjestelmä");
+        if (isKirjoitus) {
+            if (isJarjestelma) {
+                return buildJarjestelmaLink(nodeA, jarjestelmaType, nodeB, jarjestelmaType);
+            }
+            return buildJarjestelmaLink(nodeA, jarjestelmaType, nodeB, sovellusType);
+        }
+        if (isJarjestelma) {
+            return buildJarjestelmaLink(nodeB, jarjestelmaType, nodeA, jarjestelmaType);
+        }
+        return buildJarjestelmaLink(nodeB, sovellusType, nodeA, jarjestelmaType);
+    }
+
+    private List<LinkitysHierarkia> getJarjestelmaLinkThroughRelatedJarjestelma(JoinJarjestelmaLinkkaus link,
+                                                                                IdNamePair nodeA,
+                                                                                IdNamePair nodeB,
+                                                                                IdNamePair relatedJarjestelma) {
+        boolean isKirjoitus = link.getSuunta().equals("Kirjoitus");
+        boolean isJarjestelma = link.getTyyppi().equals("Järjestelmä");
+        if (isKirjoitus) {
+            if (isJarjestelma) {
+                return buildRelatedJarjestelmaLink(nodeA, jarjestelmaType, nodeB, jarjestelmaType, relatedJarjestelma);
+            }
+            return buildRelatedJarjestelmaLink(nodeA, jarjestelmaType, nodeB, sovellusType, relatedJarjestelma);
+        }
+        if (isJarjestelma) {
+            return buildRelatedJarjestelmaLink(nodeB, jarjestelmaType, nodeA, jarjestelmaType, relatedJarjestelma);
+        }
+        return buildRelatedJarjestelmaLink(nodeB, sovellusType, nodeA, jarjestelmaType, relatedJarjestelma);
+    }
+
+    private LinkitysHierarkia buildJarjestelmaLink(IdNamePair entityA, String entityAType, IdNamePair entityB, String entityBType) {
+        LinkitysHierarkia linkitysHierarkia = new LinkitysHierarkia();
+        linkitysHierarkia.setUp(entityA, entityB);
+        linkitysHierarkia.setLahdeTaulu(entityAType);
+        linkitysHierarkia.setKohdeTaulu(entityBType);
+        return linkitysHierarkia;
+    }
+
+    private List<LinkitysHierarkia> buildRelatedJarjestelmaLink(IdNamePair nodeA, String entityAType, IdNamePair nodeB,
+                                                                String entityBType, IdNamePair relatedJarjestelma) {
+        LinkitysHierarkia aToRelated = buildJarjestelmaLink(nodeA, entityAType, relatedJarjestelma, relatedJarjestelmaType);
+        LinkitysHierarkia relatedToB = buildJarjestelmaLink(relatedJarjestelma, relatedJarjestelmaType, nodeB, entityBType);
+        return Arrays.asList(aToRelated, relatedToB);
     }
 
     private List<LinkitysHierarkia> getTietojarjestelmapalveluLinks(String jarjestelmaId, String tjpId) {
@@ -606,9 +711,6 @@ public class MolekyyliLinkkiService {
 
     }
 
-    private List<LinkitysHierarkia> getSovellusLinks(String tunnus) {
-        return getSovellusLinks(tunnus, null);
-    }
 
     private List<LinkitysHierarkia> getSovellusLinks(String tunnus, String tjpId) {
         HashMap<String, Object> propertyRestrictionMap = new HashMap<>();
@@ -622,16 +724,10 @@ public class MolekyyliLinkkiService {
         );
     }
 
-    private List<LinkitysHierarkia> getJarjestelmaLinks(String tunnus, Boolean asParent) {
-        return getJarjestelmaLinks(tunnus, asParent, null);
-    }
-
     private List<LinkitysHierarkia> getJarjestelmaLinks(String tunnus, Boolean asParent, String tjpId) {
         HashMap<String, Object> propertyRestictionMap = new HashMap<>();
         propertyRestictionMap.put("tyyppi", "Järjestelmä");
-        if (tjpId != null)
-            propertyRestictionMap.put("tietojarjestelmapalveluTunnus", Integer.parseInt(tjpId));
-
+        propertyRestictionMap.put("tietojarjestelmapalveluTunnus", Integer.parseInt(tjpId));
         if (asParent) {
             propertyRestictionMap.put("parentNode", Integer.parseInt(tunnus));
         }

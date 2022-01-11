@@ -1,6 +1,7 @@
 package fi.liike.rest.Model.linkitys;
 
 import fi.liike.rest.Model.Haettava;
+import fi.liike.rest.Service.MolekyyliLinkkiService;
 
 import java.util.Objects;
 
@@ -17,6 +18,13 @@ public class LinkitysHierarkia {
 
 
     public void setUp(Haettava from, Haettava to) {
+        this.lahdeNimi = from.getNimi();
+        this.kohdeNimi = to.getNimi();
+        this.lahdeTunnus = from.getTunnus().toString();
+        this.kohdeTunnus = to.getTunnus().toString();
+    }
+
+    public void setUp(MolekyyliLinkkiService.IdNamePair from, MolekyyliLinkkiService.IdNamePair to) {
         this.lahdeNimi = from.getNimi();
         this.kohdeNimi = to.getNimi();
         this.lahdeTunnus = from.getTunnus().toString();

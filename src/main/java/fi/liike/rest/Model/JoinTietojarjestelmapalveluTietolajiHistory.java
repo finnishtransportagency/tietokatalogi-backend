@@ -12,7 +12,7 @@ public class JoinTietojarjestelmapalveluTietolajiHistory implements java.io.Seri
     private static final long serialVersionUID = 1L;
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO, generator = "seq_gen")
+    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "seq_gen")
     @SequenceGenerator(name = "seq_gen", sequenceName = "tietojarjpalvtietohist_id_seq")
     @Column(name = "rivitunnus", unique = true, nullable = false)
     private Long rivitunnus;
@@ -25,6 +25,9 @@ public class JoinTietojarjestelmapalveluTietolajiHistory implements java.io.Seri
 
     @Column(name = "rivitila")
     private String rivitila = "A";
+
+    @Column(name = "LIITTYVA_JARJESTELMA")
+    private Integer liittyvaJarjestelma;
 
     @Column(name = "HISTORIATYYPPI")
     @Enumerated(EnumType.STRING)
@@ -39,6 +42,10 @@ public class JoinTietojarjestelmapalveluTietolajiHistory implements java.io.Seri
     public JoinTietojarjestelmapalveluTietolajiHistory(Integer childNode, Integer parentNode) {
         this.childNode = childNode;
         this.parentNode = parentNode;
+    }
+
+    public JoinTietojarjestelmapalveluTietolajiHistory(Integer liittyvaJarjestelma) {
+        this.liittyvaJarjestelma = liittyvaJarjestelma;
     }
 
     public JoinTietojarjestelmapalveluTietolajiHistory() {
@@ -80,6 +87,14 @@ public class JoinTietojarjestelmapalveluTietolajiHistory implements java.io.Seri
 
     public void setRivitila(String rivitila) {
         this.rivitila = rivitila;
+    }
+
+    public Integer getLiittyvaJarjestelma() {
+        return liittyvaJarjestelma;
+    }
+
+    public void setLiittyvaJarjestelma(Integer liittyvaJarjestelma) {
+        this.liittyvaJarjestelma = liittyvaJarjestelma;
     }
 
     @Override

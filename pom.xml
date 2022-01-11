@@ -263,7 +263,7 @@
 					<include>tietojarjestelmaseloste.jrxml</include>
 					<include>config.properties</include>
 					<include>log4j2.xml</include>
-					<include>testhibernate.cfg.xml</include>
+<!--					<include>testhibernate.cfg.xml</include>-->
 				</includes>
 				<excludes>
 					<!--  <exclude>hibernate.cfg.xml</exclude> -->

@@ -5,6 +5,7 @@ import fi.liike.rest.Model.*;
 import fi.liike.rest.api.ModelResults;
 import fi.liike.rest.api.SearchContent;
 import org.hibernate.Criteria;
+import org.hibernate.Query;
 import org.hibernate.Session;
 import org.hibernate.criterion.Disjunction;
 import org.hibernate.criterion.Order;
@@ -143,4 +144,17 @@ public class SearchDaoImpl extends HibernateDao {
         return henkiloRoolis;
     }
 
+    public String getJarjestelmaName(Integer jarjestelmaId) {
+        if (jarjestelmaId == null) return "";
+
+        Session session = getSession();
+        Query sql = session.createSQLQuery("SELECT JARJESTELMAN_NIMI FROM TIETOJARJESTELMASALKKU " +
+                "WHERE TIETOJARJESTELMATUNNUS = :jarjestelmaId")
+                .setParameter("jarjestelmaId", jarjestelmaId);
+        String jarjestelmaName = (String) sql.uniqueResult();
+        session.close();
+
+        if (jarjestelmaName == null) return "";
+        return jarjestelmaName;
+    }
 }
