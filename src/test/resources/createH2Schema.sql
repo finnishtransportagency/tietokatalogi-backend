@@ -6631,3 +6631,40 @@ CREATE VIEW TIETOOMAISUUS_JARJESTELMA_NIMI
 AS select tietoomaisuus.*, tietojarjestelmasalkku.jarjestelman_nimi
 from tietoomaisuus
 join tietojarjestelmasalkku on (tietoomaisuus.tietojarjestelma_id = tietojarjestelmasalkku.tietojarjestelmatunnus);
+alter table termilomake drop column huomautus_1;
+alter table termilomake drop column huomautus_2;
+alter table termilomake alter maaritelma type character varying(4000);
+
+alter table termilomakehistoria drop column huomautus_1;
+alter table termilomakehistoria drop column huomautus_2;
+alter table termilomakehistoria alter maaritelma type character varying(4000);
+
+ALTER TABLE tietojarjpalvliittyvajarj
+    ADD CONSTRAINT fk_tietojarjpalvliittyvajarj_1 FOREIGN KEY (tietojarjpalvelutunnus)
+            REFERENCES tietojarjestelmapalvelu(tunnus);
+
+ALTER TABLE tietojarjpalvliittyvajarj
+    ADD CONSTRAINT fk_tietojarjpalvliittyvajarj_2 FOREIGN KEY (liittyvajarjestelmatunnus)
+            REFERENCES tietojarjestelmasalkku(tietojarjestelmatunnus);
+
+
+-- ANALPK-1397 Uusi Elinkaari-alasvetovalikko Järjestelmälinkkaus-osioon
+
+ALTER TABLE jarjestelmalinkkaus ADD elinkaaritila character varying(255);
+ALTER TABLE jarjestelmalinkkaushistoria ADD elinkaaritila character varying(255);
+
+UPDATE jarjestelmalinkkaus
+SET elinkaaritila = 'Tuotannossa'
+WHERE elinkaaritila IS NULL;
+
+
+-- ANALPK-1483 Tietokatalogi: Liittyvä järjestelmä järjestelmälinkkauksen nimeen
+-- Refactoring to add liittyva jarjestelma information to db
+-- (was previously inferred from other data).
+ALTER TABLE tietojarjpalvelu_tietolaji ADD liittyva_jarjestelma NUMERIC(38,10)
+    CONSTRAINT tietojarjpalvelu_tietolaji_fk3 REFERENCES tietojarjestelmasalkku(tietojarjestelmatunnus);
+
+ALTER TABLE tietojarjpalvelutietohistoria ADD liittyva_jarjestelma NUMERIC(38,10);
+
+
+INSERT INTO tietojarjestelma_kasite_arvo (kasite_wid, kasite, arvo) VALUES(136, 'Rahoitusmomentti', 'Jaettu tienpidolle, radanpidolle ja vesiväylänpidolle');

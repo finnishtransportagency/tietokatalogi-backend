@@ -41,14 +41,14 @@ import fi.liike.testutils.TestDbUtil;
 import fi.liike.testutils.TestRequest;
 import fi.liike.testutils.TestUtil;
 
-@RunWith(MockitoJUnitRunner.class)
+//@RunWith(MockitoJUnitRunner.class)
 public class JarjestelmasalkkuTest {
 
-    @Mock
-    JarjestelmaService jarjestelmaServiceMock;
-
-    @InjectMocks
-    JarjestelmaController restMock = new JarjestelmaController();
+//    @Mock
+//    JarjestelmaService jarjestelmaServiceMock;
+//
+//    @InjectMocks
+//    JarjestelmaController restMock = new JarjestelmaController();
 
     private static JarjestelmaController rest;
 

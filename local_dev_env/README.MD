@@ -1,5 +1,7 @@
 # Installing local environment
 
+NOTE: THESE ARE OUTDATED, USE AT YOUR OWN RISK
+
 ## Prerequisites for Mac
 * HomeBrew [(https://brew.sh)](https://brew.sh)
 * VirtualBox [(https://www.virtualbox.org)](https://www.virtualbox.org/)
