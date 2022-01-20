@@ -19,6 +19,11 @@ or in a container with
 docker-compose up --build
 ```
 
+When finished, run (from another terminal)
+```
+docker-compose down
+```
+
 ### Testing
 Run JUnit tests with
 ```
