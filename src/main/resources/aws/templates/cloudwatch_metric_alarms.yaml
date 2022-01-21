@@ -1,0 +1,155 @@
+AWSTemplateFormatVersion: "2010-09-09"
+
+Description: CloudwatchAlarm template
+
+Parameters:
+  BackEndErrors:
+    Description: ErrorLoggingLogGroup
+    Type: String
+    Default: /ecs/tietokatalogi-ECS-logs
+  EmailAddress:
+    Description: 'Email address where alarms will be sent'
+    Type: String
+  FrontErrors:
+    Description: ErrorLoggingLogGroup
+    Type: String
+    Default: /ecs/tietokatalogi-UI-ECS-logs
+Resources:
+  BackEndErrorMetricsMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref BackEndErrors
+      FilterPattern: 'ERROR'
+      MetricTransformations:
+        -
+          MetricValue: 1
+          MetricNamespace: Tietokatalogi/BackEndErrorsFilter
+          MetricName: BackEndErrors
+  BackEndErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: BackEndErrorInTietokatalogi
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+      MetricName: BackEndErrors
+      Namespace: Tietokatalogi/BackEndErrorsFilter
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Period: 300
+      Statistic: Sum
+      Threshold: 1
+      TreatMissingData: notBreaching # not having data == good
+
+  FrontEndErrorMetricsMetricFilter:
+    Type: AWS::Logs::MetricFilter
+    Properties:
+      LogGroupName: !Ref FrontErrors
+      FilterPattern: "[ERROR, error]"
+      MetricTransformations:
+        -
+          MetricValue: 1
+          MetricNamespace: Tietokatalogi/FrontEndErrorsFilter
+          MetricName: FrontEndErrors
+  FrontEndErrorAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: FrontEndErrorInTietokatalogi
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+      MetricName: FrontEndErrors
+      Namespace: Tietokatalogi/FrontEndErrorsFilter
+      ComparisonOperator: GreaterThanOrEqualToThreshold
+      EvaluationPeriods: 1
+      Period: 300
+      Statistic: Sum
+      Threshold: 1
+      TreatMissingData: notBreaching # not having data == good
+  AlarmSNSTopic:
+    Type: AWS::SNS::Topic
+    Properties:
+      TopicName: AlarmTopic
+      Subscription:
+        - Protocol: email
+          Endpoint: !Ref EmailAddress
+
+  BackEndCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: BackEnd CPU utilization greater than 95%
+      AlarmDescription: Alarm if cpu utilization greater than 95% of reserved cpu
+      Namespace: AWS/ECS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: tietokatalogi-ECS-Cluster-Private
+        - Name: ServiceName
+          Value: tietokatalogi-UI-ECS-Service-Private
+      Statistic: Maximum
+      Period: "60"
+      EvaluationPeriods: "3"
+      Threshold: "95"
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+
+
+  BackEndRAMAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: BackEnd RAM utilization greater than 95%
+      AlarmDescription: Alarm if ram utilization greater than 95% of reserved cpu
+      Namespace: AWS/ECS
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: tietokatalogi-ECS-Cluster-Private
+        - Name: ServiceName
+          Value: tietokatalogi-UI-ECS-Service-Private
+      Statistic: Maximum
+      Period: "60"
+      EvaluationPeriods: "3"
+      Threshold: "95"
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+
+  FrontEndCPUAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: FrontEnd CPU utilization greater than 95%
+      AlarmDescription: Alarm if cpu utilization greater than 95% of reserved cpu
+      Namespace: AWS/ECS
+      MetricName: CPUUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: tietokatalogi-ECS-Cluster-Private
+        - Name: ServiceName
+          Value: tietokatalogi-UI-ECS-Service-Private
+      Statistic: Maximum
+      Period: "60"
+      EvaluationPeriods: "3"
+      Threshold: "95"
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref AlarmSNSTopic
+
+
+  FrontEndRAMAlarm:
+    Type: AWS::CloudWatch::Alarm
+    Properties:
+      AlarmName: FrontEnd RAM utilization greater than 95%
+      AlarmDescription: Alarm if ram utilization greater than 95% of reserved cpu
+      Namespace: AWS/ECS
+      MetricName: MemoryUtilization
+      Dimensions:
+        - Name: ClusterName
+          Value: tietokatalogi-ECS-Cluster-Private
+        - Name: ServiceName
+          Value: tietokatalogi-UI-ECS-Service-Private
+      Statistic: Maximum
+      Period: "60"
+      EvaluationPeriods: "3"
+      Threshold: "95"
+      ComparisonOperator: GreaterThanThreshold
+      AlarmActions:
+        - !Ref AlarmSNSTopic
