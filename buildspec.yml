@@ -16,7 +16,6 @@ phases:
   build:
     commands:
       - echo Build started on `date`
-      - mvn clean install -Dmaven.test.skip=true
       - sed -i 's/!dbhost!/'${LOCAL_JDBC_HOST}'/' ./src/main/resources/hibernate.cfg.aws.xml
       - sed -i 's/!dbport!/'${LOCAL_JDBC_PORT}'/' ./src/main/resources/hibernate.cfg.aws.xml
       - sed -i 's/!dbname!/'${LOCAL_JDBC_DBNAME}'/' ./src/main/resources/hibernate.cfg.aws.xml
@@ -25,6 +24,7 @@ phases:
       - sed -i 's/!dbpassword!/'${LOCAL_JDBC_PASSWORD}'/' ./src/main/resources/hibernate.cfg.aws.xml
       - rm ./src/main/resources/hibernate.cfg.xml
       - mv ./src/main/resources/hibernate.cfg.aws.xml ./src/main/resources/hibernate.cfg.xml
+      - mvn clean install -Dmaven.test.skip=true
       - docker build -f Dockerfile.aws -t $ECR_REPOSITORY_NAME:latest .
   post_build:
     commands:
