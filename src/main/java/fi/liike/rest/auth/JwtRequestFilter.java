@@ -9,7 +9,6 @@ import java.security.PublicKey;
 import java.security.SignatureException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -21,8 +20,11 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.apache.commons.codec.binary.Base64;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -65,7 +67,7 @@ public class JwtRequestFilter {
 
     private Claims decodeJWT(String jwt, String key) throws Exception {
         if (ecPublicKey == null) {
-            byte[] publicKeyBytes = Base64.getDecoder().decode(key);
+            byte[] publicKeyBytes = Base64.decodeBase64(key);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             ecPublicKey = keyFactory.generatePublic(keySpec);
@@ -85,7 +87,7 @@ public class JwtRequestFilter {
             }
             if (jwt != null) {
                 String jwt_headers = jwt.split("\\.")[0];
-                String decoded_jwt_headers = new String(Base64.getDecoder().decode(jwt_headers));
+                String decoded_jwt_headers = new String(Base64.decodeBase64(jwt_headers));
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(decoded_jwt_headers);
 
@@ -108,7 +110,7 @@ public class JwtRequestFilter {
                     LOG.debug(String.format("Username %s", userNameDetail));
 
                     String[] roles = ((String) claims.get("custom:rooli")).split("\\,");
-                    LOG.debug(String.format("Roles %s", String.join(",", roles)));
+                    LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
 
                     // claims.forEach((k, v) -> LOG.debug(String.format("Claim %s=%s", k, v)));
                     
