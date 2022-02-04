@@ -75,11 +75,10 @@ public class JwtRequestFilter {
         return Jwts.parserBuilder().setSigningKey(ecPublicKey).build().parseClaimsJws(jwt).getBody();
     }
 
-    protected List<UserGroup> getUserGroups(HttpServletRequest request) throws ServletException, IOException {
-        List<UserGroup> userGroups = new ArrayList<UserGroup>();
+    public List<UserGroup> getUserGroups(HttpServletRequest request) {
+        List<UserGroup> userGroups = new ArrayList<>();
         try {
             LOG.debug(String.format("Path %s", request.getServletPath()));
-            
 
             String jwt = request.getHeader("x-amzn-oidc-data");
             if (jwt == null || jwt.length() == 0) {

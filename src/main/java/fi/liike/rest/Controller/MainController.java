@@ -12,10 +12,7 @@ import fi.liike.rest.Service.JarjestelmaService;
 import fi.liike.rest.Service.MinimalFetchService;
 import fi.liike.rest.api.dto.HenkiloDto;
 import fi.liike.rest.api.dto.RightsDto;
-import fi.liike.rest.auth.InsufficientRightsException;
-import fi.liike.rest.auth.InvalidTietokatalogiDataException;
-import fi.liike.rest.auth.Right;
-import fi.liike.rest.auth.UserGroup;
+import fi.liike.rest.auth.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.codehaus.jettison.json.JSONArray;
@@ -353,7 +350,8 @@ public abstract class MainController {
 	void setUpNoRightsToModify(RightsDto content, HttpServletRequest httpRequest) {
 		if (System.getProperty("env", "").equals("local")) return;
 		if (content == null) return;
-		List<UserGroup> userGroupList = getUserGroups(httpRequest);
+		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
+		List<UserGroup> userGroupList = jwtRequestFilter.getUserGroups(httpRequest);
 		Set<Right> userRights = new HashSet<Right>();
 		if (userGroupList != null && userGroupList.size() > 0) {
 			for (UserGroup userGroup : userGroupList) {
@@ -440,7 +438,8 @@ public abstract class MainController {
 
 	void validateModificationRights(HttpServletRequest httpRequest) throws InsufficientRightsException {
 		if (System.getProperty("env", "").equals("local")) return;
-		List<UserGroup> userGroups = getUserGroups(httpRequest);
+		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
+		List<UserGroup> userGroups = jwtRequestFilter.getUserGroups(httpRequest);
 		if (userGroups == null || !userHasRights(userGroups, Right.getModifyUnsecuredRights()))
 			throw new InsufficientRightsException("Tietojen muokkaaminen vaatii muokkausoikeudet");
 	}
@@ -448,7 +447,8 @@ public abstract class MainController {
 	protected void validateWithRights(ContentDto content, HttpServletRequest httpRequest)
 			throws InsufficientRightsException, InvalidTietokatalogiDataException {
 		if (System.getProperty("env", "").equals("local")) return;
-		List<UserGroup> userGroups = getUserGroups(httpRequest);
+		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
+		List<UserGroup> userGroups = jwtRequestFilter.getUserGroups(httpRequest);
 		List<Right> neededRights = null;
 		try {
 			neededRights = content.getNeededRights();
@@ -465,14 +465,6 @@ public abstract class MainController {
 		validate(content);
 	}
 
-	private List<UserGroup> getUserGroups(HttpServletRequest httpRequest) {
-		String oamGroupsHeader = httpRequest.getHeader("OAM_GROUPS");
-		List<UserGroup> userGroups = null;
-		if (oamGroupsHeader != null) {
-			userGroups = UserGroup.getUserGroups(oamGroupsHeader.split(","));
-		}
-		return userGroups;
-	}
 
 	private Boolean userHasRights(List<UserGroup> userGroups, List<Right> neededRights) {
 		Set<Right> combinedRights = new HashSet<>();
