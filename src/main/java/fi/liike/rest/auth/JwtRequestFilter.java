@@ -133,4 +133,40 @@ public class JwtRequestFilter {
             return userGroups;
         }
     }
+
+
+    public String getUserName(HttpServletRequest request) {
+        try {
+            LOG.debug(String.format("Path %s", request.getServletPath()));
+
+            String jwt = request.getHeader("x-amzn-oidc-data");
+            if (jwt == null || jwt.length() == 0) {
+                jwt = request.getHeader("x-iam-data");
+            }
+            if (jwt == null) return null;
+
+            String jwt_headers = jwt.split("\\.")[0];
+            String decoded_jwt_headers = new String(Base64.decodeBase64(jwt_headers));
+            ObjectMapper objectMapper = new ObjectMapper();
+            JsonNode jsonNode = objectMapper.readTree(decoded_jwt_headers);
+
+            String key = getPublicKey(jsonNode.get("kid").asText(), false);
+            Claims claims;
+            try {
+                claims = decodeJWT(jwt, key);
+            } catch (SignatureException e) {
+                LOG.debug("Invalid key, trying again");
+                key = getPublicKey(jsonNode.get("kid").asText(), true);
+                claims = decodeJWT(jwt, key);
+            }
+            if (claims == null) return null;
+
+            String username = (String) claims.get("username");
+            String uid = (String) claims.get("custom:uid");
+            return (uid != null) ? uid : username;
+        } catch (Exception e) {
+            LOG.warn("Unable to get user name from reqest");
+        }
+        return null;
+    }
 }

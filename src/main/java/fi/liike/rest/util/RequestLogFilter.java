@@ -1,5 +1,6 @@
 package fi.liike.rest.util;
 
+import fi.liike.rest.auth.JwtRequestFilter;
 import org.slf4j.MDC;
 
 import javax.servlet.*;
@@ -17,8 +18,9 @@ public class RequestLogFilter implements Filter {
             throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest) {
             HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
-            String name = httpServletRequest.getHeader("OAM_REMOTE_USER");
-            MDC.put("user_name", name == null ? "unknown user" : name);
+            JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
+            String userName = jwtRequestFilter.getUserName(httpServletRequest);
+            MDC.put("user_name", userName == null ? "unknown user" : userName);
         }
         try {
             filterChain.doFilter(servletRequest, servletResponse);
