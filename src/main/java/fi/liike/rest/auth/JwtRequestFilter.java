@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.jsonwebtoken.JwtParser;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -67,12 +68,19 @@ public class JwtRequestFilter {
 
     private Claims decodeJWT(String jwt, String key) throws Exception {
         if (ecPublicKey == null) {
+            LOG.debug("ecPublicKey is null");
             byte[] publicKeyBytes = Base64.decodeBase64(key);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             ecPublicKey = keyFactory.generatePublic(keySpec);
+            LOG.debug("generated ecPublicKey: " + ecPublicKey);
         }
-        return Jwts.parserBuilder().setSigningKey(ecPublicKey).build().parseClaimsJws(jwt).getBody();
+        LOG.debug("using ecPublicKey: " + ecPublicKey);
+        JwtParser parser = Jwts.parserBuilder().setSigningKey(ecPublicKey).build();
+        LOG.debug("parser: " + parser.toString());
+        Claims claims = parser.parseClaimsJws(jwt).getBody();
+        LOG.debug("claims " + claims);
+        return claims;
     }
 
     public List<UserGroup> getUserGroups(HttpServletRequest request) {
@@ -90,9 +98,10 @@ public class JwtRequestFilter {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(decoded_jwt_headers);
 
-                // logger.debug(String.format("JWT headers json %s", json.toJSONString()));
+                LOG.debug(String.format("JWT headers json %s", jsonNode.toString()));
 
                 String key = getPublicKey(jsonNode.get("kid").asText(),false);
+                LOG.debug("getPublicKey: " + key);
                 Claims claims;
                 try {
                     claims = decodeJWT(jwt, key);
@@ -164,8 +173,8 @@ public class JwtRequestFilter {
             String username = (String) claims.get("username");
             String uid = (String) claims.get("custom:uid");
             return (uid != null) ? uid : username;
-        } catch (Exception e) {
-            LOG.warn("Unable to get user name from reqest");
+        } catch (Exception ex) {
+            LOG.warn("Unable to get user name from reqest", ex);
         }
         return null;
     }
