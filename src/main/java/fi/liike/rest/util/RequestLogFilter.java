@@ -1,5 +1,6 @@
 package fi.liike.rest.util;
 
+import fi.liike.rest.auth.Constants;
 import fi.liike.rest.auth.JwtRequestFilter;
 import fi.liike.rest.auth.UserInfo;
 import org.slf4j.MDC;
@@ -21,8 +22,8 @@ public class RequestLogFilter implements Filter {
             JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
             UserInfo userInfo = jwtRequestFilter.getUserInfo((HttpServletRequest) servletRequest);
             MDC.put("user_name", userInfo.getUserName() == null ? "unknown user" : userInfo.getUserName());
-            servletRequest.setAttribute("userGroups", userInfo.getUserGroups());
-            servletRequest.setAttribute("userName", userInfo.getUserName());
+            servletRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, userInfo.getUserGroups());
+            servletRequest.setAttribute(Constants.JWT_USER_NAME_ATTRIBUTE, userInfo.getUserName());
         }
         try {
             filterChain.doFilter(servletRequest, servletResponse);

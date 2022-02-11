@@ -7,6 +7,7 @@ import fi.liike.rest.Controller.*;
 import fi.liike.rest.api.Catalogue;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.*;
+import fi.liike.rest.auth.Constants;
 import fi.liike.rest.auth.UserGroup;
 import fi.liike.testutils.TestRequest;
 import fi.liike.testutils.TestUtil;
@@ -86,7 +87,7 @@ public class AuthenticationTest {
 //    @Test
 //    public void testCreateCatalogueWithSufficientRights() {
 //        TestRequest testRequest = new TestRequest();
-//        testRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.MODIFY_USER));
+//        testRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.MODIFY_USER));
 //        int status = Response.Status.OK.getStatusCode();
 //        this.testCreateCatalogue(testRequest, status);
 //        // TODO: this needs bigger modification. It's testing two things:
@@ -179,7 +180,7 @@ public class AuthenticationTest {
 //    @Test
 //    public void testDeleteCatalogueWithSufficientRights() {
 //        TestRequest testRequest = new TestRequest();
-//        testRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.MODIFY_USER));
+//        testRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.MODIFY_USER));
 //        this.testDeleteCatalogue(testRequest, true);
 //
 //        // TODO: refactor
@@ -269,7 +270,7 @@ public class AuthenticationTest {
     @Test
     public void testCreateJarjestelmaWithSecuredFieldSUCCESS() {
         TestRequest validTestRequest = new TestRequest();
-        validTestRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.SUPER_USER));
+        validTestRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.SUPER_USER));
         ExtractedResponse response = createTestJarjestelma(validTestRequest);
         assertEquals(response.getValue("tunnus") != null, true);
         assertEquals(response.getValue("tietoturvasopimus"), Boolean.TRUE);
@@ -278,7 +279,7 @@ public class AuthenticationTest {
     @Test
     public void testUpdateJarjestelmaWithSecuredFieldFAILS() {
         TestRequest validTestRequest = new TestRequest();
-        validTestRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.SUPER_USER));
+        validTestRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.SUPER_USER));
         ExtractedResponse response = createTestJarjestelma(validTestRequest);
         JarjestelmaDto modifiedJarjestelma = getJarjestelmaFromResponse(response);
         modifiedJarjestelma.setTietoturvasopimus(!modifiedJarjestelma.getTietoturvasopimus());
@@ -289,7 +290,7 @@ public class AuthenticationTest {
     @Test
     public void testUpdateJarjestelmaWithSecuredFieldSUCCESS() {
         TestRequest validTestRequest = new TestRequest();
-        validTestRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.SUPER_USER));
+        validTestRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.SUPER_USER));
         ExtractedResponse response = createTestJarjestelma(validTestRequest);
         JarjestelmaDto createdJarjestelma = getJarjestelmaFromResponse(response);
         Boolean tietoturvaSopimus = !createdJarjestelma.getTietoturvasopimus();
@@ -315,7 +316,7 @@ public class AuthenticationTest {
     @Test
     public void testGetJarjestelma() {
         TestRequest validTestRequest = new TestRequest();
-        validTestRequest.setAttribute("userGroups", Collections.singletonList(UserGroup.SUPER_USER));
+        validTestRequest.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.singletonList(UserGroup.SUPER_USER));
         ExtractedResponse response = createTestJarjestelma(validTestRequest);
         JarjestelmaDto jarjestelma = this.getJarjestelmaFromResponse(response);
         String jarjestelmaTunnus = jarjestelma.getTunnus().toString();
@@ -325,7 +326,7 @@ public class AuthenticationTest {
         assertEquals(jarjestelma.getNoRightsToModify().size(), 0);
 
         TestRequest requestWithNoRights = new TestRequest();
-        requestWithNoRights.setAttribute("userGroups", Collections.emptyList());
+        requestWithNoRights.setAttribute(Constants.JWT_USER_GROUPS_ATTRIBUTE, Collections.emptyList());
         response = new ExtractedResponse(jarjestelmaController.get(requestWithNoRights, jarjestelmaTunnus));
         jarjestelma = getJarjestelmaFromResponse(response);
         assertEquals(ImmutableSet.of("ALL_FIELDS", "tietoturvasopimus"), ImmutableSet.copyOf(jarjestelma.getNoRightsToModify()));
