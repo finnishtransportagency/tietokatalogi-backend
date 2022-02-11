@@ -116,20 +116,21 @@ public class JwtRequestFilter {
                     LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
 
                     // claims.forEach((k, v) -> LOG.debug(String.format("Claim %s=%s", k, v)));
-                    
-                    for(String role:roles){
+
+                    for (String role : roles) {
                         switch (role) {
                             case "tk_tietoturva":
                                 userGroups.add(UserGroup.SUPER_USER);
                             case "tk_muokkaus":
                                 userGroups.add(UserGroup.MODIFY_USER);
-                            default:
-                                LOG.error("JWT tokenissa ei ollut yhtaan tunnettua roolia"); // TODO: fix
                         }
+                    }
+                    if (userGroups.isEmpty()) {
+                        LOG.warn("JWT tokenissa ei ollut yhtaan tunnettua roolia");
                     }
                 }
             } else {
-                LOG.error("No JWT header found");
+                LOG.warn("No JWT header found");
             }
             return new UserInfo(userName, userGroups);
         } catch (Exception ex) {
