@@ -1,6 +1,7 @@
 package fi.liike.rest.util;
 
 import fi.liike.rest.auth.JwtRequestFilter;
+import fi.liike.rest.auth.UserInfo;
 import org.slf4j.MDC;
 
 import javax.servlet.*;
@@ -17,10 +18,10 @@ public class RequestLogFilter implements Filter {
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain)
             throws IOException, ServletException {
         if (servletRequest instanceof HttpServletRequest) {
-            HttpServletRequest httpServletRequest = (HttpServletRequest) servletRequest;
             JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
-            String userName = jwtRequestFilter.getUserName(httpServletRequest);
-            MDC.put("user_name", userName == null ? "unknown user" : userName);
+            UserInfo userInfo = jwtRequestFilter.getUserInfo((HttpServletRequest) servletRequest);
+            MDC.put("user_name", userInfo.getUserName() == null ? "unknown user" : userInfo.getUserName());
+            servletRequest.setAttribute("userGroups", userInfo.getUserGroups());
         }
         try {
             filterChain.doFilter(servletRequest, servletResponse);

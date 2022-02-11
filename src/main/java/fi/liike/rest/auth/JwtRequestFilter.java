@@ -12,10 +12,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.FilterChain;
-import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,14 +74,12 @@ public class JwtRequestFilter {
         }
         LOG.debug("using ecPublicKey: " + ecPublicKey);
         JwtParser parser = Jwts.parserBuilder().setSigningKey(ecPublicKey).build();
-        LOG.debug("parser: " + parser.toString());
-        Claims claims = parser.parseClaimsJws(jwt).getBody();
-        LOG.debug("claims " + claims);
-        return claims;
+        return parser.parseClaimsJws(jwt).getBody();
     }
 
-    public List<UserGroup> getUserGroups(HttpServletRequest request) {
+    public UserInfo getUserInfo(HttpServletRequest request) {
         List<UserGroup> userGroups = new ArrayList<>();
+        String userName = null;
         try {
             LOG.debug(String.format("Path %s", request.getServletPath()));
 
@@ -112,10 +107,10 @@ public class JwtRequestFilter {
                 }
 
                 if (claims != null) {
-                    String username = (String) claims.get("username");
+                    String userNameClaim = (String) claims.get("username");
                     String uid = (String) claims.get("custom:uid");
-                    String userNameDetail = (uid != null) ? uid : username;
-                    LOG.debug(String.format("Username %s", userNameDetail));
+                    userName = (uid != null) ? uid : userNameClaim;
+                    LOG.debug(String.format("Username %s", userName));
 
                     String[] roles = ((String) claims.get("custom:rooli")).split("\\,");
                     LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
@@ -129,53 +124,19 @@ public class JwtRequestFilter {
                             case "tk_muokkaus":
                                 userGroups.add(UserGroup.MODIFY_USER);
                             default:
-                                LOG.error("JWT tokenissa ei ollut yhtaan tunnettua roolia");
+                                LOG.error("JWT tokenissa ei ollut yhtaan tunnettua roolia"); // TODO: fix
                         }
                     }
                 }
             } else {
                 LOG.error("No JWT header found");
             }
-            return userGroups;
+            return new UserInfo(userName, userGroups);
         } catch (Exception ex) {
             LOG.error("Autorisointi epaonnistui", ex);
-            return userGroups;
+            return new UserInfo(userName, userGroups);
         }
     }
 
 
-    public String getUserName(HttpServletRequest request) {
-        try {
-            LOG.debug(String.format("Path %s", request.getServletPath()));
-
-            String jwt = request.getHeader("x-amzn-oidc-data");
-            if (jwt == null || jwt.length() == 0) {
-                jwt = request.getHeader("x-iam-data");
-            }
-            if (jwt == null) return null;
-
-            String jwt_headers = jwt.split("\\.")[0];
-            String decoded_jwt_headers = new String(Base64.decodeBase64(jwt_headers));
-            ObjectMapper objectMapper = new ObjectMapper();
-            JsonNode jsonNode = objectMapper.readTree(decoded_jwt_headers);
-
-            String key = getPublicKey(jsonNode.get("kid").asText(), false);
-            Claims claims;
-            try {
-                claims = decodeJWT(jwt, key);
-            } catch (SignatureException e) {
-                LOG.debug("Invalid key, trying again");
-                key = getPublicKey(jsonNode.get("kid").asText(), true);
-                claims = decodeJWT(jwt, key);
-            }
-            if (claims == null) return null;
-
-            String username = (String) claims.get("username");
-            String uid = (String) claims.get("custom:uid");
-            return (uid != null) ? uid : username;
-        } catch (Exception ex) {
-            LOG.warn("Unable to get user name from reqest", ex);
-        }
-        return null;
-    }
 }

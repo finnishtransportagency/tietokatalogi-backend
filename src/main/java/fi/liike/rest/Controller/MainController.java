@@ -350,8 +350,7 @@ public abstract class MainController {
 	void setUpNoRightsToModify(RightsDto content, HttpServletRequest httpRequest) {
 		if (System.getProperty("env", "").equals("local")) return;
 		if (content == null) return;
-		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
-		List<UserGroup> userGroupList = jwtRequestFilter.getUserGroups(httpRequest);
+		List<UserGroup> userGroupList = (List<UserGroup>) httpRequest.getAttribute("userGroups");
 		Set<Right> userRights = new HashSet<Right>();
 		if (userGroupList != null && userGroupList.size() > 0) {
 			for (UserGroup userGroup : userGroupList) {
@@ -438,8 +437,7 @@ public abstract class MainController {
 
 	void validateModificationRights(HttpServletRequest httpRequest) throws InsufficientRightsException {
 		if (System.getProperty("env", "").equals("local")) return;
-		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
-		List<UserGroup> userGroups = jwtRequestFilter.getUserGroups(httpRequest);
+		List<UserGroup> userGroups = (List<UserGroup>) httpRequest.getAttribute("userGroups");
 		if (userGroups == null || !userHasRights(userGroups, Right.getModifyUnsecuredRights()))
 			throw new InsufficientRightsException("Tietojen muokkaaminen vaatii muokkausoikeudet");
 	}
@@ -447,8 +445,7 @@ public abstract class MainController {
 	protected void validateWithRights(ContentDto content, HttpServletRequest httpRequest)
 			throws InsufficientRightsException, InvalidTietokatalogiDataException {
 		if (System.getProperty("env", "").equals("local")) return;
-		JwtRequestFilter jwtRequestFilter = new JwtRequestFilter();
-		List<UserGroup> userGroups = jwtRequestFilter.getUserGroups(httpRequest);
+		List<UserGroup> userGroups = (List<UserGroup>) httpRequest.getAttribute("userGroups");
 		List<Right> neededRights = null;
 		try {
 			neededRights = content.getNeededRights();
