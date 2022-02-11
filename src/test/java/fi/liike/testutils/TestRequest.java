@@ -1,5 +1,6 @@
 package fi.liike.testutils;
 
+import fi.liike.rest.auth.Constants;
 import fi.liike.rest.auth.UserGroup;
 
 import java.io.BufferedReader;
@@ -20,10 +21,12 @@ import javax.servlet.http.*;
 
 public class TestRequest implements HttpServletRequest {
 	private List<UserGroup> userGroups;
+	private String userName;
 
 	public TestRequest() {
-		userGroups = new ArrayList<>();
-		userGroups.add(UserGroup.MODIFY_USER);
+		this.userGroups = new ArrayList<>();
+		this.userGroups.add(UserGroup.MODIFY_USER);
+		this.userName = "TestUser";
 	}
 
 	public AsyncContext getAsyncContext() {
@@ -32,8 +35,14 @@ public class TestRequest implements HttpServletRequest {
 
 	@Override
 	public Object getAttribute(String arg0) {
-		if (arg0.equals("userGroups")) return this.userGroups;
-		return null;
+		switch (arg0) {
+			case Constants.JWT_USER_GROUPS_ATTRIBUTE:
+				return this.userGroups;
+			case Constants.JWT_USER_NAME_ATTRIBUTE:
+				return this.userName;
+			default:
+				return null;
+		}
 	}
 
 	@Override
@@ -188,7 +197,14 @@ public class TestRequest implements HttpServletRequest {
 
 	@Override
 	public void setAttribute(String arg0, Object arg1) {
-		if (arg0.equals("userGroups")) this.userGroups = (List<UserGroup>) arg1;
+		switch(arg0) {
+			case Constants.JWT_USER_GROUPS_ATTRIBUTE:
+				this.userGroups = (List<UserGroup>) arg1;
+				break;
+			case Constants.JWT_USER_NAME_ATTRIBUTE:
+				this.userName = (String) arg1;
+				break;
+		}
 	}
 
 	@Override

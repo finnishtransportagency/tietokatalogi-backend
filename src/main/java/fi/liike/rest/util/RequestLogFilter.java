@@ -22,6 +22,7 @@ public class RequestLogFilter implements Filter {
             UserInfo userInfo = jwtRequestFilter.getUserInfo((HttpServletRequest) servletRequest);
             MDC.put("user_name", userInfo.getUserName() == null ? "unknown user" : userInfo.getUserName());
             servletRequest.setAttribute("userGroups", userInfo.getUserGroups());
+            servletRequest.setAttribute("userName", userInfo.getUserName());
         }
         try {
             filterChain.doFilter(servletRequest, servletResponse);

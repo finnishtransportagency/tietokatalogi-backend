@@ -384,12 +384,12 @@ public abstract class MainController {
 	}
 
 	protected void setRemoteUserToContent(HttpServletRequest httpRequest, ContentDto content) {
-		logRequest("setRemoteUserToContent", httpRequest.getHeader("OAM_GROUPS"));
-		content.setRivimuokkaajatunnus(httpRequest.getHeader("OAM_REMOTE_USER"));
+		logRequest("setRemoteUserToContent", (String) httpRequest.getAttribute(Constants.JWT_USER_NAME_ATTRIBUTE));
+		content.setRivimuokkaajatunnus((String) httpRequest.getAttribute(Constants.JWT_USER_NAME_ATTRIBUTE));
 	}
 
 	protected String getUser(HttpServletRequest httpRequest) {
-		return httpRequest.getHeader("OAM_REMOTE_USER");
+		return (String) httpRequest.getAttribute(Constants.JWT_USER_NAME_ATTRIBUTE);
 	}
 
 	public Response buildResponse(List<KasiteArvoContent> resources) {
