@@ -1,5 +1,7 @@
 package fi.liike.testutils;
 
+import fi.liike.rest.auth.UserGroup;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
@@ -17,12 +19,11 @@ import javax.servlet.ServletResponse;
 import javax.servlet.http.*;
 
 public class TestRequest implements HttpServletRequest {
-	private final Map<String, String> headers;
+	private List<UserGroup> userGroups;
 
 	public TestRequest() {
-		headers = new HashMap<String, String>();
-		headers.put("OAM_REMOTE_USER", "TestUser");
-		headers.put("OAM_GROUPS", "tk_muokkaus");
+		userGroups = new ArrayList<>();
+		userGroups.add(UserGroup.MODIFY_USER);
 	}
 
 	public AsyncContext getAsyncContext() {
@@ -31,6 +32,7 @@ public class TestRequest implements HttpServletRequest {
 
 	@Override
 	public Object getAttribute(String arg0) {
+		if (arg0.equals("userGroups")) return this.userGroups;
 		return null;
 	}
 
@@ -186,6 +188,7 @@ public class TestRequest implements HttpServletRequest {
 
 	@Override
 	public void setAttribute(String arg0, Object arg1) {
+		if (arg0.equals("userGroups")) this.userGroups = (List<UserGroup>) arg1;
 	}
 
 	@Override
@@ -226,16 +229,9 @@ public class TestRequest implements HttpServletRequest {
 
 	@Override
 	public String getHeader(String arg0) {
-		return headers.get(arg0);
+		return null;
 	}
 
-	public void addHeader(String key, String value) {
-		headers.put(key, value);
-	}
-
-	public void removeHeader(String key) {
-		headers.remove(key);
-	}
 
 	@Override
 	public Enumeration<String> getHeaderNames() {
