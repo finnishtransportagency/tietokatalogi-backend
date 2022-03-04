@@ -1,7 +1,18 @@
 package fi.liike.rest.auth;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtParser;
+import io.jsonwebtoken.Jwts;
+import org.apache.commons.codec.binary.Base64;
+import org.apache.commons.lang3.StringUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.net.ssl.HttpsURLConnection;
+import javax.servlet.http.HttpServletRequest;
 import java.io.BufferedReader;
-import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.KeyFactory;
@@ -11,29 +22,14 @@ import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.net.ssl.HttpsURLConnection;
-import javax.servlet.http.HttpServletRequest;
-
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.ObjectMapper;
-
-import io.jsonwebtoken.JwtParser;
-import org.apache.commons.lang3.StringUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import org.apache.commons.codec.binary.Base64;
-
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-
 public class JwtRequestFilter {
     private final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
 
     private static String publicKey = null;
     private static PublicKey ecPublicKey = null;
 
-    private String getPublicKey(String kid, boolean isForce) throws Exception {
+    // public for mocking in tests
+    public String getPublicKey(String kid, boolean isForce) throws Exception {
         if (isForce || publicKey == null) {
             String url = "https://public-keys.auth.elb.eu-west-1.amazonaws.com/" + kid;
             HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
