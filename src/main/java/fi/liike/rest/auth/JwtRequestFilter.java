@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.JwtParser;
 import io.jsonwebtoken.Jwts;
+import io.jsonwebtoken.security.SecurityException;
 import org.apache.commons.codec.binary.Base64;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,11 +17,13 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.KeyFactory;
+import java.security.NoSuchAlgorithmException;
 import java.security.PublicKey;
-import java.security.SignatureException;
+import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 public class JwtRequestFilter {
     private final Logger LOG = LoggerFactory.getLogger(JwtRequestFilter.class);
@@ -59,8 +62,8 @@ public class JwtRequestFilter {
         return publicKey;
     }
 
-    private Claims decodeJWT(String jwt, String key) throws Exception {
-        if (ecPublicKey == null) {
+    private Claims decodeJWT(String jwt, String key, boolean isForce) throws NoSuchAlgorithmException, InvalidKeySpecException {
+        if (isForce || ecPublicKey == null) {
             LOG.debug("ecPublicKey is null");
             byte[] publicKeyBytes = Base64.decodeBase64(key);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
@@ -74,7 +77,7 @@ public class JwtRequestFilter {
     }
 
     public UserInfo getUserInfo(HttpServletRequest request) {
-        List<UserGroup> userGroups = new ArrayList<>();
+        Set<UserGroup> userGroups = new HashSet<>();
         String userName = null;
         try {
             LOG.debug(String.format("Path %s", request.getServletPath()));
@@ -95,11 +98,12 @@ public class JwtRequestFilter {
                 LOG.debug("getPublicKey: " + key);
                 Claims claims;
                 try {
-                    claims = decodeJWT(jwt, key);
-                } catch (SignatureException e) {
+                    claims = decodeJWT(jwt, key, false);
+                } catch (SecurityException e) {
+                    // The exception is actually the subclass io.jsonwebtoken.SignatureException which is deprecated
                     LOG.debug("Invalid key, trying again");
                     key = getPublicKey(jsonNode.get("kid").asText(),true);
-                    claims = decodeJWT(jwt, key);
+                    claims = decodeJWT(jwt, key, true);
                 }
 
                 if (claims != null) {
@@ -128,10 +132,10 @@ public class JwtRequestFilter {
             } else {
                 LOG.warn("No JWT header found");
             }
-            return new UserInfo(userName, userGroups);
+            return new UserInfo(userName, new ArrayList<>(userGroups));
         } catch (Exception ex) {
             LOG.error("Autorisointi epaonnistui", ex);
-            return new UserInfo(userName, userGroups);
+            return new UserInfo(userName, new ArrayList<>(userGroups));
         }
     }
 
