@@ -14,8 +14,7 @@ import org.mockito.Mockito;
 import javax.servlet.http.HttpServletRequest;
 import java.security.KeyPair;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.*;
 
 
@@ -118,10 +117,53 @@ public class JwtRequestFilterTest {
         Mockito.when(request.getHeader("x-amzn-oidc-data")).thenReturn(jws);
 
         UserInfo userInfo = jwtRequestFilter.getUserInfo(request);
-        // FIXME: the implementation returns MODIFY_USER twice, which should not happen
         assertEquals(2, userInfo.getUserGroups().size());
         assertTrue(userInfo.getUserGroups().contains(UserGroup.SUPER_USER));
     }
 
-    // TODO: test refreshing token
+    @Test
+    public void testPublicKeyUpdatedOnFailedVerification() throws Exception {
+        KeyPair changedKeyPair = Keys.keyPairFor(SignatureAlgorithm.ES384);
+        String changedPublicKeyString = Base64.encodeBase64String(changedKeyPair.getPublic().getEncoded());
+        assertNotEquals(publicKeyString, changedPublicKeyString);
+        String jws = Jwts.builder().setHeaderParam("kid", "42")
+                .claim("username", "test user")
+                .claim("custom:rooli", "group1,tk_muokkaus,group3")
+                .signWith(changedKeyPair.getPrivate())
+                .compact();
+
+        JwtRequestFilter jwtRequestFilter = Mockito.spy(new JwtRequestFilter());
+        Mockito.doReturn(null).when(jwtRequestFilter).getPublicKey(anyString(), anyBoolean());
+        Mockito.doReturn(publicKeyString).when(jwtRequestFilter).getPublicKey(eq("42"), eq(false));
+        // return refreshed token on forced update
+        Mockito.doReturn(changedPublicKeyString).when(jwtRequestFilter).getPublicKey(eq("42"), eq(true));
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(request.getHeader("x-amzn-oidc-data")).thenReturn(jws);
+
+        UserInfo userInfo = jwtRequestFilter.getUserInfo(request);
+        Mockito.verify(jwtRequestFilter, Mockito.times(2)).getPublicKey(anyString(), anyBoolean());
+        assertFalse(userInfo.getUserName().isEmpty());
+    }
+
+    @Test
+    public void testNoRightsWithBadSignature() throws Exception {
+        KeyPair wrongKeyPair = Keys.keyPairFor(SignatureAlgorithm.ES384);
+        String jws = Jwts.builder().setHeaderParam("kid", "42")
+                .claim("username", "test user")
+                .claim("custom:rooli", "group1,tk_muokkaus,group3")
+                .signWith(wrongKeyPair.getPrivate())
+                .compact();
+
+        JwtRequestFilter jwtRequestFilter = Mockito.spy(new JwtRequestFilter());
+        Mockito.doReturn(null).when(jwtRequestFilter).getPublicKey(anyString(), anyBoolean());
+        // Server's public key is unchanged on forced update, so the token must be wrong
+        Mockito.doReturn(publicKeyString).when(jwtRequestFilter).getPublicKey(eq("42"), anyBoolean());
+        HttpServletRequest request = Mockito.mock(HttpServletRequest.class);
+        Mockito.when(request.getHeader("x-amzn-oidc-data")).thenReturn(jws);
+
+        UserInfo userInfo = jwtRequestFilter.getUserInfo(request);
+        Mockito.verify(jwtRequestFilter, Mockito.times(2)).getPublicKey(anyString(), anyBoolean());
+        assertNull(userInfo.getUserName());
+        assertTrue(userInfo.getUserGroups().isEmpty());
+    }
 }
