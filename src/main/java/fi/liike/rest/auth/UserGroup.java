@@ -33,14 +33,4 @@ public enum UserGroup {
         }
     }
 
-    public static List<UserGroup> getUserGroups(String[] oamGroups) {
-        List<UserGroup> userGroups = new ArrayList<UserGroup>();
-        for (String oamGroup : oamGroups) {
-            if (oamGroup != null) {
-                UserGroup userGroup = getUserGroup(oamGroup);
-                if (userGroup != null) userGroups.add(getUserGroup(oamGroup));
-            }
-        }
-        return userGroups;
-    }
 }
