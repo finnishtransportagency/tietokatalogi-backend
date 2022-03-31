@@ -99,7 +99,17 @@ public class FimHenkiloService {
     private void validateResponse(LiikeHttpResponse resp) throws IOException {
         if (resp != null && resp.getStatusCode().equals(200)
                 && resp.getResponse() != null && !resp.getResponse().isEmpty()) {
+            LOG.debug("FimHenkiloService successfully fetched new FIM content");
         } else {
+            if (resp == null) {
+                LOG.error("Response object from FIM fetch was null");
+            } else if (!resp.getStatusCode().equals(200)) {
+                LOG.error("FIM fetch responded with status code " + resp.getStatusCode());
+            } else if (resp.getResponse() == null) {
+                LOG.error("Response from FIM fetch was null");
+            } else {
+                LOG.error("Response from FIM fetch was empty");
+            }
             throw new IOException();
         }
     }
