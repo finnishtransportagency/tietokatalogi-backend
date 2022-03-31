@@ -7,6 +7,7 @@ env:
     LOCAL_JDBC_USERNAME: "dev/hassu/db:username"
     LOCAL_JDBC_PASSWORD: "dev/hassu/db:password"
     LOCAL_JDBC_SCHEMA: "dev/hassu/db:schema"
+    FIM_BASE_URL: "dev/hassu/db:fimbaseurl"
 phases:
   pre_build:
     commands:
@@ -22,8 +23,11 @@ phases:
       - sed -i 's/!dbschema!/'${LOCAL_JDBC_SCHEMA}'/' ./src/main/resources/hibernate.cfg.aws.xml
       - sed -i 's/!dbusername!/'${LOCAL_JDBC_USERNAME}'/' ./src/main/resources/hibernate.cfg.aws.xml
       - sed -i 's/!dbpassword!/'${LOCAL_JDBC_PASSWORD}'/' ./src/main/resources/hibernate.cfg.aws.xml
+      - sed -i 's/!fimbaseurl!/'${FIM_BASE_URL}'/' ./src/main/resources/config.aws.properties
       - rm ./src/main/resources/hibernate.cfg.xml
       - mv ./src/main/resources/hibernate.cfg.aws.xml ./src/main/resources/hibernate.cfg.xml
+      - rm ./src/main/resources/config.properties
+      - mv ./src/main/resources/config.aws.properties ./src/main/resources/config.properties
       - mvn clean install -Dmaven.test.skip=true
       - docker build -f Dockerfile.aws -t $ECR_REPOSITORY_NAME:latest .
   post_build:
