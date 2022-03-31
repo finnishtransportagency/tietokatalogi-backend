@@ -25,8 +25,9 @@ join tietok.tietojarjestelmasalkku on (tietoomaisuus.tietojarjestelma_id = tieto
 
 -- ANALPK-1520 Integraatiot
 -- Migrate merge statements to pgsql upsert. In pgsql, the ON CONFLICT columns require a unique constraint.
-alter table tietok.sovellus
-add constraint sov_merge_unq unique(nimi,versio,tuotekoodi);
+-- Update 2022-03-31: This is ignored since the sovellus integration was decided to be removed.
+--alter table tietok.sovellus
+--add constraint sov_merge_unq unique(nimi,versio,tuotekoodi);
 
 alter table tietok.henkilo
 add constraint object_id_unq unique (object_id);
