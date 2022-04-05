@@ -61,6 +61,7 @@ public class FimHenkiloService {
 
     private List<HenkiloTemp> fetchAllPersonsFromFIM() throws IOException {
         String url = baseFIMurl + fimFetchAllPersons;
+        LOG.debug("Building FIM request to " + url);
         LiikeHttpResponse response = httpClient.get(url);
         validateResponse(response);
         List<HenkiloDto> contentDtoList = httpResponseToPersonList(response);
