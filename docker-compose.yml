@@ -8,7 +8,6 @@ services:
         - 8080:8080
       environment:
         JAVA_OPTS: -Xmx2048m -Xms1024m -Dport.http=8080
-        FIM_URL: https://testioag.liikennevirasto.fi/FIM/SimpleREST4FIM/1/
         CATALINA_OPTS: "-Denv=local"
       networks: 
         - default
