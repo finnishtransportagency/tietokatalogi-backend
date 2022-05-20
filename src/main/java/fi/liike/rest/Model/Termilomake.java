@@ -18,6 +18,9 @@ public class Termilomake extends Haettava implements java.io.Serializable {
     @Column(name = "termilomaketunnus", unique = true, nullable = false)
     private Integer tunnus;
 
+    @Column(name = "muokattava_tunnus")
+    private Integer muokattava_tunnus;
+
     @Column(name = "nimi")
     private String nimi;
 
@@ -63,6 +66,17 @@ public class Termilomake extends Haettava implements java.io.Serializable {
     @Column(name = "rivimuokkaajatunnus")
     private String rivimuokkaajatunnus;
 
+    @Column(name = "pdf_linkki")
+    private String pdf_linkki;
+
+    @Column(name = "pdf_linkki_nimi")
+    private String pdf_linkki_nimi;
+
+    @Column(name = "kasitekaavio_linkki")
+    private String kasitekaavio_linkki;
+
+    @Column(name = "kasitekaavio_linkki_nimi")
+    private String kasitekaavio_linkki_nimi;
 
     public Termilomake() {}
 
@@ -171,6 +185,46 @@ public class Termilomake extends Haettava implements java.io.Serializable {
 
     public void setHakutermit(String hakutermit) {
         this.hakutermit = hakutermit;
+    }
+
+    public String getPdf_linkki() {
+        return pdf_linkki;
+    }
+
+    public void setPdf_linkki(String pdf_linkki) {
+        this.pdf_linkki = pdf_linkki;
+    }
+
+    public String getPdf_linkki_nimi() {
+        return pdf_linkki_nimi;
+    }
+
+    public void setPdf_linkki_nimi(String pdf_linkki_nimi) {
+        this.pdf_linkki_nimi = pdf_linkki_nimi;
+    }
+
+    public String getKasitekaavio_linkki() {
+        return kasitekaavio_linkki;
+    }
+
+    public void setKasitekaavio_linkki(String kasitekaavio_linkki) {
+        this.kasitekaavio_linkki = kasitekaavio_linkki;
+    }
+
+    public String getKasitekaavio_linkki_nimi() {
+        return kasitekaavio_linkki_nimi;
+    }
+
+    public void setKasitekaavio_linkki_nimi(String kasitekaavio_linkki_nimi) {
+        this.kasitekaavio_linkki_nimi = kasitekaavio_linkki_nimi;
+    }
+
+    public Integer getMuokattava_tunnus() {
+        return muokattava_tunnus;
+    }
+
+    public void setMuokattava_tunnus(Integer muokattava_tunnus) {
+        this.muokattava_tunnus = muokattava_tunnus;
     }
 
     @Override

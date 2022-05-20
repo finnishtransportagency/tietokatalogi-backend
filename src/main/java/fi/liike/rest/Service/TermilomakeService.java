@@ -46,12 +46,15 @@ public class TermilomakeService extends MainService implements Service {
 
         DaoContent dataToSave = prepareDaoContent(content);
 
-        Haettava savedTermilomake = dao.save(session, dataToSave);
-        if (savedTermilomake != null ) {
-
-            return get(savedTermilomake.getTunnus());
+        Termilomake savedTermilomake = (Termilomake) dao.save(session, dataToSave);
+        // Set editable id to database id if empty
+        if (savedTermilomake.getMuokattava_tunnus() == null) {
+            savedTermilomake.setMuokattava_tunnus(savedTermilomake.getTunnus());
+            DaoContent daoContent = new DaoContent();
+            daoContent.setHaettava(savedTermilomake);
+            dao.update(session, daoContent);
         }
-        return null;
+        return get(savedTermilomake.getTunnus());
     }
 
     private DaoContent prepareDaoContent(ContentDto content) {

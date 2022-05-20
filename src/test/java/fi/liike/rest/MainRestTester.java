@@ -182,7 +182,9 @@ public class MainRestTester {
 		List<? extends HaettavaHistory> historyRows = TestDbUtil.getHaettavaHistoryRowsFromDb(historyClassName);
 		assertEquals(HistoryType.MOD, historyRows.get(0).getHistoriatyyppi());
 		assertFalse(historyRows.get(0).getRiviluotupvm().equals(historyRows.get(1).getRiviluotupvm()));
-		assertEquals(2, historyRows.size());
+		// Ignore termilomake, since it creates an additional history entry when saving to update its "editable id" field
+		if (!catalogue.equals(Catalogue.TERMILOMAKE))
+			assertEquals(2, historyRows.size());
 		assertEquals("TestUser", historyRows.get(0).getRivimuokkaajatunnus());
 
 		// - Test that non-existing id is not possible to update

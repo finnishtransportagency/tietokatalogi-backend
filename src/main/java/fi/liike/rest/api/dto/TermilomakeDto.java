@@ -5,6 +5,7 @@ import java.util.List;
 public class TermilomakeDto extends ContentDtoWithRights {
 
     private Integer tunnus;
+    private Integer muokattava_tunnus;
     private String nimi;
     private String ensisij_termi;
     private String synonyymit;
@@ -17,6 +18,10 @@ public class TermilomakeDto extends ContentDtoWithRights {
     private String omistaja;
     private String ydinkasite;
     private String hakutermit;
+    private String pdf_linkki;
+    private String pdf_linkki_nimi;
+    private String kasitekaavio_linkki;
+    private String kasitekaavio_linkki_nimi;
 
     private String rivimuokkaajatunnus;
 
@@ -145,6 +150,46 @@ public class TermilomakeDto extends ContentDtoWithRights {
 
     public void setAssosiatiiv_kasite(List<Integer> assosiatiiv_kasite) {
         this.assosiatiiv_kasite = assosiatiiv_kasite;
+    }
+
+    public String getPdf_linkki() {
+        return pdf_linkki;
+    }
+
+    public void setPdf_linkki(String pdf_linkki) {
+        this.pdf_linkki = pdf_linkki;
+    }
+
+    public String getPdf_linkki_nimi() {
+        return pdf_linkki_nimi;
+    }
+
+    public void setPdf_linkki_nimi(String pdf_linkki_nimi) {
+        this.pdf_linkki_nimi = pdf_linkki_nimi;
+    }
+
+    public String getKasitekaavio_linkki() {
+        return kasitekaavio_linkki;
+    }
+
+    public void setKasitekaavio_linkki(String kasitekaavio_linkki) {
+        this.kasitekaavio_linkki = kasitekaavio_linkki;
+    }
+
+    public String getKasitekaavio_linkki_nimi() {
+        return kasitekaavio_linkki_nimi;
+    }
+
+    public void setKasitekaavio_linkki_nimi(String kasitekaavio_linkki_nimi) {
+        this.kasitekaavio_linkki_nimi = kasitekaavio_linkki_nimi;
+    }
+
+    public Integer getMuokattava_tunnus() {
+        return muokattava_tunnus;
+    }
+
+    public void setMuokattava_tunnus(Integer muokattava_tunnus) {
+        this.muokattava_tunnus = muokattava_tunnus;
     }
 
     @Override
