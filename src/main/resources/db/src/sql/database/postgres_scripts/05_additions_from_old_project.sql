@@ -28,3 +28,20 @@ ALTER TABLE tietok.tietojarjpalvelutietohistoria ADD liittyva_jarjestelma NUMERI
 
 
 INSERT INTO tietok.tietojarjestelma_kasite_arvo (kasite_wid, kasite, arvo) VALUES(136, 'Rahoitusmomentti', 'Jaettu tienpidolle, radanpidolle ja vesiväylänpidolle');
+
+
+-- ANALPA-1783 Sanasto Pdf-muodossa - lisäys Sanastolomakkeeseen
+ALTER TABLE tietok.termilomake ADD pdf_linkki VARCHAR(4000);
+ALTER TABLE tietok.termilomakehistoria ADD pdf_linkki VARCHAR(4000);
+ALTER TABLE tietok.termilomake ADD pdf_linkki_nimi VARCHAR(4000);
+ALTER TABLE tietok.termilomakehistoria ADD pdf_linkki_nimi VARCHAR(4000);
+
+ALTER TABLE tietok.termilomake ADD kasitekaavio_linkki VARCHAR(4000);
+ALTER TABLE tietok.termilomakehistoria ADD kasitekaavio_linkki VARCHAR(4000);
+ALTER TABLE tietok.termilomake ADD kasitekaavio_linkki_nimi VARCHAR(4000);
+ALTER TABLE tietok.termilomakehistoria ADD kasitekaavio_linkki_nimi VARCHAR(4000);
+
+ALTER TABLE tietok.termilomake ADD muokattava_tunnus NUMERIC(38,10);
+ALTER TABLE tietok.termilomakehistoria ADD muokattava_tunnus NUMERIC(38,10);
+
+UPDATE tietok.termilomake SET muokattava_tunnus = termilomaketunnus WHERE muokattava_tunnus IS NULL;
