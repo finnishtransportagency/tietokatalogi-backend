@@ -34,13 +34,14 @@ public class JwtRequestFilter {
     // public for mocking in tests
     public String getPublicKey(String kid, boolean isForce) throws Exception {
         if (isForce || publicKey == null) {
+            LOG.debug("Fetching new public key");
             String url = "https://public-keys.auth.elb.eu-west-1.amazonaws.com/" + kid;
             HttpsURLConnection httpClient = (HttpsURLConnection) new URL(url).openConnection();
             httpClient.setRequestMethod("GET");
             httpClient.setRequestProperty("User-Agent", "Mozilla/5.0");
             int responseCode = httpClient.getResponseCode();
 
-            LOG.debug(String.format("Sending request %s", url));
+            // LOG.debug(String.format("Sending request %s", url));
             LOG.debug(String.format("Response code %s", responseCode));
 
             String key = "";
@@ -54,7 +55,7 @@ public class JwtRequestFilter {
                         .replaceAll("-----BEGIN PUBLIC KEY-----", "")
                         .replaceAll("-----END PUBLIC KEY-----", "");
 
-                LOG.debug(String.format("Public key %s", key));
+                // LOG.debug(String.format("Public key %s", key));
             }
             publicKey = key;
             ecPublicKey = null;
@@ -64,14 +65,14 @@ public class JwtRequestFilter {
 
     private Claims decodeJWT(String jwt, String key, boolean isForce) throws NoSuchAlgorithmException, InvalidKeySpecException {
         if (isForce || ecPublicKey == null) {
-            LOG.debug("ecPublicKey is null");
+            LOG.debug("generating new ecPublicKey");
             byte[] publicKeyBytes = Base64.decodeBase64(key);
             X509EncodedKeySpec keySpec = new X509EncodedKeySpec(publicKeyBytes);
             KeyFactory keyFactory = KeyFactory.getInstance("EC");
             ecPublicKey = keyFactory.generatePublic(keySpec);
-            LOG.debug("generated ecPublicKey: " + ecPublicKey);
+            // LOG.debug("generated ecPublicKey: " + ecPublicKey);
         }
-        LOG.debug("using ecPublicKey: " + ecPublicKey);
+        // LOG.debug("using ecPublicKey: " + ecPublicKey);
         JwtParser parser = Jwts.parserBuilder().setSigningKey(ecPublicKey).build();
         return parser.parseClaimsJws(jwt).getBody();
     }
@@ -92,10 +93,9 @@ public class JwtRequestFilter {
                 ObjectMapper objectMapper = new ObjectMapper();
                 JsonNode jsonNode = objectMapper.readTree(decoded_jwt_headers);
 
-                LOG.debug(String.format("JWT headers json %s", jsonNode.toString()));
-
+                // LOG.debug(String.format("JWT headers json %s", jsonNode.toString()));
                 String key = getPublicKey(jsonNode.get("kid").asText(),false);
-                LOG.debug("getPublicKey: " + key);
+                // LOG.debug("getPublicKey: " + key);
                 Claims claims;
                 try {
                     claims = decodeJWT(jwt, key, false);
@@ -113,8 +113,7 @@ public class JwtRequestFilter {
                     LOG.debug(String.format("Username %s", userName));
 
                     String[] roles = ((String) claims.get("custom:rooli")).split("\\,");
-                    LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
-
+                    // LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
                     // claims.forEach((k, v) -> LOG.debug(String.format("Claim %s=%s", k, v)));
 
                     for (String role : roles) {
