@@ -112,6 +112,10 @@
 		<mapping class="fi.liike.rest.Model.TermilomakeJoinAssosiatiivinenKasiteHistory"></mapping>
 		<mapping class="fi.liike.rest.Model.TermilomakeJoinHierarkkinenKasite"></mapping>
 		<mapping class="fi.liike.rest.Model.TermilomakeJoinHierarkkinenKasiteHistory"></mapping>
+		<mapping class="fi.liike.rest.Model.TermilomakeJoinHuomautus"></mapping>
+		<mapping class="fi.liike.rest.Model.TermilomakeJoinHuomautusHistory"></mapping>
+		<mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelma"></mapping>
+		<mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelmaHistory"></mapping>
 
 	</session-factory>
 </hibernate-configuration>
