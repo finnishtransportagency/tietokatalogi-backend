@@ -1,6 +1,0 @@
----
-- hosts: all
-  become: yes
-  tasks:
-    - name: Start tomcat
-      service: name=tomcat state=started enabled=yes

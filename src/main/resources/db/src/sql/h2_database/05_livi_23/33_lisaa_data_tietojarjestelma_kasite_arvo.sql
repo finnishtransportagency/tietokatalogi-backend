@@ -1,3 +1,0 @@
-
--- TKYP-147
-insert into TIETOJARJESTELMA_KASITE_ARVO (KASITE_WID, KASITE, ARVO) values (106, 'OMISTAVA_ORGANISAATIO', 'Muut ulkoiset organisaatiot');

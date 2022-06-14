@@ -1,1 +1,0 @@
-ansible-playbook tasks/deploy_local_docker.yml -i inventory/inventory_local -c local
