@@ -29,21 +29,6 @@ Execute all files added after last update.
 
 Run command `./updateDatabase.sh`
 
-## Updating test environments database
-* Fill database username & password to dbmaintain\_livi\_testi.properties (if you haven't already done that). **DO NOT STORE PASSWORDS IN GIT**. Password is stored in [CRED-811](https://jira.solita.fi/browse/CRED-811).
-* Open VPN connection [https://etayhteys.vayla.fi/](https://etayhteys.vayla.fi/)
-* Open ssh-tunnel to test-env
-* `ssh -L1530:10.129.46.171:1521 <yourKaccount>@172.17.204.73`
-* Run updatescript `updateDatabaseLiviTesti.sh`
-
-## Updating production environments database
-* Fill database username & password to dbmaintain\_livi\_tuotanto.properties (if you haven't already done that). **DO NOT STORE PASSWORDS IN GIT**. Password is stored in [CRED-811](https://jira.solita.fi/browse/CRED-811).
-* Open VPN connection [https://etayhteys.vayla.fi/](https://etayhteys.vayla.fi/)
-* Open ssh-tunnel to test-env
-* `ssh -L1535:10.129.47.76:1521 <yourKaccount>@172.17.201.21`
-* Run updatescript `updateDatabaseLiviTuotanto.sh`
-
-
 ## Deleting all data from local database
 **WARNING: THIS DELETES ALL YOUR TABLES AND DATA**
 
