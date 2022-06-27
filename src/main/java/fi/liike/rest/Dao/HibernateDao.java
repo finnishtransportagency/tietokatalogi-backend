@@ -5,7 +5,6 @@ import fi.liike.rest.Model.*;
 import fi.liike.rest.api.DaoContent;
 import fi.liike.rest.api.HistoryType;
 import fi.liike.rest.api.KasiteArvoContent;
-import fi.liike.rest.api.dto.ExternalSovellusCSVDto;
 import org.apache.commons.beanutils.PropertyUtilsBean;
 import org.apache.commons.lang3.StringUtils;
 import org.hibernate.*;
@@ -15,7 +14,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
 import java.sql.SQLException;
 import java.util.*;
@@ -55,17 +53,6 @@ public class HibernateDao extends HibernateSession {
 		List<Haettava> entries = list(crit);
 		closeSession();
 		return getLatest(entries);
-	}
-
-	public Haettava getByExternalSovellusCSVDto(Class<? extends Haettava> className, ExternalSovellusCSVDto externalCSVsovellus) {
-		Criteria crit = luoHaku(className);
-		crit.add(Restrictions.eq("nimi", externalCSVsovellus.getAdGroup()));
-		crit.add(Restrictions.eq("tuotekoodi", externalCSVsovellus.getSignature0()));
-		crit.add(Restrictions.eq("versio", externalCSVsovellus.getVersion()));
-
-		Haettava haettava = (Haettava) crit.uniqueResult();
-		closeSession();
-		return haettava;
 	}
 
 	@SuppressWarnings("unchecked")

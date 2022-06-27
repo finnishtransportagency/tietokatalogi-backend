@@ -6,7 +6,6 @@ import fi.liike.rest.api.DaoContent;
 import fi.liike.rest.api.KasiteArvoContent;
 import fi.liike.rest.api.ModelResults;
 import fi.liike.rest.api.SearchContent;
-import fi.liike.rest.api.dto.ExternalSovellusCSVDto;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
@@ -16,7 +15,6 @@ import org.hibernate.criterion.Restrictions;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import javax.persistence.Table;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -61,10 +59,6 @@ public class SovellusDaoImpl extends SearchDaoImpl implements MainDao {
         }
 
         return super.get(Sovellus.class, id, criterionList);
-    }
-
-    public Haettava getByExternalSovellusCSVDto(ExternalSovellusCSVDto externalCSVsovellus) {
-        return super.getByExternalSovellusCSVDto(Sovellus.class, externalCSVsovellus);
     }
 
     @Override
