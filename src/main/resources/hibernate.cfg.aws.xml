@@ -20,7 +20,6 @@
 		<mapping class="fi.liike.rest.Model.SovellusUpdate"></mapping>
 		<mapping class="fi.liike.rest.Model.SovellusHenkiloRooliHistory"></mapping>
 		<mapping class="fi.liike.rest.Model.SovellusHenkiloRooli"></mapping>
-		<mapping class="fi.liike.rest.Model.SovellusTemp"></mapping>
 		<mapping class="fi.liike.rest.Model.JarjestelmaHenkiloRooliHistory"></mapping>
 		<mapping class="fi.liike.rest.Model.JarjestelmaHenkiloRooli"></mapping>
 		<mapping class="fi.liike.rest.Model.JoinHenkiloRooliTable"></mapping>

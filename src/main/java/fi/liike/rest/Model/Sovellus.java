@@ -14,10 +14,6 @@ import java.util.List;
 @Table(name = "SOVELLUS")
 public class Sovellus extends Haettava implements Serializable, Cloneable {
     public static final String seqName = "sovellus_id_seq";
-    public static final String idColumn = "TUNNUS";
-    public static final List<String> mergeMatchingColumns = ImmutableList.of("NIMI", "VERSIO", "TUOTEKOODI");
-    public static final String mergeUnmatchUpdateColumn = "POISTUNUT";
-    public static final Integer mergeUnmatchUpdateValue = 1;
 
     private static final long serialVersionUID = 1L;
 
@@ -250,17 +246,4 @@ public class Sovellus extends Haettava implements Serializable, Cloneable {
         this.poistunut = poistunut;
     }
 
-    public static List<String> getUpdateColumnsForMerge() {
-        return Arrays.asList("VALMISTAJA", "ALIAS_NIMET", "KONFIGURAATIO_VERSIO",
-                "LISATIETOJA", "SOVELLUS_TYYPPI", "KIELISYYS", "KAYTTOJARJESTELMAVAATIMUS", "ARKKITEHTUURI",
-                "ALUSTA", "RIIPPUVUUSTIETO", "LIITTYMAT_JARJESTELMIIN", "TUOTANTOON_HYVAKSYMISPAIVA", "KRIITTISYYS");
-    }
-
-    public static List<String> getInsertColumnsForMerge() {
-        ArrayList<String> result = new ArrayList<String>(){};
-        result.add(idColumn);
-        result.addAll(mergeMatchingColumns);
-        result.addAll(getUpdateColumnsForMerge());
-        return result;
-    }
 }

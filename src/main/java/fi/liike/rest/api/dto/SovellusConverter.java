@@ -58,44 +58,4 @@ public class SovellusConverter implements Converter {
         sovellusDto.setPoistunut(sovellus.getPoistunut());
         return sovellusDto;
     }
-
-    public List<SovellusTemp> convertExternalSovellusCSVDtosToSovellusTempList(List<ExternalSovellusCSVDto> csvList) {
-        List<SovellusTemp> sovellusTempList = new ArrayList<>();
-        for (ExternalSovellusCSVDto externalSovellus : csvList) {
-            sovellusTempList.add(convertExternalSovellusCSVDDtoToSovellusTemp(externalSovellus));
-        }
-
-        return sovellusTempList;
-    }
-
-    private SovellusTemp convertExternalSovellusCSVDDtoToSovellusTemp(ExternalSovellusCSVDto csvDto) {
-        SovellusTemp sovellus = new SovellusTemp();
-
-        sovellus.setValmistaja(convertNull(csvDto.getManufacturer()));
-        sovellus.setAliasNimet(convertNull(csvDto.getModel()));
-        sovellus.setNimi(convertNull(csvDto.getAdGroup()));
-        sovellus.setVersio(convertNull(csvDto.getVersion()));
-        sovellus.setTuotekoodi(convertNull(csvDto.getSignature0()));
-        sovellus.setKonfiguraatioVersio(convertNull(csvDto.getConfigVersion()));
-        sovellus.setLisatietoja(convertNull(csvDto.getMisc()));
-        sovellus.setSovellusTyyppi(convertNull(csvDto.getConfigurationBasicNumber()));
-        sovellus.setKielisyys(convertNull(csvDto.getLanguage()));
-        sovellus.setKayttojarjestelmaVaatimus(convertNull(csvDto.getForOS()));
-        sovellus.setArkkitehtuuri(convertNull(csvDto.getForArchitecture()));
-        sovellus.setAlusta(convertNull(csvDto.getPlatform()));
-        sovellus.setRiippuvuustieto(convertNull(csvDto.getDependencies()));
-        sovellus.setLiittymatJarjestelmiin(convertNull(csvDto.getRelations()));
-        sovellus.setTuotantoonHyvaksymisPaiva(strToDate(convertNull(csvDto.getAcceptanceDate())));
-        sovellus.setKriittisyys(convertNull(csvDto.getCriticality()));
-
-        return sovellus;
-    }
-
-    private String convertNull(String val) {
-        if (val == null || val.equals("NULL") || val.equals("null") || val.equals("N/A")) {
-            return null;
-        }
-        return val;
-    }
-
 }

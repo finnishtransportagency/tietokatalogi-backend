@@ -44,29 +44,6 @@ public class SovellusDaoImpl extends SearchDaoImpl implements MainDao {
         return res;
     }
 
-
-    public void mergeExternalSovellusList(List<SovellusTemp> list) {
-        List<Object> objList = new ArrayList<>();
-        objList.addAll(list);
-
-        LOG.info("Starting to merge sovellus list");
-
-        String tempTable = SovellusTemp.class.getAnnotation(Table.class).name();
-        String targetTable = Sovellus.class.getAnnotation(Table.class).name();
-        String targetTableIdSequence = Sovellus.seqName;
-        String idColumn = Sovellus.idColumn;
-        List<String> matchingColumn = Sovellus.mergeMatchingColumns;
-        String updateColumn = Sovellus.mergeUnmatchUpdateColumn;
-        Integer updateValue = Sovellus.mergeUnmatchUpdateValue;
-
-        List<String> updateColumns = Sovellus.getUpdateColumnsForMerge();
-        List<String> insertColumns = Sovellus.getInsertColumnsForMerge();
-
-        saveTempTableAndMergeTables(objList, tempTable, targetTable, targetTableIdSequence,
-                idColumn, matchingColumn, updateColumn, updateValue, updateColumns, insertColumns);
-        LOG.info("Sovellus merging is complete");
-    }
-
     @Override
     public ModelResults getFiltered(SearchContent searchContent) {
         return super.getFiltered(Sovellus.class, searchContent);

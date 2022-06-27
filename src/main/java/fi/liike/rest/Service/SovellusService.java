@@ -28,13 +28,6 @@ public class SovellusService extends MainService implements Service {
         this.henkiloConverter = new HenkiloConverter();
     }
 
-    public SovellusService(SovellusDaoImpl sovellusDao, HenkiloService henkiloService) {
-        this.sovellusDao = sovellusDao;
-        this.henkiloService = henkiloService;
-        this.converter = new SovellusConverter();
-        this.henkiloConverter = new HenkiloConverter();
-    }
-
     public SovellusImportMetadata getImportMetadata() {
         Timestamp latest = sovellusDao.getLatestImport();
         Timestamp latestSuccessful = sovellusDao.getLatestSuccessfulImport();
@@ -107,81 +100,12 @@ public class SovellusService extends MainService implements Service {
         return update(sovellusUpdate);
     }
 
-    public void importExternalSovellusCSVList(List<? extends  ExternalSovellusCSVDto> sovellusList, Set<PersonRole> includeRoles) throws IOException, SQLException {
-        if (sovellusList != null) {
-            List<ExternalSovellusCSVDto> sovellusListWithoutDuplicates = removeDuplicates(sovellusList);
-            LOG.info("Removed duplicates from sovha CSV. Size: {}", sovellusListWithoutDuplicates.size());
-            List<SovellusTemp> sovellusTempList = converter.convertExternalSovellusCSVDtosToSovellusTempList(sovellusListWithoutDuplicates);
-            sovellusDao.mergeExternalSovellusList(sovellusTempList);
-            LOG.info("Starting to merge henkilo lists");
-            for (ExternalSovellusCSVDto sovellus : sovellusListWithoutDuplicates) {
-                importSovellusHenkiloList(sovellus, includeRoles);
-            }
-            LOG.info("Henkilo merging is complete");
-        }
-    }
-
+    // Most likely unnecessary. But import metadata can still be _read_.
     public void saveImportMetadata(Boolean isSuccessful) throws IOException, SQLException {
         SovellusImport sovellusImport = new SovellusImport();
         sovellusImport.setOnnistunut(isSuccessful ? 1 : 0);
         sovellusImport.setTuontiaika(new java.sql.Timestamp(Calendar.getInstance().getTime().getTime()));
         this.sovellusDao.saveImportMetadata(sovellusImport);
-    }
-
-    private List<ExternalSovellusCSVDto> removeDuplicates(List<? extends ExternalSovellusCSVDto> sovellusList) {
-        List<ExternalSovellusCSVDto> mergedSovellusList = new ArrayList<>();
-
-        Map<ExternalSovellusCSVDto, List<ExternalSovellusCSVDto>> csvSovellusMap = new HashMap<>();
-        for (ExternalSovellusCSVDto sovellus : sovellusList) {
-            if (!csvSovellusMap.containsKey(sovellus)) {
-                csvSovellusMap.put(sovellus, new ArrayList<ExternalSovellusCSVDto>());
-            }
-            csvSovellusMap.get(sovellus).add(sovellus);
-        }
-
-        for (ExternalSovellusCSVDto keySovellus : csvSovellusMap.keySet()) {
-            mergedSovellusList.add(keySovellus.of(csvSovellusMap.get(keySovellus)));
-        }
-
-        return mergedSovellusList;
-    }
-
-    private void importSovellusHenkiloList(ExternalSovellusCSVDto sovellus, Set<PersonRole> includeRoles) throws IOException {
-        Haettava fetchedSovellus = sovellusDao.getByExternalSovellusCSVDto(sovellus);
-        if (fetchedSovellus == null) {
-            LOG.error("Could not find sovellus: nimi {}, tuotekoodi {}, versio {}", sovellus.getAdGroup(), sovellus.getSignature0(), sovellus.getVersion());
-            return;
-        }
-        Integer sovellusId = fetchedSovellus.getTunnus();
-
-        List<HenkiloRooliDto> henkiloRooliList = new ArrayList<>();
-        addHenkiloRooliList(sovellus.getAcceptedBy(), PersonRole.TUOTANTOON_HYVAKSYNYT.getId(), henkiloRooliList);
-        addHenkiloRooliList(sovellus.getInstallationApprovalName(), PersonRole.ASENNUKSEN_HYVAKSYNYT.getId(), henkiloRooliList);
-
-        if (sovellus.getClass().equals(ExternalSovellusCSVinitialDto.class)) {
-            ExternalSovellusCSVinitialDto initialSovellus = (ExternalSovellusCSVinitialDto) sovellus;
-            addHenkiloRooliList(initialSovellus.getMainUsers(), PersonRole.VASTAAVA.getId(), henkiloRooliList);
-            addHenkiloRooliList(initialSovellus.getOwners(), PersonRole.OMISTAJA.getId(), henkiloRooliList);
-        }
-
-        try {
-            henkiloService.addAndDeleteSystemHenkiloRoolis(
-                    SovellusHenkiloRooli.class, SovellusHenkiloRooliHistory.class,
-                    henkiloRooliList, sovellusId, "csv-import", "sovellusId", includeRoles);
-        } catch (SQLException e) {
-            LOG.error("There was an error with modifying sovellus persons: HenkiloList {}, sovellusId {}. Error was {}", henkiloRooliList, sovellusId, e.getMessage());
-        }
-    }
-
-    private void addHenkiloRooliList(List<String> loginNames, Integer rooliId, List<HenkiloRooliDto> henkiloRooliList) {
-        Integer currHenkiloId;
-        for (String loginName : loginNames) {
-            Henkilo henkilo = henkiloService.getHenkiloByLoginName(loginName);
-            if (henkilo != null) {
-                currHenkiloId = henkilo.getTunnus();
-                henkiloRooliList.add(new HenkiloRooliDto(rooliId, currHenkiloId));
-            }
-        }
     }
 
     @Override
