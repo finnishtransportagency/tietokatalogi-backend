@@ -301,7 +301,6 @@ public class TestDbUtil {
 			dbNames.add("rooli");
 			dbNames.add("henkilo_temp");
 			dbNames.add("henkilo");
-			dbNames.add("sovellus_temp");
 			dbNames.add("sovellus_history");
 			dbNames.add("sovellus");
 			dbNames.add("sovellus_tuonti");

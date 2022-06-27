@@ -3,8 +3,7 @@ package fi.liike.rest.Model;
 import javax.persistence.*;
 import java.io.Serializable;
 
-@Entity @IdClass(SovellusTempID.class)
-@Table(name = "SOVELLUS_TEMP")
+
 public class SovellusTemp implements Serializable, Cloneable {
     // TODO: move
     @Entity

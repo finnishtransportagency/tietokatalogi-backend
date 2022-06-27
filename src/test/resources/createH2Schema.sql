@@ -6685,3 +6685,6 @@ ALTER TABLE termilomake ADD muokattava_tunnus NUMERIC(38,10);
 ALTER TABLE termilomakehistoria ADD muokattava_tunnus NUMERIC(38,10);
 
 UPDATE termilomake SET muokattava_tunnus = termilomaketunnus WHERE muokattava_tunnus IS NULL;
+
+-- ANALPA-1875 Tietokatalogin SovHa-integraation poistaminen
+DROP TABLE sovellus_temp;
