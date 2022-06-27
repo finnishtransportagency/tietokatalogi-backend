@@ -5,12 +5,10 @@ All updates are incremental - only new files are executed. Therefore you can ins
 
 Create new folder for new development iteration (for example folder/version).  Sql-filename must begin with ordernumber, you can skip numbers but you cannot later add files with lower number (for example 03-add-user.sql after 05-add-group.sql is not allowed - next file must be 06 or bigger).
 
-TODO: reorganize/remove old (non-postgres) scripts after migration is complete!
-
 ## Initialize database
 Start the docker container by running `start-local-db.sh`
 Connect to db with
-  1. `sudo docker exec -it tk-pgsql bash`
+  1. `docker exec -it tk-pgsql bash`
   2. `psql -U tietokt`
 Copy-paste and run contents of src/main/resources/db/src/sql/init_users/01_globals.sql.
 Run `./updateDatabase.sh`
