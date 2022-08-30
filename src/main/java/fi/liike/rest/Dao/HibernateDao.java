@@ -263,7 +263,7 @@ public class HibernateDao extends HibernateSession {
 		return existing;
 	}
 
-	private void logDbException(RuntimeException e) {
+	protected void logDbException(RuntimeException e) {
 		if (e instanceof JDBCException) {
 			JDBCException dbe = (JDBCException) e;
 			LOG.error("Unable to do a transaction. Error message: " + dbe.getMessage());
