@@ -17,7 +17,7 @@ public class FrontpageConverter extends BasicConverter {
 
     public FrontpageDto modelToDto(Frontpage model) {
         FrontpageDto dto = new FrontpageDto();
-        super.convert(dto, model);
+        super.convert(model, dto);
         return dto;
     }
 }

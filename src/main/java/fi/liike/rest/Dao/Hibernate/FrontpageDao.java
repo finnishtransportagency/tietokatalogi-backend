@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
-import java.sql.SQLException;
+import java.util.Optional;
 
 public class FrontpageDao extends HibernateDao {
     private final Logger LOG = LoggerFactory.getLogger(FrontpageDao.class);
@@ -34,4 +34,11 @@ public class FrontpageDao extends HibernateDao {
                 session.close();
         }
     }
+
+    public Optional<Frontpage> getSingle() {
+        Frontpage result = (Frontpage) getSession().createCriteria(Frontpage.class).uniqueResult();
+        closeSession();
+        return Optional.of(result);
+    }
+
 }
