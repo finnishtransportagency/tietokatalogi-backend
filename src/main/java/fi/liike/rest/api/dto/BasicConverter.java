@@ -11,7 +11,7 @@ public class BasicConverter {
 
     protected <T, U> void convert(T source, U target) {
         try {
-            BeanUtils.copyProperties(source, target);
+            BeanUtils.copyProperties(target, source);
         } catch (IllegalAccessException | InvocationTargetException e) {
             LOG.error("Could not copy properties to BeanUtils! Error Message: " + e.getMessage());
         }

@@ -16,10 +16,12 @@ public class FrontpageDao extends HibernateDao {
     public void save(Frontpage saveContent) {
         Session session = getSession();
         Transaction transaction = null;
+        saveContent.setId(1);
         try {
             transaction = session.beginTransaction();
-            session.save(saveContent);
+            session.saveOrUpdate(saveContent);
             transaction.commit();
+            LOG.debug("Persisted frontpage successfully");
         } catch (RuntimeException e) {
             this.logDbException(e);
             try {

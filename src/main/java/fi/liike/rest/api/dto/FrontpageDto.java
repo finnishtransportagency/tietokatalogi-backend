@@ -20,4 +20,12 @@ public class FrontpageDto {
     public void setSideText(String sideText) {
         this.sideText = sideText;
     }
+
+    @Override
+    public String toString() {
+        return "FrontpageDto{" +
+                "mainText='" + mainText + '\'' +
+                ", sideText='" + sideText + '\'' +
+                '}';
+    }
 }

@@ -4,12 +4,15 @@ import fi.liike.rest.Service.FrontpageService;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.FrontpageDto;
 import io.swagger.annotations.Api;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
@@ -18,9 +21,11 @@ import java.io.IOException;
 @Path("/frontpage/")
 public class FrontpageController extends MainController {
     private FrontpageService service;
+    private final Logger LOG = LoggerFactory.getLogger(FrontpageController.class);
 
-    public FrontpageController(FrontpageService service) {
-        this.service = service;
+
+    public FrontpageController() {
+        this.service = new FrontpageService();
     }
 
     @Override
@@ -32,7 +37,8 @@ public class FrontpageController extends MainController {
     @Path("")
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces(MediaType.APPLICATION_JSON)
-    public Response save(HttpServletRequest httpRequest, FrontpageDto frontpageDto) {
+    public Response save(@Context HttpServletRequest httpRequest, FrontpageDto frontpageDto) {
+        LOG.info("Frontpage save with dto: " + frontpageDto.toString());
         this.service.save(frontpageDto);
         return Response.status(Response.Status.OK).build();
     }

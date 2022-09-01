@@ -5,11 +5,11 @@ import fi.liike.rest.api.dto.FrontpageConverter;
 import fi.liike.rest.api.dto.FrontpageDto;
 
 public class FrontpageService extends MainService {
-    private final FrontpageDao dao;
-    private final FrontpageConverter converter;
+    private FrontpageDao dao;
+    private FrontpageConverter converter;
 
-    public FrontpageService(FrontpageDao dao) {
-        this.dao = dao;
+    public FrontpageService() {
+        this.dao = new FrontpageDao();
         this.converter = new FrontpageConverter();
     }
 
