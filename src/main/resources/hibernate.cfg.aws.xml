@@ -115,6 +115,6 @@
 		<mapping class="fi.liike.rest.Model.TermilomakeJoinHuomautusHistory"></mapping>
 		<mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelma"></mapping>
 		<mapping class="fi.liike.rest.Model.JoinTJPRelatedJarjestelmaHistory"></mapping>
-
+		<mapping class="fi.liike.rest.Model.Frontpage"></mapping>
 	</session-factory>
 </hibernate-configuration>
