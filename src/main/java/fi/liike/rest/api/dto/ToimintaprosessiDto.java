@@ -7,6 +7,7 @@ public class ToimintaprosessiDto extends ContentDtoWithRights {
     private String rivimuokkaajatunnus;
     private String vastaava_organisaatio;
     private String tarkoitus;
+    private String tyotila;
 
     @Override
     public void setNimi(String name) {
@@ -52,5 +53,13 @@ public class ToimintaprosessiDto extends ContentDtoWithRights {
 
     public void setTarkoitus(String tarkoitus) {
         this.tarkoitus = tarkoitus;
+    }
+
+    public String getTyotila() {
+        return tyotila;
+    }
+
+    public void setTyotila(String tyotila) {
+        this.tyotila = tyotila;
     }
 }

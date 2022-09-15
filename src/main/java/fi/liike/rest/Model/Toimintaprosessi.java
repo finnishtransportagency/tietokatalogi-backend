@@ -26,6 +26,9 @@ public class Toimintaprosessi extends Haettava implements Serializable {
     @Column(name = "tarkoitus")
     private String tarkoitus;
 
+    @Column(name = "tyotila")
+    private String tyotila;
+
     @Column(name = "rivimuokkaajatunnus")
     private String rivimuokkaajatunnus;
 
@@ -71,6 +74,14 @@ public class Toimintaprosessi extends Haettava implements Serializable {
 
     public void setTarkoitus(String tarkoitus) {
         this.tarkoitus = tarkoitus;
+    }
+
+    public String getTyotila() {
+        return tyotila;
+    }
+
+    public void setTyotila(String tyotila) {
+        this.tyotila = tyotila;
     }
 
     @Override

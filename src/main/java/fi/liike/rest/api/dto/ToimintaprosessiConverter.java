@@ -10,16 +10,14 @@ import org.slf4j.LoggerFactory;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class ToimintaprosessiConverter implements Converter {
+public class ToimintaprosessiConverter extends BasicConverter implements Converter {
     private final String VASTAAVA_ORGANISAATIO = "VASTAAVA_ORGANISAATIO";
-
-    private final Logger LOG = LoggerFactory.getLogger(ToimintaprosessiConverter.class);
 
     @Override
     public Haettava dtoToDomain(ContentDto dtoContent) {
         ToimintaprosessiDto toimintaprosessiDto = (ToimintaprosessiDto) dtoContent;
         Toimintaprosessi toimintaprosessi = new Toimintaprosessi();
-        convert(toimintaprosessiDto, toimintaprosessi, true);
+        super.convert(toimintaprosessiDto, toimintaprosessi);
         return toimintaprosessi;
     }
 
@@ -29,7 +27,7 @@ public class ToimintaprosessiConverter implements Converter {
             return null;
         Toimintaprosessi toimintaprosessi = (Toimintaprosessi) modelObject;
         ToimintaprosessiDto toimintaprosessiDto = new ToimintaprosessiDto();
-        convert(toimintaprosessiDto, toimintaprosessi, false);
+        super.convert(toimintaprosessi, toimintaprosessiDto);
         return toimintaprosessiDto;
     }
 
@@ -43,15 +41,4 @@ public class ToimintaprosessiConverter implements Converter {
         return null;
     }
 
-    private <T, U> void convert(T dto, U model, Boolean toModel) {
-        try {
-            if (toModel)
-                BeanUtils.copyProperties(model, dto);
-            else
-                BeanUtils.copyProperties(dto, model);
-
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            LOG.error("Could not copy properties to BeanUtils! Error Message: " + e.getMessage());
-        }
-    }
 }
