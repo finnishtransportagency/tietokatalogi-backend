@@ -34,6 +34,10 @@ public class ToimintaprosessiHistory implements Serializable, HaettavaHistory {
     @Column(name = "tarkoitus")
     private String tarkoitus;
 
+    @Column(name = "tyotila")
+    private String tyotila;
+
+
     @Column(name = "rivimuokkaajatunnus")
     private String rivimuokkaajatunnus;
 
@@ -81,6 +85,14 @@ public class ToimintaprosessiHistory implements Serializable, HaettavaHistory {
 
     public void setTarkoitus(String tarkoitus) {
         this.tarkoitus = tarkoitus;
+    }
+
+    public String getTyotila() {
+        return tyotila;
+    }
+
+    public void setTyotila(String tyotila) {
+        this.tyotila = tyotila;
     }
 
     @Override
