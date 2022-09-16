@@ -1,0 +1,6 @@
+FROM postgres:13
+
+ADD src/main/resources/db/src/sql/init_users/001_globals.sql docker-entrypoint-initdb.d/001_globals.sql
+ADD src/main/resources/db/src/sql/database/postgres_scripts docker-entrypoint-initdb.d/
+
+EXPOSE 5432

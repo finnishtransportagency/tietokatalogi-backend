@@ -1,18 +1,26 @@
 version: "3"
 services:
-    tomcat:
-      container_name: tietokatalogi-backend
-      build:
-        context: .
-      ports: 
-        - 8080:8080
-      environment:
-        JAVA_OPTS: -Xmx2048m -Xms1024m -Dport.http=8080
-        CATALINA_OPTS: "-Denv=local"
-      networks: 
-        - default
-      extra_hosts:
-        - "host.docker.internal:host-gateway"
+  tomcat:
+    container_name: tietokatalogi-backend
+    build:
+      context: .
+    ports:
+      - 8080:8080
+    environment:
+      JAVA_OPTS: -Xmx2048m -Xms1024m -Dport.http=8080
+      CATALINA_OPTS: "-Denv=local"
+    networks:
+      - default
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+  postgres:
+    build:
+      context: .
+      dockerfile: Dockerfile_postgres
+    environment:
+      POSTGRES_USER: tietokt
+      POSTGRES_PASSWORD: tietok123
+
 networks: 
   default:
     driver: bridge

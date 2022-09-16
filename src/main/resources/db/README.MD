@@ -1,11 +1,25 @@
 # Database management
 
-Database is updated using [dbmaintain-maven-plugin ](http://www.dbmaintain.org/maven-goals.html). All files placed in src/sql/database/postgres_scripts are executed in sql-server.
-All updates are incremental - only new files are executed. Therefore you can insert files to folder with biggest ordernumber.
+Database is updated using [dbmaintain-maven-plugin ](http://www.dbmaintain.org/maven-goals.html), when managing the database container separately.
+All files placed in src/sql/database/postgres_scripts are executed in sql-server.
+All updates are incremental - only new files are executed. Therefore, you can insert files to folder with biggest ordernumber.
 
-Create new folder for new development iteration (for example folder/version).  Sql-filename must begin with ordernumber, you can skip numbers but you cannot later add files with lower number (for example 03-add-user.sql after 05-add-group.sql is not allowed - next file must be 06 or bigger).
+Create new folder for new development iteration (for example folder/version).  Sql-filename must begin with ordernumber, you can skip numbers, but you cannot later add files with lower number (for example 03-add-user.sql after 05-add-group.sql is not allowed - next file must be 06 or bigger).
+
+## New, docker-compose based solution
+Start backend and database by `docker-compose up`.
+The database is automatically created and initialized based on the scripts in the `./src/sql/[...]` directories relative to this file.
+
+In order to connect to the database using e.g. dbeaver, do the following:
+  1. Start the database and backend
+  2. Find the host of the database container using `docker network inspect {created network name}`. The network name will include the string `tietokatalogi`.
+  3. Use same connection settings in dbeaver as in `dbmaintain_local.properties` or `hibernate.cfg.xml`, except substitute `localhost` with the host found in previous step. The database name is the same as username: `tietokt`.
+
+The other steps below describe managing the database container separately (not using docker-compose).
 
 ## Initialize database
+Uncomment the hibernate.connection.url line from `hibernate.cfg.xml` that corresponds to the separate container solution (as shown in comment in the file).
+
 Start the docker container by running `start-local-db.sh`
 Connect to db with
   1. `docker exec -it tk-pgsql bash`

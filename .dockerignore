@@ -1,3 +1,4 @@
 *
-!db/*.sql
+!src/main/resources/db/src/sql/init_users/*.sql
+!src/main/resources/db/src/sql/database/postgres_scripts/*.sql
 !target/TietokatalogiUI.war
