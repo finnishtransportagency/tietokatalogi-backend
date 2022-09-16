@@ -38,7 +38,7 @@ public class FrontpageDao extends HibernateDao {
     public Optional<Frontpage> getSingle() {
         Frontpage result = (Frontpage) getSession().createCriteria(Frontpage.class).uniqueResult();
         closeSession();
-        return Optional.of(result);
+        return Optional.ofNullable(result);
     }
 
 }
