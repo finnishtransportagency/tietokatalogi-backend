@@ -6688,3 +6688,16 @@ UPDATE termilomake SET muokattava_tunnus = termilomaketunnus WHERE muokattava_tu
 
 -- ANALPA-1875 Tietokatalogin SovHa-integraation poistaminen
 DROP TABLE sovellus_temp;
+-- ANALPA-1530 Tietokatalogiin muokattava etusivu
+CREATE TABLE etusivu (
+    id integer,
+    paateksti text,
+    sivuteksti text
+);
+
+-- ANALPA-1932 Tietokatalogin kehitystä
+ALTER TABLE toimintaprosessi
+ADD COLUMN tyotila character varying(4000);
+
+ALTER TABLE toimintaprosessihistoria
+ADD COLUMN tyotila character varying(4000);

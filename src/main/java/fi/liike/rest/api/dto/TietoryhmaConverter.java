@@ -4,7 +4,7 @@ import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietoryhma;
 import fi.liike.rest.api.ContentDto;
 
-public class TietoryhmaConverter implements Converter {
+public class TietoryhmaConverter extends BasicConverter implements Converter {
 
 	public TietoryhmaConverter() {
 	}
@@ -34,17 +34,7 @@ public class TietoryhmaConverter implements Converter {
 			return null;
 		Tietoryhma data = (Tietoryhma) modelObject;
 		TietoryhmaDto result = new TietoryhmaDto();
-		result.setLahde(data.getLahde());
-		result.setOmistaja(data.getOmistaja());
-		result.setTila(data.getTila());
-		result.setSynonyymi(data.getSynonyymi());
-		result.setTietosuojataso(data.getTietosuojataso());
-		result.setPaatietoryhma(data.getPaatietoryhma());
-		result.setTunnus(data.getTunnus());
-		result.setNimi(data.getNimi());
-		result.setKoodi(data.getKoodi());
-		result.setKuvaus(data.getKuvaus());
-		result.setTietovaranto(data.getTietovaranto());
+		super.convert(data, result);
 		return result;
 	}
 }

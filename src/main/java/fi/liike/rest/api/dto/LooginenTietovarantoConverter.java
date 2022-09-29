@@ -6,7 +6,7 @@ import fi.liike.rest.api.ContentDto;
 
 import java.util.List;
 
-public class LooginenTietovarantoConverter implements Converter {
+public class LooginenTietovarantoConverter extends BasicConverter implements Converter {
 
 	public LooginenTietovarantoConverter() {
 	}
@@ -36,15 +36,8 @@ public class LooginenTietovarantoConverter implements Converter {
 			return null;
 		LooginenTietovaranto model = (LooginenTietovaranto) modelObject;
 		LooginenTietovarantoDto dtoContent = new LooginenTietovarantoDto();
-		dtoContent.setTunnus(model.getTunnus());
-		dtoContent.setNimi(model.getNimi());
-		dtoContent.setKuvaus(model.getKuvaus());
-		dtoContent.setOmistaja(model.getOmistaja());
-		dtoContent.setPaivitystiheys(model.getPaivitystiheys());
-		dtoContent.setKayttaja(model.getKayttaja());
-		dtoContent.setKuvauskayttaja(model.getKuvauskayttaja());
+		super.convert(model, dtoContent);
 		dtoContent.setTietomalli(model.getKasitemalli());
-		dtoContent.setAlue(model.getAlue());
 		if (parentId.length > 0)
 			dtoContent.setFyysinenTietovaranto(parentId[0]);
 		return dtoContent;

@@ -11,6 +11,8 @@ public abstract class ContentDto implements RightsDto {
 
 	protected static Map<Right, List<String>> mapRightToFields;
 
+	public String rivimuokattupvm;
+
 	public abstract void setNimi(String name);
 
 	public abstract void setTunnus(Integer id);
@@ -22,6 +24,15 @@ public abstract class ContentDto implements RightsDto {
 	public abstract void setRivimuokkaajatunnus(String header);
 
 	public abstract String getRivimuokkaajatunnus();
+
+
+	public String getRivimuokattupvm() {
+		return rivimuokattupvm;
+	}
+
+	public void setRivimuokattupvm(String rivimuokattupvm) {
+		this.rivimuokattupvm = rivimuokattupvm;
+	}
 
 	public List<Right> getNeededRights() throws NoSuchFieldException, IllegalAccessException {
 		return Right.getModifyUnsecuredRights();

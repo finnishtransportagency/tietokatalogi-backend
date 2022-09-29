@@ -4,7 +4,7 @@ import fi.liike.rest.Model.FyysinenTietovaranto;
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.api.ContentDto;
 
-public class FyysinenTietovarantoConverter implements Converter {
+public class FyysinenTietovarantoConverter extends BasicConverter implements Converter {
 
 	public FyysinenTietovarantoConverter() {
 	}
@@ -37,20 +37,7 @@ public class FyysinenTietovarantoConverter implements Converter {
 			return null;
 		FyysinenTietovaranto data = (FyysinenTietovaranto) modelObject;
 		FyysinenTietovarantoDto result = new FyysinenTietovarantoDto();
-		result.setTunnus(data.getTunnus());
-		result.setNimi(data.getNimi());
-		result.setKoodi(data.getKoodi());
-		result.setKuvaus(data.getKuvaus());
-		result.setId(data.getId());
-		result.setTietokantateknologia(data.getTietokantateknologia());
-		result.setPalvelutaso(data.getPalvelutaso());
-		result.setKoko(data.getKoko());
-		result.setTietuemaara(data.getTietuemaara());
-		result.setLinkki(data.getLinkki());
-		result.setMuuta(data.getMuuta());
-		result.setTeknologia(data.getTeknologia());
-		result.setOmistaja(data.getOmistaja());
-		result.setSijainti(data.getSijainti());
+		super.convert(data, result);
 		return result;
 	}
 }

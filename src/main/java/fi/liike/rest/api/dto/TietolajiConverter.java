@@ -4,7 +4,7 @@ import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietolaji;
 import fi.liike.rest.api.ContentDto;
 
-public class TietolajiConverter implements Converter {
+public class TietolajiConverter extends BasicConverter implements Converter {
 
 	public TietolajiConverter() {
 	}
@@ -37,22 +37,12 @@ public class TietolajiConverter implements Converter {
 			return null;
 		Tietolaji data = (Tietolaji) modelObject;
 		TietolajiDto result = new TietolajiDto();
-		result.setTunnus(data.getTunnus());
+		super.convert(data, result);
 		if (parentId.length > 0 && parentId[0] != null)
 			result.setLooginenTietovarantoTunnus(parentId[0]);
 		if (parentId.length > 1 && parentId[1] != null)
 			result.setTietoryhmatunnus(parentId[1]);
-		result.setNimi(data.getNimi());
-		result.setKoodi(data.getKoodi());
-		result.setKuvaus(data.getKuvaus());
-		result.setOmistaja(data.getOmistaja());
-		result.setLahde(data.getLahde());
-		result.setTila(data.getTila());
-		result.setSynonyymi(data.getSynonyymi());
-		result.setTietosuojataso(data.getTietosuojataso());
-		result.setYlempitaso(data.getYlempitaso());
-		result.setRivitunnus(data.getRivitunnus());
-		result.setRivitila(data.getRivitila());
+
 		return result;
 	}
 }
