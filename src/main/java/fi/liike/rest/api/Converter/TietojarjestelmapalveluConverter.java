@@ -1,7 +1,10 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.AnnotatedTietolajiDto;
+import fi.liike.rest.api.dto.TietojarjestelmapalveluDto;
+import fi.liike.rest.api.dto.TietojarjestelmapalveluFetchMinimalDto;
 
 import java.util.List;
 

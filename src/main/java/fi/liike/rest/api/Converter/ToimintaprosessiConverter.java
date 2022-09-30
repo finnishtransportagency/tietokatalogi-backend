@@ -1,14 +1,10 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Toimintaprosessi;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.KasiteArvoContent;
-import org.apache.commons.beanutils.BeanUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-import java.lang.reflect.InvocationTargetException;
+import fi.liike.rest.api.dto.ToimintaprosessiDto;
 
 public class ToimintaprosessiConverter extends BasicConverter implements Converter {
     private final String VASTAAVA_ORGANISAATIO = "VASTAAVA_ORGANISAATIO";

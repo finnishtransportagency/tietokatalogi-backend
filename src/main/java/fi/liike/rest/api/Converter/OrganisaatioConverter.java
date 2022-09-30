@@ -1,8 +1,9 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Organisaatio;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.OrganisaatioDto;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

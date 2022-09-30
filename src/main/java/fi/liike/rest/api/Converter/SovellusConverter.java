@@ -1,16 +1,14 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Sovellus;
-import fi.liike.rest.Model.SovellusTemp;
 import fi.liike.rest.Model.SovellusUpdate;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.SovellusDto;
+import fi.liike.rest.api.dto.SovellusUpdateDto;
 
-
-import java.util.*;
 
 import static fi.liike.rest.util.Utils.dateToStr;
-import static fi.liike.rest.util.Utils.strToDate;
 
 public class SovellusConverter implements Converter {
 

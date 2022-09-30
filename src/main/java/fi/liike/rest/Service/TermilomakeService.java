@@ -5,6 +5,7 @@ import fi.liike.rest.Dao.JoinPublicDao;
 import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.*;
+import fi.liike.rest.api.Converter.TermilomakeConverter;
 import fi.liike.rest.api.dto.*;
 import org.hibernate.Session;
 

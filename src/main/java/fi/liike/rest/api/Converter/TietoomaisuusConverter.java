@@ -1,9 +1,10 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietoomaisuus;
 import fi.liike.rest.Model.TietoomaisuusFetch;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.TietoomaisuusDto;
 
 public class TietoomaisuusConverter implements Converter {
     @Override

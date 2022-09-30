@@ -5,6 +5,7 @@ import fi.liike.rest.Dao.Hibernate.TietojarjestelmapalveluDaoImpl;
 import fi.liike.rest.Dao.JoinPublicDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.*;
+import fi.liike.rest.api.Converter.TietojarjestelmapalveluConverter;
 import fi.liike.rest.api.dto.*;
 import fi.liike.rest.auth.InvalidTietokatalogiDataException;
 import org.hibernate.Session;

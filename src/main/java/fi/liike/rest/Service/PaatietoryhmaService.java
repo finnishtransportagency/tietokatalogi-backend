@@ -3,7 +3,7 @@ package fi.liike.rest.Service;
 import fi.liike.rest.Dao.Hibernate.PaatietoryhmaDaoImpl;
 import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.api.*;
-import fi.liike.rest.api.dto.PaatietoryhmaConverter;
+import fi.liike.rest.api.Converter.PaatietoryhmaConverter;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

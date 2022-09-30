@@ -1,17 +1,16 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietovaranto;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.KasiteArvoContent;
-import org.apache.commons.beanutils.BeanUtils;
+import fi.liike.rest.api.dto.TietovarantoDto;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
-public class TietovarantoConverter implements Converter {
+public class TietovarantoConverter extends BasicConverter implements Converter {
     private final String REKISTERINPITAJA = "REKISTERINPITAJA";
 
     private final Logger LOG = LoggerFactory.getLogger(TietovarantoConverter.class);
@@ -20,7 +19,7 @@ public class TietovarantoConverter implements Converter {
     public Haettava dtoToDomain(ContentDto dtoContent) {
         TietovarantoDto tietovarantoDto = (TietovarantoDto) dtoContent;
         Tietovaranto tietovaranto = new Tietovaranto();
-        convert(tietovarantoDto, tietovaranto, true);
+        super.convert(tietovarantoDto, tietovaranto);
         return tietovaranto;
     }
 
@@ -30,7 +29,7 @@ public class TietovarantoConverter implements Converter {
             return null;
         Tietovaranto tietovaranto = (Tietovaranto) modelObject;
         TietovarantoDto tietovarantoDto = new TietovarantoDto();
-        convert(tietovarantoDto, tietovaranto, false);
+        super.convert(tietovaranto, tietovarantoDto);
         return tietovarantoDto;
     }
 
@@ -62,18 +61,6 @@ public class TietovarantoConverter implements Converter {
             return new KasiteArvoContent(null, REKISTERINPITAJA, tietovaranto.getRekisterinpitaja());
         }
         return null;
-    }
-
-    private <T, U> void convert(T dto, U model, Boolean toModel) {
-        try {
-            if (toModel)
-                BeanUtils.copyProperties(model, dto);
-            else
-                BeanUtils.copyProperties(dto, model);
-
-        } catch (IllegalAccessException | InvocationTargetException e) {
-            LOG.error("Could not copy properties to BeanUtils! Error Message: " + e.getMessage());
-        }
     }
 
 }

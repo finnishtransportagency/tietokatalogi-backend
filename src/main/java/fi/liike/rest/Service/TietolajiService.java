@@ -3,7 +3,7 @@ package fi.liike.rest.Service;
 import fi.liike.rest.Dao.Hibernate.TietolajiDaoImpl;
 import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.api.*;
-import fi.liike.rest.api.dto.TietolajiConverter;
+import fi.liike.rest.api.Converter.TietolajiConverter;
 import fi.liike.rest.api.dto.TietolajiDto;
 import org.hibernate.Session;
 import org.slf4j.Logger;

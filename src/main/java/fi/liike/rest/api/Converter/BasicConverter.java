@@ -1,4 +1,4 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.BeanUtilsBean;

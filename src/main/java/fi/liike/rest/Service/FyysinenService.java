@@ -3,7 +3,7 @@ package fi.liike.rest.Service;
 import fi.liike.rest.Dao.Hibernate.FyysinenDaoImpl;
 import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.api.*;
-import fi.liike.rest.api.dto.FyysinenTietovarantoConverter;
+import fi.liike.rest.api.Converter.FyysinenTietovarantoConverter;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

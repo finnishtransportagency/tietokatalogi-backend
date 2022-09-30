@@ -6,6 +6,7 @@ import fi.liike.rest.Dao.Hibernate.JoinJarjestelmaLinkkausDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.Model.Dto.MolekyyliLinkkiDto;
 import fi.liike.rest.api.*;
+import fi.liike.rest.api.Converter.JarjestelmaConverter;
 import fi.liike.rest.api.dto.*;
 import fi.liike.rest.util.DocumentCreator;
 import org.apache.commons.beanutils.BeanUtils;

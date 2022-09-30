@@ -5,6 +5,7 @@ import fi.liike.config.Configurations;
 import fi.liike.rest.Dao.Hibernate.HenkiloDao;
 import fi.liike.rest.Dao.HibernateSession;
 import fi.liike.rest.Model.*;
+import fi.liike.rest.api.Converter.HenkiloConverter;
 import fi.liike.rest.api.dto.*;
 import org.hibernate.Session;
 import org.hibernate.Transaction;

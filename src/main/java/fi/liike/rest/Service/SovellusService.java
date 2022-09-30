@@ -4,6 +4,8 @@ import com.google.common.collect.ImmutableSet;
 import fi.liike.rest.Dao.Hibernate.SovellusDaoImpl;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.*;
+import fi.liike.rest.api.Converter.HenkiloConverter;
+import fi.liike.rest.api.Converter.SovellusConverter;
 import fi.liike.rest.api.dto.*;
 import org.hibernate.Session;
 import org.slf4j.Logger;

@@ -8,7 +8,7 @@ import fi.liike.rest.Service.FimHenkiloService;
 import fi.liike.rest.Service.HenkiloService;
 import fi.liike.rest.api.Catalogue;
 import fi.liike.rest.api.ContentDto;
-import fi.liike.rest.api.dto.HenkiloConverter;
+import fi.liike.rest.api.Converter.HenkiloConverter;
 import fi.liike.rest.api.dto.HenkiloDto;
 import fi.liike.rest.api.dto.HenkiloRooliDto;
 import org.hibernate.Session;

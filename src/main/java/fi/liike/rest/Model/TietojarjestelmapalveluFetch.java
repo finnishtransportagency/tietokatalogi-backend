@@ -13,6 +13,7 @@ import java.util.Set;
 @Entity
 @Table (name="TIETOJARJESTELMAPALVELU")
 public class TietojarjestelmapalveluFetch extends Haettava implements Serializable {
+    // TODO: This class should be unused - remove!
     private static final String seqName = "TIETOJARJESTELMAPALVELU_ID_SEQ";
     private static final long serialVersionUID = 1L;
 

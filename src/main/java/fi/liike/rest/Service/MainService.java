@@ -9,7 +9,7 @@ import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.DtoResults;
 import fi.liike.rest.api.ModelResults;
 import fi.liike.rest.api.SearchContent;
-import fi.liike.rest.api.dto.Converter;
+import fi.liike.rest.api.Converter.Converter;
 
 public class MainService {
 

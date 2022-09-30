@@ -15,7 +15,7 @@ import fi.liike.rest.Model.JoinTietovarantoYhteisrekisterinpitaja;
 import fi.liike.rest.Model.JoinTietovarantoYllapitoMuuTaho;
 import fi.liike.rest.Model.JoinToimintaprosessiTietovaranto;
 import fi.liike.rest.api.*;
-import fi.liike.rest.api.dto.TietovarantoConverter;
+import fi.liike.rest.api.Converter.TietovarantoConverter;
 import fi.liike.rest.api.dto.TietovarantoDto;
 import fi.liike.rest.auth.InvalidTietokatalogiDataException;
 import org.hibernate.Session;

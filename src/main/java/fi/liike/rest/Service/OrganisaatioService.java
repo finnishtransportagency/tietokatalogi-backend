@@ -7,7 +7,7 @@ import fi.liike.rest.api.DaoContent;
 import fi.liike.rest.api.DtoResults;
 import fi.liike.rest.api.KasiteArvoContent;
 import fi.liike.rest.api.SearchContent;
-import fi.liike.rest.api.dto.OrganisaatioConverter;
+import fi.liike.rest.api.Converter.OrganisaatioConverter;
 import fi.liike.rest.auth.InvalidTietokatalogiDataException;
 import org.hibernate.Session;
 import org.slf4j.Logger;

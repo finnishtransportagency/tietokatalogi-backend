@@ -1,9 +1,12 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Henkilo;
 import fi.liike.rest.Model.HenkiloTemp;
 import fi.liike.rest.Model.JoinHenkiloRooliTable;
 import fi.liike.rest.Model.Rooli;
+import fi.liike.rest.api.dto.HenkiloDto;
+import fi.liike.rest.api.dto.HenkiloRooliDto;
+import fi.liike.rest.api.dto.RooliDto;
 
 import java.util.ArrayList;
 import java.util.List;

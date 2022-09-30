@@ -1,8 +1,9 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Palvelu;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.PalveluDto;
 
 public class PalveluConverter implements Converter {
 

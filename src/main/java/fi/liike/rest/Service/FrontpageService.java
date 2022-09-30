@@ -2,7 +2,7 @@ package fi.liike.rest.Service;
 
 import fi.liike.rest.Dao.Hibernate.FrontpageDao;
 import fi.liike.rest.Model.Frontpage;
-import fi.liike.rest.api.dto.FrontpageConverter;
+import fi.liike.rest.api.Converter.FrontpageConverter;
 import fi.liike.rest.api.dto.FrontpageDto;
 
 import java.util.Optional;

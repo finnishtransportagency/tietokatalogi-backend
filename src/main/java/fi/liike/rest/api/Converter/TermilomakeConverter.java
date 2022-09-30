@@ -1,9 +1,11 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Termilomake;
 import fi.liike.rest.Model.TermilomakeJoinHierarkkinenKasite;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.TermilomakeDto;
+import fi.liike.rest.api.dto.TermilomakeHierarkkinenKasiteDto;
 import org.apache.commons.beanutils.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

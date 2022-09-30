@@ -7,7 +7,7 @@ import fi.liike.config.Configurations;
 import fi.liike.rest.Dao.Hibernate.HenkiloDao;
 import fi.liike.rest.Model.Henkilo;
 import fi.liike.rest.Model.HenkiloTemp;
-import fi.liike.rest.api.dto.HenkiloConverter;
+import fi.liike.rest.api.Converter.HenkiloConverter;
 import fi.liike.rest.api.dto.HenkiloDto;
 import fi.liike.rest.util.http.HttpClient;
 import fi.liike.rest.util.http.LiikeHttpResponse;

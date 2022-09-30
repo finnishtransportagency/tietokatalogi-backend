@@ -5,7 +5,7 @@ import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietoomaisuus;
 import fi.liike.rest.Model.TietoomaisuusFetch;
 import fi.liike.rest.api.*;
-import fi.liike.rest.api.dto.TietoomaisuusConverter;
+import fi.liike.rest.api.Converter.TietoomaisuusConverter;
 import org.hibernate.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

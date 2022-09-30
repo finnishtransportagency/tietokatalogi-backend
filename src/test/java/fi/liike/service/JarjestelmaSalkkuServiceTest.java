@@ -6,6 +6,7 @@ import fi.liike.rest.Model.*;
 import fi.liike.rest.Service.JarjestelmaService;
 import fi.liike.rest.api.Catalogue;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.Converter.HenkiloConverter;
 import fi.liike.rest.api.dto.*;
 import org.junit.After;
 import org.junit.Before;

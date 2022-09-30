@@ -1,30 +1,31 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
-import fi.liike.rest.Model.Paatietoryhma;
+import fi.liike.rest.Model.Tietoryhma;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.TietoryhmaDto;
 
-public class PaatietoryhmaConverter extends BasicConverter implements Converter {
+public class TietoryhmaConverter extends BasicConverter implements Converter {
 
-	public PaatietoryhmaConverter() {
+	public TietoryhmaConverter() {
 	}
 
 	@Override
 	public Haettava dtoToDomain(ContentDto dtoContent) {
-		PaatietoryhmaDto data = (PaatietoryhmaDto) dtoContent;
-		Paatietoryhma result = new Paatietoryhma();
+		TietoryhmaDto data = (TietoryhmaDto) dtoContent;
+		Tietoryhma result = new Tietoryhma();
+		result.setLahde(data.getLahde());
 		result.setOmistaja(data.getOmistaja());
 		result.setTila(data.getTila());
 		result.setSynonyymi(data.getSynonyymi());
 		result.setTietosuojataso(data.getTietosuojataso());
-		result.setJulkaisutieto(data.getJulkaisutieto());
-		result.setJulkaisuhuomio(data.getJulkaisuhuomio());
+		result.setPaatietoryhma(data.getPaatietoryhma());
 		result.setTunnus(data.getTunnus());
 		result.setNimi(data.getNimi());
 		result.setKoodi(data.getKoodi());
 		result.setKuvaus(data.getKuvaus());
-		result.setLahde(data.getLahde());
 		result.setRivimuokkaajatunnus(data.getRivimuokkaajatunnus());
+		result.setTietovaranto(data.getTietovaranto());
 		return result;
 	}
 
@@ -32,8 +33,8 @@ public class PaatietoryhmaConverter extends BasicConverter implements Converter 
 	public ContentDto modelToDto(Haettava modelObject, Integer... parentId) {
 		if (modelObject == null)
 			return null;
-		Paatietoryhma data = (Paatietoryhma) modelObject;
-		PaatietoryhmaDto result = new PaatietoryhmaDto();
+		Tietoryhma data = (Tietoryhma) modelObject;
+		TietoryhmaDto result = new TietoryhmaDto();
 		super.convert(data, result);
 		return result;
 	}

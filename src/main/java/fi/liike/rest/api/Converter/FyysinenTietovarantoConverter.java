@@ -1,8 +1,9 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.FyysinenTietovaranto;
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.FyysinenTietovarantoDto;
 
 public class FyysinenTietovarantoConverter extends BasicConverter implements Converter {
 

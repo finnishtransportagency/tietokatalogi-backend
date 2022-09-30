@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import fi.liike.rest.Dao.JoinPublicDao;
 import fi.liike.rest.Dao.MainDao;
 import fi.liike.rest.Dao.Hibernate.LooginenDaoImpl;
-import fi.liike.rest.api.dto.LooginenTietovarantoConverter;
+import fi.liike.rest.api.Converter.LooginenTietovarantoConverter;
 import fi.liike.rest.api.dto.LooginenTietovarantoDto;
 
 public class LooginenService extends MainService implements Service {

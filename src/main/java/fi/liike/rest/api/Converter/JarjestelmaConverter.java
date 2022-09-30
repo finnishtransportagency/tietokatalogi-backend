@@ -1,8 +1,9 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.*;
 import fi.liike.rest.Model.Dto.MolekyyliLinkkiDto;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.*;
 import fi.liike.rest.util.Utils;
 
 import java.util.ArrayList;

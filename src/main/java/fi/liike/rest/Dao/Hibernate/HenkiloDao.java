@@ -4,7 +4,7 @@ import fi.liike.rest.Dao.HibernateDao;
 import fi.liike.rest.Model.*;
 import fi.liike.rest.api.HistoryType;
 import fi.liike.rest.api.dto.FetchHenkiloRooliDto;
-import fi.liike.rest.api.dto.HenkiloConverter;
+import fi.liike.rest.api.Converter.HenkiloConverter;
 import fi.liike.rest.api.dto.HenkiloDto;
 import fi.liike.rest.api.dto.RooliDto;
 import org.hibernate.*;

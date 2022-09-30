@@ -1,8 +1,9 @@
-package fi.liike.rest.api.dto;
+package fi.liike.rest.api.Converter;
 
 import fi.liike.rest.Model.Haettava;
 import fi.liike.rest.Model.Tietolaji;
 import fi.liike.rest.api.ContentDto;
+import fi.liike.rest.api.dto.TietolajiDto;
 
 public class TietolajiConverter extends BasicConverter implements Converter {
 
