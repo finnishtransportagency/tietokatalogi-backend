@@ -8,7 +8,7 @@ import fi.liike.rest.api.dto.TietojarjestelmapalveluFetchMinimalDto;
 
 import java.util.List;
 
-public class TietojarjestelmapalveluConverter implements MinimalConverter {
+public class TietojarjestelmapalveluConverter extends BasicConverter implements MinimalConverter {
     @Override
     public Haettava dtoToDomain(ContentDto dtoContent) {
         TietojarjestelmapalveluDto data = (TietojarjestelmapalveluDto) dtoContent;
@@ -31,13 +31,9 @@ public class TietojarjestelmapalveluConverter implements MinimalConverter {
             return null;
         Tietojarjestelmapalvelu data = (Tietojarjestelmapalvelu) modelObject;
         TietojarjestelmapalveluDto result = new TietojarjestelmapalveluDto();
-        result.setTunnus(data.getTunnus());
-        result.setNimi(data.getNimi());
-        result.setKuvaus(data.getKuvaus());
+        super.convert(data, result);
         result.setElinkaaritila(data.getElinkaari());
-        result.setKayttajaroolit(data.getKayttajaroolit());
         result.setJarjestelma(data.getTietojarjestelmatunnus());
-        result.setRivimuokkaajatunnus(data.getRivimuokkaajatunnus());
         return result;
     }
 

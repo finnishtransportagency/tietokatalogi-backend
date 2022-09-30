@@ -6,7 +6,7 @@ import fi.liike.rest.Model.TietoomaisuusFetch;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.TietoomaisuusDto;
 
-public class TietoomaisuusConverter implements Converter {
+public class TietoomaisuusConverter extends BasicConverter implements Converter {
     @Override
     public Haettava dtoToDomain(ContentDto dtoContent) {
         Tietoomaisuus tietoomaisuus = new Tietoomaisuus();
@@ -40,27 +40,10 @@ public class TietoomaisuusConverter implements Converter {
     public ContentDto modelToDto(Haettava modelObject, Integer... parentId) {
         Tietoomaisuus tietoomaisuus = (Tietoomaisuus) modelObject;
         TietoomaisuusDto dto = new TietoomaisuusDto();
+        super.convert(tietoomaisuus, dto);
         dto.setAlustojen_tyyp_ja_sij(tietoomaisuus.getAlustojenTyypJaSij());
-        dto.setAvoimuus(tietoomaisuus.getAvoimuus());
-        dto.setDokumentaatio(tietoomaisuus.getDokumentaatio());
-        dto.setEheys(tietoomaisuus.getEheys());
-        dto.setElinkaari(tietoomaisuus.getElinkaari());
-        dto.setHenkilotiedot(tietoomaisuus.getHenkilotiedot());
-        dto.setHistoriatiedot(tietoomaisuus.getHistoriatiedot());
-        dto.setImmateriaalioikeudet(tietoomaisuus.getImmateriaalioikeudet());
-        dto.setKayttoformaatit(tietoomaisuus.getKayttoformaatit());
         dto.setKattavuus_ja_laatu(tietoomaisuus.getKattavuusJaLaatu());
-        dto.setKayttajat(tietoomaisuus.getKayttajat());
-        dto.setMallinnustapa(tietoomaisuus.getMallinnustapa());
-        dto.setMetatiedot(tietoomaisuus.getMetatiedot());
-        dto.setMuutostiedot(tietoomaisuus.getMuutostiedot());
-        dto.setPrimaarikayttotarve(tietoomaisuus.getPrimaarikayttotarve());
-        dto.setPysyvyys(tietoomaisuus.getPysyvyys());
-        dto.setRivimuokkaajatunnus(tietoomaisuus.getRivimuokkaajatunnus());
-        dto.setSaatavuus(tietoomaisuus.getSaatavuus());
-        dto.setSekundaar_kayttotarpeet(tietoomaisuus.getSekundaar_kayttotarpeet());
         dto.setTietojarjestelma_tunnus(tietoomaisuus.getTietojarjestelmaTunnus());
-        dto.setTunnus(tietoomaisuus.getTunnus());
         dto.setYksiloivat_tunnisteet(tietoomaisuus.getYksiloivatTunnisteet());
         return dto;
     }

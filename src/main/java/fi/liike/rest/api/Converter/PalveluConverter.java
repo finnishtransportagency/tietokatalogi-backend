@@ -5,7 +5,7 @@ import fi.liike.rest.Model.Palvelu;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.PalveluDto;
 
-public class PalveluConverter implements Converter {
+public class PalveluConverter extends BasicConverter implements Converter {
 
 	public PalveluConverter() {
 	}
@@ -36,18 +36,7 @@ public class PalveluConverter implements Converter {
 			return null;
 		Palvelu data = (Palvelu) modelObject;
 		PalveluDto result = new PalveluDto();
-		result.setTunnus(data.getTunnus());
-		result.setYlataso(data.getYlataso());
-		result.setOtsikko(data.getOtsikko());
-		result.setNimi(data.getNimi());
-		result.setKuvaus(data.getKuvaus());
-		result.setVastuuhenkilo(data.getVastuuhenkilo());
-		result.setAsiakkaat(data.getAsiakkaat());
-		result.setSaatavuus(data.getSaatavuus());
-		result.setVasteajat(data.getVasteajat());
-		result.setOhje_pt(data.getOhje_pt());
-		result.setOhjeistus(data.getOhjeistus());
-		result.setOhjesaannot(data.getOhjesaannot());
+		super.convert(data, result);
 		return result;
 	}
 }
