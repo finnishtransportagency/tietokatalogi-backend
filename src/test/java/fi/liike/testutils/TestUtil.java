@@ -406,6 +406,10 @@ public class TestUtil {
 		case TERMILOMAKE_HIERARKKINEN_KASITE:
 		case TERMILOMAKE_KOOSTUMUSSUHT_KASITE:
 			newEntry = new TermilomakeDto();
+			break;
+		case TIETOSUOJAVASTAAVA:
+			newEntry = new TietosuojavastaavaDto();
+			break;
 		default:
 			break;
 		}
@@ -446,6 +450,8 @@ public class TestUtil {
 		case TERMILOMAKE_HIERARKKINEN_KASITE:
 		case TERMILOMAKE_KOOSTUMUSSUHT_KASITE:
 			return new TermilomakeController();
+		case TIETOSUOJAVASTAAVA:
+			return new TietosuojavastaavaController();
 		default:
 			return null;
 		}
