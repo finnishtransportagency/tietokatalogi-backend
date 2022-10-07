@@ -13,6 +13,8 @@ public abstract class ContentDto implements RightsDto {
 
 	public String rivimuokattupvm;
 
+	public String riviluotupvm;
+
 	public abstract void setNimi(String name);
 
 	public abstract void setTunnus(Integer id);
@@ -34,9 +36,17 @@ public abstract class ContentDto implements RightsDto {
 		this.rivimuokattupvm = rivimuokattupvm;
 	}
 
+	public String getRiviluotupvm() {
+		return riviluotupvm;
+	}
+
+	public void setRiviluotupvm(String riviluotupvm) {
+		this.riviluotupvm = riviluotupvm;
+	}
+
 	public List<Right> getNeededRights() throws NoSuchFieldException, IllegalAccessException {
 		return Right.getModifyUnsecuredRights();
-	};
+	}
 	//Later on this could be abstract, TODO
 	public List<String> getNoRightsToModify() {return null;}
 	public void setNoRightsToModify(Set<Right> userRights) {}
