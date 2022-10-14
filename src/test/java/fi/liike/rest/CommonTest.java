@@ -61,7 +61,6 @@ public class CommonTest {
 
     @Test
     public void testModificationDate() {
-        // TODO
         formTypes.forEach(type -> {
             MainController controller = TestUtil.getRest(type);
             assertNotNull("Controller for " + type + " was null.", controller);
