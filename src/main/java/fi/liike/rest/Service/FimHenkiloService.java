@@ -40,11 +40,11 @@ public class FimHenkiloService {
     }
 
     public FimHenkiloService() {
-        this.httpClient = new HttpClient();
         this.xmlMapper = new XmlMapper();
         this.henkiloConverter = new HenkiloConverter();
         this.henkiloDao = new HenkiloDao();
         Configurations.readConfigurations();
+        this.httpClient = new HttpClient(Configurations.fimUsername, Configurations.fimPassword);
         this.baseFIMurl = Configurations.baseFIMurl;
     }
 

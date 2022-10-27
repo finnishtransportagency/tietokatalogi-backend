@@ -13,6 +13,8 @@ public class Configurations {
     private static Properties props;
     private static final String configPath = "./config.properties";
     public static String baseFIMurl;
+    public static String fimUsername;
+    public static String fimPassword;
 
     public static void readConfigurations() {
         if (props == null) {
@@ -23,6 +25,8 @@ public class Configurations {
                 input = Configurations.class.getClassLoader().getResourceAsStream(configPath);
                 props.load(input);
                 baseFIMurl = props.getProperty("baseFIMurl");
+                fimUsername = props.getProperty("fimUsername");
+                fimPassword = props.getProperty("fimPassword");
             } catch (IOException e) {
                 LOG.error("Couldn't load " + configPath + ". Url was not found.", e);
             } finally {

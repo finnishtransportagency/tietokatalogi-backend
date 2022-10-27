@@ -24,7 +24,7 @@ public class HttpClientTest {
 
     @Before
     public void setUp() {
-        this.httpClient = new HttpClient();
+        this.httpClient = new HttpClient("test username", "test password");
         this.gson = new Gson();
     }
 

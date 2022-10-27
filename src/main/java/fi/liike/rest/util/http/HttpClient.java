@@ -3,6 +3,12 @@ package fi.liike.rest.util.http;
 import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
+
+import org.apache.http.auth.AuthScope;
+import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.CredentialsProvider;
+import org.apache.http.impl.client.BasicCredentialsProvider;
+import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -12,7 +18,6 @@ import org.apache.http.client.methods.HttpPost;
 import org.apache.http.client.methods.HttpUriRequest;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 
 import static java.lang.String.format;
@@ -21,6 +26,13 @@ import static java.lang.String.format;
 public class HttpClient {
 
     private final Logger LOG = LoggerFactory.getLogger(HttpClient.class);
+    private final String fimUsername;
+    private final String fimPassword;
+
+    public HttpClient(String fimUsername, String fimPassword) {
+        this.fimUsername = fimUsername;
+        this.fimPassword = fimPassword;
+    }
 
     public LiikeHttpResponse get(String uri) throws IOException {
         HttpGet request = new HttpGet(URI.create(uri));
@@ -45,7 +57,10 @@ public class HttpClient {
     private LiikeHttpResponse executeRequest(HttpUriRequest request){
         Integer statusCode = null;
         String response = "";
-        CloseableHttpClient client = HttpClients.createDefault();
+        CredentialsProvider provider = new BasicCredentialsProvider();
+        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.fimUsername, this.fimPassword);
+        provider.setCredentials(AuthScope.ANY, credentials);
+        CloseableHttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
         try {
             HttpResponse httpResponse = client.execute(request);
             response = EntityUtils.toString(httpResponse.getEntity());
