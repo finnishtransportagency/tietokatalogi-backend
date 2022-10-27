@@ -29,7 +29,7 @@ public abstract class ContentDto implements RightsDto {
 
 
 	public String getRivimuokattupvm() {
-		return rivimuokattupvm;
+		return rivimuokattupvm != null && rivimuokattupvm.isEmpty() ? null : rivimuokattupvm;
 	}
 
 	public void setRivimuokattupvm(String rivimuokattupvm) {
@@ -37,7 +37,7 @@ public abstract class ContentDto implements RightsDto {
 	}
 
 	public String getRiviluotupvm() {
-		return riviluotupvm;
+		return riviluotupvm != null && riviluotupvm.isEmpty() ? null : riviluotupvm;
 	}
 
 	public void setRiviluotupvm(String riviluotupvm) {

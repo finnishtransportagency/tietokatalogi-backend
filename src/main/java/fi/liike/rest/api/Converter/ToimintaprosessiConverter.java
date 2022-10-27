@@ -13,12 +13,6 @@ public class ToimintaprosessiConverter extends BasicConverter implements Convert
     public Haettava dtoToDomain(ContentDto dtoContent) {
         ToimintaprosessiDto toimintaprosessiDto = (ToimintaprosessiDto) dtoContent;
         Toimintaprosessi toimintaprosessi = new Toimintaprosessi();
-        if (toimintaprosessiDto.getRiviluotupvm() != null && toimintaprosessiDto.getRiviluotupvm().isEmpty()) {
-            toimintaprosessiDto.setRiviluotupvm(null);
-        }
-        if (toimintaprosessiDto.getRivimuokattupvm() != null && toimintaprosessiDto.getRivimuokattupvm().isEmpty()) {
-            toimintaprosessiDto.setRivimuokattupvm(null);
-        }
         super.convert(toimintaprosessiDto, toimintaprosessi);
         return toimintaprosessi;
     }
