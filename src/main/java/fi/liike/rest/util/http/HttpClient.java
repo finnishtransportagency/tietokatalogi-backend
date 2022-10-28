@@ -30,6 +30,7 @@ public class HttpClient {
     private final String fimPassword;
 
     public HttpClient(String fimUsername, String fimPassword) {
+        LOG.debug("Creating httpclient with username " + fimUsername);
         this.fimUsername = fimUsername;
         this.fimPassword = fimPassword;
     }
@@ -59,9 +60,10 @@ public class HttpClient {
         String response = "";
         CredentialsProvider provider = new BasicCredentialsProvider();
         UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.fimUsername, this.fimPassword);
+        LOG.debug("Will execute request with username: " + this.fimUsername);
         provider.setCredentials(AuthScope.ANY, credentials);
-        CloseableHttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
         try {
+            CloseableHttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
             HttpResponse httpResponse = client.execute(request);
             response = EntityUtils.toString(httpResponse.getEntity());
             statusCode = httpResponse.getStatusLine().getStatusCode();

@@ -26,6 +26,7 @@ public class Configurations {
                 props.load(input);
                 baseFIMurl = props.getProperty("baseFIMurl");
                 fimUsername = props.getProperty("fimUsername");
+                LOG.debug("Read username from configurations. Username: " + fimUsername);
                 fimPassword = props.getProperty("fimPassword");
             } catch (IOException e) {
                 LOG.error("Couldn't load " + configPath + ". Url was not found.", e);
