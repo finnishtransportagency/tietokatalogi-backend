@@ -4,9 +4,14 @@ import java.io.IOException;
 import java.net.URI;
 import java.util.Map;
 
+import org.apache.http.HttpHost;
 import org.apache.http.auth.AuthScope;
 import org.apache.http.auth.UsernamePasswordCredentials;
+import org.apache.http.client.AuthCache;
 import org.apache.http.client.CredentialsProvider;
+import org.apache.http.client.protocol.HttpClientContext;
+import org.apache.http.impl.auth.BasicScheme;
+import org.apache.http.impl.client.BasicAuthCache;
 import org.apache.http.impl.client.BasicCredentialsProvider;
 import org.apache.http.impl.client.HttpClientBuilder;
 import org.slf4j.Logger;
@@ -55,16 +60,24 @@ public class HttpClient {
         return executeRequest(request);
     }
 
-    private LiikeHttpResponse executeRequest(HttpUriRequest request){
+    private LiikeHttpResponse executeRequest(HttpUriRequest request) {
         Integer statusCode = null;
         String response = "";
-        CredentialsProvider provider = new BasicCredentialsProvider();
-        UsernamePasswordCredentials credentials = new UsernamePasswordCredentials(this.fimUsername, this.fimPassword);
         LOG.debug("Will execute request with username: " + this.fimUsername);
-        provider.setCredentials(AuthScope.ANY, credentials);
+
+        CredentialsProvider provider = new BasicCredentialsProvider();
+        provider.setCredentials(AuthScope.ANY, new UsernamePasswordCredentials(this.fimUsername, this.fimPassword));
+
+        AuthCache authCache = new BasicAuthCache();
+        HttpHost targetHost = new HttpHost(request.getURI().getHost(), request.getURI().getPort(), request.getURI().getScheme());
+        authCache.put(targetHost, new BasicScheme());
+
+        HttpClientContext context = HttpClientContext.create();
+        context.setCredentialsProvider(provider);
+        context.setAuthCache(authCache);
+        CloseableHttpClient client = HttpClientBuilder.create().build();
         try {
-            CloseableHttpClient client = HttpClientBuilder.create().setDefaultCredentialsProvider(provider).build();
-            HttpResponse httpResponse = client.execute(request);
+            HttpResponse httpResponse = client.execute(request, context);
             response = EntityUtils.toString(httpResponse.getEntity());
             statusCode = httpResponse.getStatusLine().getStatusCode();
         }catch (IOException e){
