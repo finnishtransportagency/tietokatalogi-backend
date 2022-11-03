@@ -2,6 +2,8 @@ package fi.liike.rest.Controller;
 
 import com.google.gson.Gson;
 
+import com.sun.jersey.core.header.FormDataContentDisposition;
+import com.sun.jersey.multipart.FormDataParam;
 import fi.liike.rest.Service.FrontpageService;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.FrontpageDto;
@@ -9,12 +11,24 @@ import io.swagger.annotations.Api;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
+import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
+import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
+import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import org.apache.commons.io.IOUtils;
+
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Optional;
 
 @Api(value = "Etusivu")
@@ -56,6 +70,47 @@ public class FrontpageController extends MainController {
         Gson gson = new Gson();
         String jsonStr = gson.toJson(frontpageDtoOptional.get());
         return Response.ok(jsonStr, MediaType.APPLICATION_JSON).build();
+    }
+
+    @GET
+    @Path("bucket")
+    @Produces(MediaType.APPLICATION_JSON)
+    public Response getBuckets(@Context HttpServletRequest httpRequest) {
+//        AwsCredentialsProvider provider = EnvironmentVariableCredentialsProvider.create();
+        Region region = Region.EU_WEST_1;
+        S3Client s3 = S3Client.builder()
+                .region(region)
+                .build();
+        ListBucketsRequest listBucketsRequest = ListBucketsRequest.builder().build();
+        ListBucketsResponse listBucketsResponse = s3.listBuckets(listBucketsRequest);
+        listBucketsResponse.buckets().stream().forEach(x -> System.out.println(x.name()));
+        return Response.ok().build();
+    }
+
+    @POST
+    @Path("image")
+    @Consumes(MediaType.MULTIPART_FORM_DATA)
+    @Produces("image/*")
+    public Response save(
+            @Context HttpServletRequest httpRequest,
+            @FormDataParam("image") InputStream inputStream,
+            @FormDataParam("image") FormDataContentDisposition fileDetail) throws IOException {
+        LOG.info("----received image post-----");
+        LOG.info(inputStream.toString());
+        LOG.info(fileDetail.toString());
+        // frontpage-images
+        Region region = Region.EU_WEST_1;
+        S3Client s3 = S3Client.builder()
+                .region(region)
+                .build();
+        PutObjectRequest objectRequest = PutObjectRequest.builder()
+                .bucket("frontpage-images")
+                .key(fileDetail.getFileName())
+                .build();
+
+        ByteBuffer byteBuffer = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
+        s3.putObject(objectRequest, RequestBody.fromByteBuffer(byteBuffer));
+        return Response.ok().build();
     }
 
     @Override

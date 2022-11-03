@@ -9,6 +9,10 @@ services:
     environment:
       JAVA_OPTS: -Xmx2048m -Xms1024m -Dport.http=8080
       CATALINA_OPTS: "-Denv=local"
+      AWS_ACCESS_KEY_ID: ""
+      AWS_SECRET_ACCESS_KEY: ""
+      AWS_SESSION_TOKEN: ""
+      AWS_REGION: ""
     networks:
       - default
     extra_hosts:
