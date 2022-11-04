@@ -12,12 +12,11 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 
+import software.amazon.awssdk.core.ResponseInputStream;
 import software.amazon.awssdk.core.sync.RequestBody;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
-import software.amazon.awssdk.services.s3.model.ListBucketsRequest;
-import software.amazon.awssdk.services.s3.model.ListBucketsResponse;
-import software.amazon.awssdk.services.s3.model.PutObjectRequest;
+import software.amazon.awssdk.services.s3.model.*;
 import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
@@ -73,7 +72,7 @@ public class FrontpageController extends MainController {
     }
 
     @GET
-    @Path("bucket")
+    @Path("buckets")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBuckets(@Context HttpServletRequest httpRequest) {
 //        AwsCredentialsProvider provider = EnvironmentVariableCredentialsProvider.create();
@@ -87,6 +86,23 @@ public class FrontpageController extends MainController {
         return Response.ok().build();
     }
 
+    @GET
+    @Path("image/{name}")
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    public Response getImage(@Context HttpServletRequest httpRequest, @PathParam("name") String name) throws IOException {
+        Region region = Region.EU_WEST_1;
+        S3Client s3 = S3Client.builder()
+                .region(region)
+                .build();
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                .bucket("frontpage-images")
+                .key(name)
+                .build();
+
+        ResponseInputStream<GetObjectResponse> response = s3.getObject(getObjectRequest);
+        return Response.ok(IOUtils.toByteArray(response)).header("content-disposition", "inline; filename = " + name).build();
+    }
+
     @POST
     @Path("image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
@@ -98,7 +114,6 @@ public class FrontpageController extends MainController {
         LOG.info("----received image post-----");
         LOG.info(inputStream.toString());
         LOG.info(fileDetail.toString());
-        // frontpage-images
         Region region = Region.EU_WEST_1;
         S3Client s3 = S3Client.builder()
                 .region(region)
