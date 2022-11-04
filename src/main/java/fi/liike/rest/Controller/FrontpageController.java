@@ -7,7 +7,10 @@ import com.sun.jersey.multipart.FormDataParam;
 import fi.liike.rest.Service.FrontpageService;
 import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.FrontpageDto;
+import fi.liike.rest.api.dto.FrontpageUploadResponseContents;
+import fi.liike.rest.api.dto.FrontpageUploadResponseDto;
 import io.swagger.annotations.Api;
+import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,6 +32,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Optional;
+import java.util.UUID;
 
 @Api(value = "Etusivu")
 @Path("/frontpage/")
@@ -106,7 +110,7 @@ public class FrontpageController extends MainController {
     @POST
     @Path("image")
     @Consumes(MediaType.MULTIPART_FORM_DATA)
-    @Produces("image/*")
+    @Produces(MediaType.APPLICATION_JSON)
     public Response save(
             @Context HttpServletRequest httpRequest,
             @FormDataParam("image") InputStream inputStream,
@@ -118,14 +122,25 @@ public class FrontpageController extends MainController {
         S3Client s3 = S3Client.builder()
                 .region(region)
                 .build();
+        // image upload
+        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
+        UUID uuid = UUID.randomUUID();
+        String randomName = uuid + (extension.isEmpty() ? "" : "." + extension);
         PutObjectRequest objectRequest = PutObjectRequest.builder()
                 .bucket("frontpage-images")
-                .key(fileDetail.getFileName())
+                .key(randomName)
                 .build();
-
         ByteBuffer byteBuffer = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
         s3.putObject(objectRequest, RequestBody.fromByteBuffer(byteBuffer));
-        return Response.ok().build();
+        // response
+        // {"data": {"filePath": "<filePath>"}}
+        FrontpageUploadResponseDto uploadResponseDto = new FrontpageUploadResponseDto(
+                new FrontpageUploadResponseContents(
+                "tietokatalogi/rest/frontpage/image/" + randomName
+        ));
+        Gson gson = new Gson();
+        String responseString = gson.toJson(uploadResponseDto);
+        return Response.ok(responseString).build();
     }
 
     @Override
