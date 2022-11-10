@@ -9,30 +9,23 @@ import fi.liike.rest.api.ContentDto;
 import fi.liike.rest.api.dto.FrontpageDto;
 import fi.liike.rest.api.dto.FrontpageUploadResponseContents;
 import fi.liike.rest.api.dto.FrontpageUploadResponseDto;
+import fi.liike.rest.util.S3ClientUtil;
 import io.swagger.annotations.Api;
-import org.apache.commons.io.FilenameUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-
-import software.amazon.awssdk.core.ResponseInputStream;
-import software.amazon.awssdk.core.sync.RequestBody;
-import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.*;
-import org.apache.commons.io.IOUtils;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.*;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.ByteBuffer;
 import java.util.Optional;
-import java.util.UUID;
 
 @Api(value = "Etusivu")
 @Path("/frontpage/")
@@ -79,11 +72,7 @@ public class FrontpageController extends MainController {
     @Path("buckets")
     @Produces(MediaType.APPLICATION_JSON)
     public Response getBuckets(@Context HttpServletRequest httpRequest) {
-//        AwsCredentialsProvider provider = EnvironmentVariableCredentialsProvider.create();
-        Region region = Region.EU_WEST_1;
-        S3Client s3 = S3Client.builder()
-                .region(region)
-                .build();
+        S3Client s3 = S3ClientUtil.getInstance();
         ListBucketsRequest listBucketsRequest = ListBucketsRequest.builder().build();
         ListBucketsResponse listBucketsResponse = s3.listBuckets(listBucketsRequest);
         listBucketsResponse.buckets().stream().forEach(x -> System.out.println(x.name()));
@@ -93,18 +82,14 @@ public class FrontpageController extends MainController {
     @GET
     @Path("image/{name}")
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    public Response getImage(@Context HttpServletRequest httpRequest, @PathParam("name") String name) throws IOException {
-        Region region = Region.EU_WEST_1;
-        S3Client s3 = S3Client.builder()
-                .region(region)
-                .build();
-        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket("frontpage-images")
-                .key(name)
-                .build();
-
-        ResponseInputStream<GetObjectResponse> response = s3.getObject(getObjectRequest);
-        return Response.ok(IOUtils.toByteArray(response)).header("content-disposition", "inline; filename = " + name).build();
+    public Response getImage(@Context HttpServletRequest httpRequest, @PathParam("name") String name) {
+        ByteBuffer imageBytes;
+        try {
+            imageBytes = service.getImage(name);
+        } catch (IOException e) {
+            return Response.serverError().entity("Failed conversion to ByteArray").build();
+        }
+        return Response.ok(imageBytes).header("content-disposition", "inline; filename = " + name).build();
     }
 
     @POST
@@ -114,30 +99,21 @@ public class FrontpageController extends MainController {
     public Response save(
             @Context HttpServletRequest httpRequest,
             @FormDataParam("image") InputStream inputStream,
-            @FormDataParam("image") FormDataContentDisposition fileDetail) throws IOException {
-        LOG.info("----received image post-----");
-        LOG.info(inputStream.toString());
-        LOG.info(fileDetail.toString());
-        Region region = Region.EU_WEST_1;
-        S3Client s3 = S3Client.builder()
-                .region(region)
-                .build();
-        // image upload
-        String extension = FilenameUtils.getExtension(fileDetail.getFileName());
-        UUID uuid = UUID.randomUUID();
-        String randomName = uuid + (extension.isEmpty() ? "" : "." + extension);
-        PutObjectRequest objectRequest = PutObjectRequest.builder()
-                .bucket("frontpage-images")
-                .key(randomName)
-                .build();
-        ByteBuffer byteBuffer = ByteBuffer.wrap(IOUtils.toByteArray(inputStream));
-        s3.putObject(objectRequest, RequestBody.fromByteBuffer(byteBuffer));
-        // response
-        // {"data": {"filePath": "<filePath>"}}
+            @FormDataParam("image") FormDataContentDisposition fileDetail) {
+        LOG.info("Save image");
+        LOG.debug(inputStream.toString());
+        LOG.debug(fileDetail.toString());
+
+        String generatedName;
+        try {
+            generatedName = service.uploadImage(inputStream, fileDetail);
+        } catch (IOException e) {
+            return Response.serverError().entity("Failed conversion to ByteArray").build();
+        }
         FrontpageUploadResponseDto uploadResponseDto = new FrontpageUploadResponseDto(
                 new FrontpageUploadResponseContents(
-                "tietokatalogi/rest/frontpage/image/" + randomName
-        ));
+                "tietokatalogi/rest/frontpage/image/" + generatedName
+        )); // {"data": {"filePath": "<filePath>"}}
         Gson gson = new Gson();
         String responseString = gson.toJson(uploadResponseDto);
         return Response.ok(responseString).build();
