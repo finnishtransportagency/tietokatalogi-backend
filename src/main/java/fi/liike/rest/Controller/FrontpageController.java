@@ -89,7 +89,7 @@ public class FrontpageController extends MainController {
         } catch (IOException e) {
             return Response.serverError().entity("Failed conversion to ByteArray").build();
         }
-        return Response.ok(imageBytes).header("content-disposition", "inline; filename = " + name).build();
+        return Response.ok(imageBytes.array()).header("content-disposition", "inline; filename = " + name).build();
     }
 
     @POST
