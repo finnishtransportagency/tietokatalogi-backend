@@ -57,7 +57,7 @@
 
 	<filter>
 		<filter-name>requestLogFilter</filter-name>
-		<filter-class>fi.liike.rest.util.RequestLogFilter</filter-class>
+		<filter-class>fi.liike.rest.util.RequestFilter</filter-class>
 	</filter>
 	<filter-mapping>
 		<filter-name>requestLogFilter</filter-name>
