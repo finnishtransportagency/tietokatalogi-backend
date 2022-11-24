@@ -7,7 +7,9 @@ import org.slf4j.MDC;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.io.PrintWriter;
 
 public class RequestLogFilter implements Filter {
     @Override
@@ -27,6 +29,12 @@ public class RequestLogFilter implements Filter {
         }
         try {
             filterChain.doFilter(servletRequest, servletResponse);
+        } catch (Exception e) {
+            HttpServletResponse res = (HttpServletResponse) servletResponse;
+            res.setStatus(500);
+            PrintWriter writer = res.getWriter();
+            writer.print("Tietokatalogi: virhe (500)");
+            writer.flush();
         } finally {
             MDC.remove("user_name");
         }
