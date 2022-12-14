@@ -492,7 +492,7 @@ public class MainRestTester {
 	private Response getAll(Catalogue catalogue, String size, String offset, String filter, String order) {
 		switch (catalogue) {
 		case JARJESTELMA:
-			return new JarjestelmaController().getAll(size, offset, filter, order, null, null, null);
+			return new JarjestelmaController().getAll(size, offset, filter, order, null, null, null, null);
 		case PALVELU:
 			return new PalveluController().getAll(size, offset, filter, order, null, null);
 		case LOOGINEN:
