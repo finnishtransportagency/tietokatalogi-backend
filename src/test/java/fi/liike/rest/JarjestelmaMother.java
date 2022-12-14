@@ -9,6 +9,7 @@ public class JarjestelmaMother {
 	private String name;
 	private String type;
 	private String area;
+	private String owningOrganization;
 
 	private JarjestelmaMother() {
 	}
@@ -42,6 +43,11 @@ public class JarjestelmaMother {
 		return this;
 	}
 
+	public JarjestelmaMother owningOrganization(String owningOrganization) {
+		this.owningOrganization = owningOrganization;
+		return this;
+	}
+
 	public JarjestelmaDto build() {
 		JarjestelmaDto jarjestelma = new JarjestelmaDto();
 		jarjestelma.setTunnus(id);
@@ -49,6 +55,7 @@ public class JarjestelmaMother {
 		jarjestelma.setElinkaaritila(lifeSpan);
 		jarjestelma.setJarjestelmatyyppi(type);
 		jarjestelma.setJarjestelmaalue(area);
+		jarjestelma.setOmistava_organisaatio(owningOrganization);
 		return jarjestelma;
 	}
 }

@@ -441,14 +441,14 @@ public class JarjestelmasalkkuTest {
     public void testSorting() throws JSONException {
         TestDbUtil.writeToDb(TestUtil.createEntriesInJson(Catalogue.JARJESTELMA, 25));
 
-        Response response = rest.getAll("25", "0", null, "asc", null, null, null);
+        Response response = rest.getAll("25", "0", null, "asc", null, null, null, null);
         JSONObject responseInJson = getJson(response);
         JSONArray itemsArray = (JSONArray) responseInJson.get("items");
 
         assertEquals("a01", itemsArray.getJSONObject(0).get("nimi"));
         assertEquals("a25", itemsArray.getJSONObject(24).get("nimi"));
 
-        response = rest.getAll("25", "0", null, "desc", null, null, null);
+        response = rest.getAll("25", "0", null, "desc", null, null, null, null);
         responseInJson = getJson(response);
         itemsArray = (JSONArray) responseInJson.get("items");
 
@@ -467,7 +467,7 @@ public class JarjestelmasalkkuTest {
         assertEquals("a01", itemsArray.getJSONObject(0).get("nimi"));
         assertEquals("a25", itemsArray.getJSONObject(24).get("nimi"));
 
-        response = rest.getAll("25", "0", null, "desc", null, null, null);
+        response = rest.getAll("25", "0", null, "desc", null, null, null, null);
         responseInJson = getJson(response);
         itemsArray = (JSONArray) responseInJson.get("items");
 
@@ -476,25 +476,25 @@ public class JarjestelmasalkkuTest {
     }
 
     @Test
-    public void testFilter() throws ParseException, JSONException {
+    public void testFilter() throws JSONException {
         setupDbWithTestData();
 
         ExtractedResponse response = new ExtractedResponse(
-                rest.getAll("100", "0", "Digiroad", "asc", null, null, null));
+                rest.getAll("100", "0", "Digiroad", "asc", null, null, null, null));
         JSONArray items = response.getItems();
         assertEquals(1, items.length());
         JSONObject item = items.getJSONObject(0);
         assertEquals("Digiroad 2: Väyläverkonhallintasovellus", item.get("nimi"));
         assertEquals(1, response.getValue("count"));
 
-        response = new ExtractedResponse(rest.getAll("100", "0", "liikenteen kamera", null, null, null, null));
+        response = new ExtractedResponse(rest.getAll("100", "0", "liikenteen kamera", null, null, null, null, null));
         items = response.getItems();
         assertEquals(3, items.length());
         item = items.getJSONObject(0);
         assertEquals("Junaliikenteen valtakunnallinen kameravalvontajärjestelmä", item.get("nimi"));
         assertEquals(3, response.getValue("count"));
 
-        response = new ExtractedResponse(rest.getAll("1", "0", "liikenteen kamera", "desc", null, null, null));
+        response = new ExtractedResponse(rest.getAll("1", "0", "liikenteen kamera", "desc", null, null, null, null));
         items = response.getItems();
         assertEquals(1, items.length());
         item = items.getJSONObject(0);
@@ -503,14 +503,14 @@ public class JarjestelmasalkkuTest {
 
         response = new ExtractedResponse(
                 rest.getAll("100", "0", "liikenteen", "desc", Arrays.asList("Kehityksessä"),
-                        Arrays.asList("tietojärjestelmä"), Arrays.asList("VTJ - Meri")));
+                        Arrays.asList("tietojärjestelmä"), Arrays.asList("VTJ - Meri"), null));
         items = response.getItems();
         assertEquals(1, items.length());
         item = items.getJSONObject(0);
         assertEquals(400, item.get("tunnus"));
         assertEquals(1, response.getValue("count"));
 
-        response = new ExtractedResponse(rest.getAll("100", "0", "zzz", "desc", null, null, null));
+        response = new ExtractedResponse(rest.getAll("100", "0", "zzz", "desc", null, null, null, null));
         assertEquals(0, response.getItems().length());
         assertEquals(0, response.getValue("count"));
     }
@@ -535,7 +535,7 @@ public class JarjestelmasalkkuTest {
 
         ExtractedResponse response = new ExtractedResponse(
                 new JarjestelmaController().getAll("100", "0", henkiloNamePartly, "asc", null,
-                        null, null));
+                        null, null, null));
 
         assertEquals(response.getItems().getJSONObject(0).get("tunnus"), jarjestelmaHenkiloRooli.getSysteemiId());
     }
@@ -584,12 +584,24 @@ public class JarjestelmasalkkuTest {
     }
 
     @Test
+    public void testFilterOwningOrganization() throws IOException {
+        // create Jarjestelma items with different organizations and save
+        int count = 5;
+        saveItems(createItemsWithOwningOrganizations(count));
+        // get list from rest with different organizations
+        assertOwningOrganization(Arrays.asList("Org1"), count);
+        assertOwningOrganization(Arrays.asList("Org2"), count);
+        assertOwningOrganization(Arrays.asList("Org3"), count);
+        assertOwningOrganization(Arrays.asList("Org1", "Org2"), count * 2);
+    }
+
+    @Test
     public void testCreateJarjestelmaLink() throws IOException {
         mainTester.testCreateJarjestelmaLink();
     }
 
     private void assertLifeSpan(List<String> list) {
-        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", list, null, null));
+        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", list, null, null, null));
         List<Object> lifeSpans = response.getValues("items", "elinkaaritila");
         assertFalse(lifeSpans.isEmpty());
         for (Object lifeSpan : lifeSpans) {
@@ -599,7 +611,7 @@ public class JarjestelmasalkkuTest {
     }
 
     private void assertType(List<String> list) {
-        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", null, list, null));
+        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", null, list, null, null));
         List<Object> types = response.getValues("items", "jarjestelmatyyppi");
         assertFalse(types.isEmpty());
         for (Object type : types) {
@@ -609,11 +621,21 @@ public class JarjestelmasalkkuTest {
     }
 
     private void assertRegion(List<String> list, int count) {
-        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", null, null, list));
+        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", null, null, list, null));
         List<Object> regions = response.getValues("items", "jarjestelmaalue");
         assertEquals(count, regions.size());
         for (Object region : regions) {
             String text = (String) region;
+            assertTrue(list.contains(text));
+        }
+    }
+
+    private void assertOwningOrganization(List<String> list, int count) {
+        ExtractedResponse response = new ExtractedResponse(rest.getAll("30", "0", null, "asc", null, null, null, list));
+        List<Object> organizations = response.getValues("items", "omistava_organisaatio");
+        assertEquals(count, organizations.size());
+        for (Object organization : organizations) {
+            String text = (String) organization;
             assertTrue(list.contains(text));
         }
     }
@@ -706,6 +728,19 @@ public class JarjestelmasalkkuTest {
         for (String region : regions) {
             for (int i = 0; i < countPerRegion; i++) {
                 JarjestelmaDto jarjestelma = mother.nimi(region + i).jarjestelmaalue(region).build();
+                items.add(jarjestelma);
+            }
+        }
+        return items;
+    }
+
+    private List<JarjestelmaDto> createItemsWithOwningOrganizations(int countPerOrganization) {
+        List<String> organizations = Arrays.asList("Org1", "Org2", "Org3");
+        JarjestelmaMother mother = JarjestelmaMother.def();
+        List<JarjestelmaDto> items = new ArrayList<>();
+        for (String organization : organizations) {
+            for (int i = 0; i < countPerOrganization; i++) {
+                JarjestelmaDto jarjestelma = mother.nimi(organization + i).owningOrganization(organization).build();
                 items.add(jarjestelma);
             }
         }
