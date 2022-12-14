@@ -460,7 +460,7 @@ public class JarjestelmasalkkuTest {
     public void testSortinMinimal() throws JSONException {
         TestDbUtil.writeToDb(TestUtil.createEntriesInJson(Catalogue.JARJESTELMA, 25));
 
-        Response response = rest.getAllMinimal("25", "0", null, "asc", null, null, null);
+        Response response = rest.getAllMinimal("25", "0", null, "asc", null, null, null, null);
         JSONObject responseInJson = getJson(response);
         JSONArray itemsArray = (JSONArray) responseInJson.get("items");
 
