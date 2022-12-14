@@ -108,12 +108,14 @@ public class JarjestelmaController extends MainController {
 						   @DefaultValue("0") @QueryParam("offset") String offset,
 						   @DefaultValue("") @QueryParam("filter") String filter, @DefaultValue("") @QueryParam("sort") String sort,
 						   @QueryParam("span") List<String> span, @QueryParam("type") List<String> type,
-						   @QueryParam("region") List<String> region) {
+						   @QueryParam("region") List<String> region,
+						   @QueryParam("owning_organization") List<String> owning_organization) {
 		LOG.info("Järjestelmä hakee kaiken");
 		SearchContent searchContent = new SearchContent(filter, sort);
 		searchContent.addFields("elinkaaritila", span);
 		searchContent.addFields("jarjestelmatyyppi", type);
 		searchContent.addFields("jarjestelmaalue", region);
+		searchContent.addFields("omistava_organisaatio", owning_organization);
 
 		return super.getAll(service, searchContent, size, offset);
 	}
