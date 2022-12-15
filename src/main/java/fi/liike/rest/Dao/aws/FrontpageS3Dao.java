@@ -1,5 +1,6 @@
 package fi.liike.rest.Dao.aws;
 
+import fi.liike.config.Configurations;
 import fi.liike.rest.util.S3ClientUtil;
 import org.apache.pdfbox.io.IOUtils;
 import software.amazon.awssdk.core.ResponseInputStream;
@@ -13,7 +14,12 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class FrontpageS3Dao {
-    private final String bucketName = "frontpage-images";
+    private final String bucketName;
+
+    public FrontpageS3Dao() {
+        Configurations.readConfigurations();
+        this.bucketName = Configurations.bucketName;
+    }
 
     public ByteBuffer getImage(String name) throws IOException {
         S3Client s3 = S3ClientUtil.getInstance();

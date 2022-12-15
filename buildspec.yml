@@ -10,6 +10,7 @@ env:
     FIM_BASE_URL: "dev/hassu/db:fimbaseurl"
     FIM_USERNAME: "dev/hassu/db:fimusername"
     FIM_PASSWORD: "dev/hassu/db:fimpassword"
+    BUCKET_NAME: "dev/hassu/db:bucketname"
 phases:
   pre_build:
     commands:
@@ -29,6 +30,7 @@ phases:
       - sed -i 's|!fimbaseurl!|'${FIM_BASE_URL}'|' ./src/main/resources/config.aws.properties
       - sed -i 's/!fimusername!/'${FIM_USERNAME}'/' ./src/main/resources/config.aws.properties
       - sed -i 's/!fimpassword!/'${FIM_PASSWORD}'/' ./src/main/resources/config.aws.properties
+      - sed -i 's/!bucketname!/'${BUCKET_NAME}'/' ./src/main/resources/config.aws.properties
       - rm ./src/main/resources/hibernate.cfg.xml
       - mv ./src/main/resources/hibernate.cfg.aws.xml ./src/main/resources/hibernate.cfg.xml
       - rm ./src/main/resources/config.properties
