@@ -29,7 +29,7 @@ public class Configurations {
                 fimUsername = props.getProperty("fimUsername");
                 LOG.debug("Read username from configurations. Username: " + fimUsername);
                 fimPassword = props.getProperty("fimPassword");
-                bucketName = props.getProperty("bucketname");
+                bucketName = props.getProperty("bucketName");
             } catch (IOException e) {
                 LOG.error("Couldn't load " + configPath + ". Url was not found.", e);
             } finally {
