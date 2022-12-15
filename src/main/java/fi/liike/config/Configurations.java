@@ -15,6 +15,7 @@ public class Configurations {
     public static String baseFIMurl;
     public static String fimUsername;
     public static String fimPassword;
+    public static String bucketName;
 
     public static void readConfigurations() {
         if (props == null) {
@@ -28,6 +29,7 @@ public class Configurations {
                 fimUsername = props.getProperty("fimUsername");
                 LOG.debug("Read username from configurations. Username: " + fimUsername);
                 fimPassword = props.getProperty("fimPassword");
+                bucketName = props.getProperty("bucketname");
             } catch (IOException e) {
                 LOG.error("Couldn't load " + configPath + ". Url was not found.", e);
             } finally {
