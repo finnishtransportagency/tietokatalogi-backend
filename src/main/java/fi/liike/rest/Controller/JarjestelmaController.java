@@ -200,5 +200,13 @@ public class JarjestelmaController extends MainController {
 		return responseBuilder.build();
 	}
 
+	@GET
+	@Path("rights")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Response getRights(@Context HttpServletRequest httpRequest) {
+		JarjestelmaDto dto = new JarjestelmaDto();
+		setUpNoRightsToModify(dto, httpRequest);
+		return super.buildResponse(dto);
+	}
 
 }
