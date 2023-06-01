@@ -113,7 +113,7 @@ public class JwtRequestFilter {
                     LOG.debug(String.format("Username %s", userName));
 
                     String[] roles = ((String) claims.get("custom:rooli")).split("\\,");
-                    LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
+                    // LOG.debug(String.format("Roles %s", StringUtils.join(roles, ",")));
                     // claims.forEach((k, v) -> LOG.debug(String.format("Claim %s=%s", k, v)));
 
                     for (String role : roles) {
