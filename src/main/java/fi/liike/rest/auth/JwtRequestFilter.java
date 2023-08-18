@@ -129,7 +129,7 @@ public class JwtRequestFilter {
                     }
                 }
             } else {
-                LOG.warn("No JWT header found");
+                LOG.debug("No JWT header found");
             }
             return new UserInfo(userName, new ArrayList<>(userGroups));
         } catch (Exception ex) {
